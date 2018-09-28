@@ -8,99 +8,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="/static/layui/layuiadmin/layui/css/layui.css"  media="all">
   <link rel="stylesheet" href="/static/layui/layuiadmin/style/admin.css"  media="all">
+  <script src="/static/layui/layuiadmin/layui/layui.js" charset="utf-8"></script>
+  <script src="/static/jquery/jquery-2.1.4.min.js" charset="utf-8"></script>
   <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
 
-
-<div class="layui-card layadmin-header">
-  <div class="layui-breadcrumb" lay-filter="breadcrumb">
-    <a lay-href="">主页</a>
-    <a><cite>组件</cite></a>
-    <a><cite>数据表格</cite></a>
-    <a><cite>开启合计行</cite></a>
-  </div>
-</div>
-
-
-
-          <table class="layui-hide" id="test-table-totalRow" lay-filter="test-table-totalRow"></table>
-
-          <div class="layui-card-body">
-            <div style="padding-bottom: 10px;">
-              <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
-              <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
-            </div>
-
-            <table id="LAY-user-manage" lay-filter="LAY-user-manage"></table>
-            <script type="text/html" id="imgTpl">
-              <img style="display: inline-block; width: 50%; height: 100%;" src= {{ d.avatar }}>
-            </script>
-            <script type="text/html" id="table-useradmin-webuser">
-              <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-              <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
-            </script>
+        <script type="text/html" id="toolbarDemo">
+          <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
           </div>
+        </script>
 
-<script src="/static/layui/layuiadmin/layui/layui.js" charset="utf-8"></script>
-<script>
-    layui.use( 'table', function(){
-        var $ = layui.$
-            ,table = layui.table
-            ,form = layui.form;
+        <table class="layui-hide" id="test-table-totalRow" lay-filter="test-table-totalRow"></table>
 
-        table.render({
-            elem: '#test-table-totalRow'
-            ,url: '/person/listJson'
-            ,toolbar: '#test-table-totalRow-toolbarDemo'
-            ,title: '用户数据表'
-            ,totalRow: true
-            ,cols: [[
-                {type: 'checkbox', fixed: 'left'}
-                ,{field:'id', width:200, title: 'ID', sort: true}
-                ,{field:'name', width:200, title: '用户名'}
-                ,{field:'sex', width:200, title: '性别', sort: true}
-                ,{field:'address', width:200, title: '城市'}
-            ]]
-            ,page: true
-            ,defaultToolbar: ['filter', 'print', 'exports']
-        });
+        <script type="text/html" id="barPerson">
+          <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+          <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+          <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
 
 
-        //事件
-        var active = {
-            batchdel: function(){
-                var checkStatus = table.checkStatus('LAY-user-manage')
-                    ,checkData = checkStatus.data; //得到选中的数据
 
-                if(checkData.length === 0){
-                    return layer.msg('请选择数据');
-                }
+        <script>
+          $(function (){
+              init();
+          })
 
-                layer.prompt({
-                    formType: 1
-                    ,title: '敏感操作，请验证口令'
-                }, function(value, index){
-                    layer.close(index);
+          //初始化 layui 数据表格
+          function init(){
+              layui.use( 'table', function(){
+                  var $ = layui.$
+                      ,table = layui.table
+                      ,form = layui.form;
+                  table.render({
+                      elem: '#test-table-totalRow'
+                      ,url: '/person/listJson'
+                      ,toolbar: '#toolbarDemo'
+                      ,title: '用户数据表'
+                      ,totalRow: true
+                      ,cols: [[
+                          {type: 'checkbox', fixed: 'left'}
+                          ,{field:'id', width:200, title: 'ID', sort: true}
+                          ,{field:'name', width:200, title: '用户名'}
+                          ,{field:'sex', width:100, title: '性别', sort: true,templet:'#sexTpl'}
+                          ,{field:'address', width:200, title: '地址'}
+                          ,{field:'note', width:200, title: '备注'}
+                          ,{fixed: 'right', width: 165, align:'center', toolbar: '#barPerson'}
+                      ]]
+                      ,page: true
+                  });
 
-                    layer.confirm('确定删除吗？', function(index) {
+                  //监听行工具事件
+                  table.on('tool(test-table-totalRow)', function(obj){
+                      var data = obj.data;
+                      if(obj.event === 'del'){      //删除
+                          delById(data.id);
+                      } else if(obj.event === 'edit'){     //编辑
+                          personEdit(data.id);
+                      } else {     //查看
+                          alert("查看");
+                      }
+                  });
 
-                        //执行 Ajax 后重载
-                      /*
-                       admin.req({
-                       url: 'xxx'
-                       //,……
-                       });
-                       */
-                        table.reload('LAY-user-manage');
-                        layer.msg('已删除');
-                    });
-                });
-            }
-            ,add: function(){
+                 //头工具栏事件
+                  table.on('toolbar(test-table-totalRow)', function(obj){
+                      var checkStatus = table.checkStatus(obj.config.id);
+                      if(obj.event=="add"){   //添加
+                          personAdd();
+                      }
+                  });
+              });
+              }
+
+            //增加页面
+            function personAdd(){
                 layer.open({
                     type: 2
-                    ,title: '添加用户信息'
+                    ,title: '增加用户信息'
                     ,content: 'personAdd.html'
                     ,maxmin: true
                     ,area: ['650px', '550px']
@@ -109,35 +94,80 @@
                         var iframeWindow = window['layui-layer-iframe'+ index]
                             ,submitID = 'LAY-user-front-submit'
                             ,submit = layero.find('iframe').contents().find('#'+ submitID);
-
                         //监听提交
                         iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                             var field = data.field; //获取提交的字段
-
-                            //提交 Ajax 成功后，静态更新表格中的数据
-                            //$.ajax({});
-                            table.reload('LAY-user-front-submit'); //数据刷新
-                            layer.close(index); //关闭弹层
+                            $.ajax({
+                                url : '/person/insert',
+                                type : 'post',
+                                dataTypep : 'json',
+                                data: field,
+                                success : function (res){
+                                    layer.msg("增加成功");
+                                    layui.table.reload('test-table-totalRow');
+                                    layer.close(index); //关闭弹层
+                                }
+                            })
                         });
-
                         submit.trigger('click');
                     }
                 });
             }
-        };
 
-        $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
-            var type = $(this).data('type');
-            active[type] ? active[type].call(this) : '';
-        });
+            //编辑页面
+            function personEdit(id){
+                layer.open({
+                    type: 2
+                    ,title: '修改用户信息'
+                   ,content: '/person/getById?id='+id
+                    ,maxmin: true
+                    ,area: ['650px', '550px']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                           ,submitID = 'LAY-user-front-update'
+                           ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                           //监听提交
+                           iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                           var field = data.field; //获取提交的字段
+                           $.ajax({
+                               url : '/person/update',
+                               type : 'post',
+                               dataTypep : 'json',
+                               data: field,
+                               success : function (res){
+                                 layer.msg("修改成功");
+                                   layui.table.reload('test-table-totalRow');
+                                   layer.close(index); //关闭弹层
+                               }
+                           })
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            }
 
-    });
+            //删除id
+            function delById(id){
+                layer.confirm('确定删除吗？', function(index) {
+                    $.post("/person/deleteById",{id:id},function (res){
+                        layer.msg('已删除');
+                        layui.table.reload('test-table-totalRow');
+                        layer.close(index); //关闭弹层
+                    })  ;
+                });
+            }
+        </script>
+
+        <script type="text/html" id="sexTpl">
+          {{# if(d.sex===1) { }}
+          男
+          {{# }else{ }}
+          女
+          {{# }}}
 
 
-
-</script>
-
-
+        </script>
 
 </body>
 </html>
