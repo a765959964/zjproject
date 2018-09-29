@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author 张瑶
+ * @author zf
  * @Description: redis配置
  * @date 2018/4/30 10:38
  */

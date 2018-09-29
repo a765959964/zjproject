@@ -230,6 +230,12 @@
 			<scope>true</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.santint</groupId>
+			<artifactId>core-framework</artifactId>
+			<version>2.0.1-SNAPSHOT</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

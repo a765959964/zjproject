@@ -16,4 +16,38 @@
     <result column="school" jdbcType="VARCHAR" property="school" />
     <result column="sex" jdbcType="INTEGER" property="sex" />
   </resultMap>
+
+
+  <select id="getAll"  resultMap="BaseResultMap">
+
+    select * from person
+    where 1=1
+
+    <if test="name != '' and name != null">
+        and name like  concat('%',#{name},'%')
+    </if>
+
+    <if test="address != '' and address != null">
+      and address like   concat(concat('%',#{address}),'%')
+    </if>
+
+    <if test="id != '' and id != null">
+      and id = #{id}
+    </if>
+
+    <if test="page !='' and page != null">
+       limit #{page}
+    </if>
+    <if test="limit !='' and limit != null">
+        , #{limit}
+    </if>
+
+  </select>
+
+
+
+
+
+
+
 </mapper>

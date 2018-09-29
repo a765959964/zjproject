@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * @Description: 基于通用MyBatis Mapper插件的Service接口的实现
- * @author 张瑶
+ * @author zf
  * @date 2018/4/18 11:28
  */
 public abstract class AbstractService<T> implements Service<T> {

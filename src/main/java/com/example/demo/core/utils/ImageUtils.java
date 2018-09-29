@@ -15,7 +15,7 @@ import java.io.OutputStream;
 
 /**
  * 图片处理工具类，主要压缩，添加logo等
- * @author 张瑶
+ * @author zf
  */
 public class ImageUtils {
 

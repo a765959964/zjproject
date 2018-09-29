@@ -6,7 +6,7 @@ import tk.mybatis.mapper.entity.Condition;
 import java.util.List;
 
 /**
- * @author 张瑶
+ * @author zf
  * @Description: Service层基础接口，其他Service接口请继承该接口
  * @date 2018/4/18 11:25
  */

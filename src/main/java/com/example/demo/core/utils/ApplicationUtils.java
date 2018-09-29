@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * @author 张瑶
+ * @author zf
  * @Description: 程序工具类，提供便捷方法
  * @time 2018/4/25 11:39
  */

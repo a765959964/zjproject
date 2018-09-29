@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
 * @Description: SystemLogService接口
-* @author 张瑶
+* @author zf
 * @date 2018/04/25 15:52
 */
 public interface SystemLogService extends Service<SystemLog> {

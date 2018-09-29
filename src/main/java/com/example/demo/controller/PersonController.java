@@ -7,13 +7,18 @@ import com.example.demo.model.Person;
 import com.example.demo.service.PersonService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.santint.core.web.query.QueryFilter;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @Description: PersonController类
@@ -90,13 +95,37 @@ public class PersonController {
      * @param limit 每页条数
      * @return
      */
-    @RequestMapping("/listJson")
+    @RequestMapping("/getAll")
     @ResponseBody
-    public LayuiResult<Person> getAll(@RequestParam(defaultValue = "0") Integer page,
+    public LayuiResult<Person> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
                                       @RequestParam(defaultValue = "0") Integer limit){
+        HashMap map = new HashMap();
         PageHelper.startPage(page, limit);
-        List<Person> list = personService.selectAll();
+        QueryFilter filter = new QueryFilter(request);
+        map.put("id",filter.getFilters().get("id"));
+        map.put("name",filter.getFilters().get("name"));
+        map.put("address",filter.getFilters().get("address"));
+        List<Person> list = personService.getAll(map);
         PageInfo<Person> pageInfo = new PageInfo<Person>(list);
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());
     }
+
+
+    @RequestMapping("/listJson")
+    @ResponseBody
+    public LayuiResult<Person> listJson(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
+                                      @RequestParam(defaultValue = "0") Integer limit, @Param("id")String id){
+        HashMap map = new HashMap();
+        PageHelper.startPage(page, limit);
+        String name = request.getParameter("name");
+        String address = request.getParameter("address");
+        map.put("name",name);
+        map.put("address",address);
+        map.put("id",id);
+        List<Person> list = personService.getAll(map);
+        PageInfo<Person> pageInfo = new PageInfo<Person>(list);
+        return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());
+    }
+
+
 }

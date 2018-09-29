@@ -11,7 +11,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
- * @author 张瑶
+ * @author zf
  * @Description: redis配置
  * @date 2018/4/30 10:28
  */

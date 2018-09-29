@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 /**
  * @Description: Mybatis翻页插件配置和XML文件配置等
- * @author 张瑶
+ * @author zf
  * @date 2018/4/18 11:50
  */
 @Configuration

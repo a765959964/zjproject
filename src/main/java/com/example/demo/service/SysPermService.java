@@ -5,7 +5,7 @@ import com.example.demo.core.universal.Service;
 
 /**
 * @Description: SysPermService接口
-* @author 张瑶
+* @author zf
 * @date 2018/05/26 00:30
 */
 public interface SysPermService extends Service<SysPerm> {

@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
 * @Description: UserRoleService接口
-* @author 张瑶
+* @author zf
 * @date 2018/05/25 23:27
 */
 public interface UserRoleService extends Service<UserRole> {

@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * @Description: 将结果转换为封装后的对象
- * @author 张瑶
+ * @author zf
  * @date 2018/4/19 09:45
  */
 public class RetResponse {

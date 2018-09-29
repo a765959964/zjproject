@@ -5,7 +5,7 @@ import com.example.demo.core.universal.Service;
 
 /**
 * @Description: SysRoleService接口
-* @author 张瑶
+* @author zf
 * @date 2018/05/25 23:01
 */
 public interface SysRoleService extends Service<SysRole> {

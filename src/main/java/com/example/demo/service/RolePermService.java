@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
 * @Description: RolePermService接口
-* @author 张瑶
+* @author zf
 * @date 2018/05/26 00:35
 */
 public interface RolePermService extends Service<RolePerm> {

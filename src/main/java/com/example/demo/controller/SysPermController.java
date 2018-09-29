@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
 * @Description: SysPermController类
-* @author 张瑶
+* @author zf
 * @date 2018/05/26 00:30
 */
 @RestController

@@ -18,7 +18,7 @@ import java.io.IOException;
 
 /**
  * @Description: 全局异常处理
- * @author 张瑶
+ * @author zf
  */
 @ControllerAdvice
 public class GlobalExceptionResolver {

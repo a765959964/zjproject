@@ -14,6 +14,25 @@
 </head>
 <body>
 
+    <div class="demoTable">
+        ID：
+        <div class="layui-inline">
+            <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+        </div>
+
+        用户名：
+        <div class="layui-inline">
+            <input class="layui-input" name="name" id="name" autocomplete="off">
+        </div>
+
+        地址：
+        <div class="layui-inline">
+            <input class="layui-input" name="address" id="address" autocomplete="off">
+        </div>
+        <button class="layui-btn" data-type="reload">搜索</button>
+    </div>
+
+
         <script type="text/html" id="toolbarDemo">
           <div class="layui-btn-container">
             <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
@@ -43,20 +62,22 @@
                       ,form = layui.form;
                   table.render({
                       elem: '#test-table-totalRow'
-                      ,url: '/person/listJson'
+                      ,url: '/person/getAll'
                       ,toolbar: '#toolbarDemo'
                       ,title: '用户数据表'
                       ,totalRow: true
                       ,cols: [[
                           {type: 'checkbox', fixed: 'left'}
-                          ,{field:'id', width:200, title: 'ID', sort: true}
-                          ,{field:'name', width:200, title: '用户名'}
+                          ,{field:'id', width:50, title: 'ID', sort: true}
+                          ,{field:'name', width:150, title: '用户名'}
                           ,{field:'sex', width:100, title: '性别', sort: true,templet:'#sexTpl'}
                           ,{field:'address', width:200, title: '地址'}
                           ,{field:'note', width:200, title: '备注'}
+                          ,{field:'birthDate', width:200, title: '出生日期'}
                           ,{fixed: 'right', width: 165, align:'center', toolbar: '#barPerson'}
                       ]]
                       ,page: true
+                      ,id : 'testReload'
                   });
 
                   //监听行工具事件
@@ -78,6 +99,31 @@
                           personAdd();
                       }
                   });
+
+                  var $ = layui.$, active = {
+                      reload: function(){
+                          var demoReload = $('#demoReload');
+                          //执行重载
+                          table.reload('testReload', {
+                              url : '/person/getAll'
+                              ,page: {
+                                  curr: 1 //重新从第 1 页开始
+                              }
+                              ,where: {
+                                  id: demoReload.val(),
+                                  name : $("#name").val(),
+                                  address :  $("#address").val()
+
+                              }
+                          });
+                      }
+                  };
+
+                  $('.demoTable .layui-btn').on('click', function(){
+                      var type = $(this).data('type');
+                      active[type] ? active[type].call(this) : '';
+                  });
+
               });
               }
 
@@ -104,7 +150,7 @@
                                 data: field,
                                 success : function (res){
                                     layer.msg("增加成功");
-                                    layui.table.reload('test-table-totalRow');
+                                    layui.table.reload('testReload');
                                     layer.close(index); //关闭弹层
                                 }
                             })
@@ -137,7 +183,7 @@
                                data: field,
                                success : function (res){
                                  layer.msg("修改成功");
-                                   layui.table.reload('test-table-totalRow');
+                                   layui.table.reload('testReload');
                                    layer.close(index); //关闭弹层
                                }
                            })
@@ -152,7 +198,7 @@
                 layer.confirm('确定删除吗？', function(index) {
                     $.post("/person/deleteById",{id:id},function (res){
                         layer.msg('已删除');
-                        layui.table.reload('test-table-totalRow');
+                        layui.table.reload('testReload');
                         layer.close(index); //关闭弹层
                     })  ;
                 });

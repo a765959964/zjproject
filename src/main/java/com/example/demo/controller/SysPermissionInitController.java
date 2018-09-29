@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
 * @Description: SysPermissionInitController类
-* @author 张瑶
+* @author zf
 * @date 2018/05/18 14:37
 */
 @RestController

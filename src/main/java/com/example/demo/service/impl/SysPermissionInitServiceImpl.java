@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
 * @Description: SysPermissionInitService接口实现类
-* @author 张瑶
+* @author zf
 * @date 2018/05/18 14:37
 */
 @Service

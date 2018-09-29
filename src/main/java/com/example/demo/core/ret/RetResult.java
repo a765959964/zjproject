@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSON;
 
 /**
  * @Description: 返回对象实体
- * @author 张瑶
+ * @author zf
  * @date 2018/4/19 09:43
  */
 public class RetResult<T> implements Serializable {
