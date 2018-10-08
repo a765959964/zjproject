@@ -1,5 +1,10 @@
 package com.example.demo.core.constant;
 
+/**
+ * 项目常量配置
+ * @Author: zf
+ * @Date: 2018-10-8 14:19:40
+ */
 public class ProjectConstant {
 
 	// 项目基础包名称，根据自己公司的项目修改

@@ -36,7 +36,8 @@ public class CodeGenerator {
     private static final String PACKAGE_PATH_SERVICE_IMPL = packageConvertPath(ProjectConstant.SERVICE_IMPL_PACKAGE);
     // 生成的Controller存放路径
     private static final String PACKAGE_PATH_CONTROLLER = packageConvertPath(ProjectConstant.CONTROLLER_PACKAGE);
-
+    //生成Mapper存放路径
+    private static final String PACKAGE_PATH_MAPPERR = packageConvertPath(ProjectConstant.MAPPER_PACKAGE);
     // @author
     private static final String AUTHOR = "zf";
     // @date
@@ -47,7 +48,7 @@ public class CodeGenerator {
      * @param args
      */
     public static void main(String[] args) {
-        genCode("person");
+        genCode("demo2");
     }
 
     /**
@@ -74,6 +75,10 @@ public class CodeGenerator {
         genController(tableName);
     }
 
+    /**
+     * model and Mapper 生成器
+     * @param tableName
+     */
     public static void genModelAndMapper(String tableName) {
         Context context = getContext();
 
@@ -121,6 +126,10 @@ public class CodeGenerator {
         System.out.println(modelName + "Mapper.xml 生成成功");
     }
 
+    /**
+     * service 生成器
+     * @param tableName
+     */
     public static void genService(String tableName) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
@@ -154,6 +163,10 @@ public class CodeGenerator {
         }
     }
 
+    /**
+     * 控制器生成
+     * @param tableName
+     */
     public static void genController(String tableName) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
@@ -238,6 +251,7 @@ public class CodeGenerator {
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
         return cfg;
     }
+
 
     private static String tableNameConvertUpperCamel(String tableName) {
         return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName.toLowerCase());

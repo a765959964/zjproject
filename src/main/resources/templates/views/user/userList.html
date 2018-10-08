@@ -14,7 +14,7 @@
 </head>
 <body>
 
-    <div class="demoTable">
+    <div class="sysUserTable">
         ID：
         <div class="layui-inline">
             <input class="layui-input" name="id" id="demoReload" autocomplete="off">
@@ -33,15 +33,15 @@
     </div>
 
 
-        <script type="text/html" id="toolbarDemo">
+        <script type="text/html" id="toolbarSysUser">
           <div class="layui-btn-container">
             <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
           </div>
         </script>
 
-        <table class="layui-hide" id="test-table-totalRow" lay-filter="test-table-totalRow"></table>
+        <table class="layui-hide" id="sysUserTable" lay-filter="sysUserTable"></table>
 
-        <script type="text/html" id="barPerson">
+        <script type="text/html" id="barSysUser">
           <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
           <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -61,42 +61,42 @@
                       ,table = layui.table
                       ,form = layui.form;
                   table.render({
-                      elem: '#test-table-totalRow'
-                      ,url: '/person/getAll'
-                      ,toolbar: '#toolbarDemo'
+                      elem: '#sysUserTable'
+                      ,url: '/sysuser/getAll'
+                      ,toolbar: '#toolbarSysUser'
                       ,title: '用户数据表'
                       ,totalRow: true
                       ,cols: [[
                           {type: 'checkbox', fixed: 'left'}
                           ,{field:'id', width:50, title: 'ID', sort: true}
-                          ,{field:'name', width:150, title: '用户名'}
-                          ,{field:'sex', width:100, title: '性别', sort: true,templet:'#sexTpl'}
-                          ,{field:'address', width:200, title: '地址'}
-                          ,{field:'note', width:200, title: '备注'}
-                          ,{field:'birthDate', width:200, title: '出生日期'}
-                          ,{fixed: 'right', width: 165, align:'center', toolbar: '#barPerson'}
+                          ,{field:'name', width:200, title: '用户名'}
+                          ,{field:'sex', width:150, title: '性别', sort: true,templet:'#sexTpl'}
+                          ,{field:'pwd', width:100, title: '密码'}
+                          ,{field:'email', width:100, title: 'email'}
+                          ,{field:'phone', width:200, title: '手机号'}
+                          ,{fixed: 'right', width: 200, align:'center', toolbar: '#barSysUser'}
                       ]]
                       ,page: true
-                      ,id : 'testReload'
+                      ,id : 'sysUserReload'
                   });
 
                   //监听行工具事件
-                  table.on('tool(test-table-totalRow)', function(obj){
+                  table.on('tool(sysUserTable)', function(obj){
                       var data = obj.data;
                       if(obj.event === 'del'){      //删除
                           delById(data.id);
                       } else if(obj.event === 'edit'){     //编辑
-                          personEdit(data.id);
+                          sysUserEdit(data.id);
                       } else {     //查看
                           alert("查看");
                       }
                   });
 
                  //头工具栏事件
-                  table.on('toolbar(test-table-totalRow)', function(obj){
+                  table.on('toolbar(sysUserTable)', function(obj){
                       var checkStatus = table.checkStatus(obj.config.id);
                       if(obj.event=="add"){   //添加
-                          personAdd();
+                          sysUserAdd();
                       }
                   });
 
@@ -104,8 +104,8 @@
                       reload: function(){
                           var demoReload = $('#demoReload');
                           //执行重载
-                          table.reload('testReload', {
-                              url : '/person/getAll'
+                          table.reload('sysUserReload', {
+                              url : '/sysuser/getAll'
                               ,page: {
                                   curr: 1 //重新从第 1 页开始
                               }
@@ -119,7 +119,7 @@
                       }
                   };
 
-                  $('.demoTable .layui-btn').on('click', function(){
+                  $('.sysUserTable .layui-btn').on('click', function(){
                       var type = $(this).data('type');
                       active[type] ? active[type].call(this) : '';
                   });
@@ -128,29 +128,29 @@
               }
 
             //增加页面
-            function personAdd(){
+            function sysUserAdd(){
                 layer.open({
                     type: 2
                     ,title: '增加用户信息'
-                    ,content: 'personAdd.html'
+                    ,content: 'userAdd.html'
                     ,maxmin: true
                     ,area: ['650px', '550px']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
                         var iframeWindow = window['layui-layer-iframe'+ index]
-                            ,submitID = 'LAY-user-front-submit'
+                            ,submitID = 'sysUserSubmit'
                             ,submit = layero.find('iframe').contents().find('#'+ submitID);
                         //监听提交
                         iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                             var field = data.field; //获取提交的字段
                             $.ajax({
-                                url : '/person/insert',
+                                url : '/sysuser/insert',
                                 type : 'post',
                                 dataTypep : 'json',
                                 data: field,
                                 success : function (res){
                                     layer.msg("增加成功");
-                                    layui.table.reload('testReload');
+                                    layui.table.reload('sysUserReload');
                                     layer.close(index); //关闭弹层
                                 }
                             })
@@ -161,29 +161,29 @@
             }
 
             //编辑页面
-            function personEdit(id){
+            function sysUserEdit(id){
                 layer.open({
                     type: 2
                     ,title: '修改用户信息'
-                   ,content: '/person/getById?id='+id
+                   ,content: '/sysuser/getById?id='+id
                     ,maxmin: true
                     ,area: ['650px', '550px']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
                         var iframeWindow = window['layui-layer-iframe'+ index]
-                           ,submitID = 'LAY-user-front-update'
+                           ,submitID = 'sysUserUpdate'
                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
                            //监听提交
                            iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                            var field = data.field; //获取提交的字段
                            $.ajax({
-                               url : '/person/update',
+                               url : '/sysuser/update',
                                type : 'post',
                                dataTypep : 'json',
                                data: field,
                                success : function (res){
                                  layer.msg("修改成功");
-                                   layui.table.reload('testReload');
+                                   layui.table.reload('sysUserReload');
                                    layer.close(index); //关闭弹层
                                }
                            })
@@ -196,9 +196,9 @@
             //删除id
             function delById(id){
                 layer.confirm('确定删除吗？', function(index) {
-                    $.post("/person/deleteById",{id:id},function (res){
+                    $.post("/sysuser/deleteById",{id:id},function (res){
                         layer.msg('已删除');
-                        layui.table.reload('testReload');
+                        layui.table.reload('sysUserReload');
                         layer.close(index); //关闭弹层
                     })  ;
                 });

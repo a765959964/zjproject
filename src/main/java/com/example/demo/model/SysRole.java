@@ -36,22 +36,10 @@ public class SysRole {
     private Date updateTime;
 
     /**
-     * 是否禁用  0是不禁用，1为禁用
+     * 是否禁用
      */
-    @Column(name = "isDisable")
+    @Column(name = "is_disable")
     private Integer isDisable;
-
-    /**
-     * 被禁用
-     */
-    @Transient
-    public static final Integer DISABLEYES = 1;
-
-    /**
-     * 未被禁用
-     */
-    @Transient
-    public static final Integer DISABLENO = 1;
 
     /**
      * 获取角色名称
@@ -153,10 +141,20 @@ public class SysRole {
         this.updateTime = updateTime;
     }
 
+    /**
+     * 获取是否禁用
+     *
+     * @return is_disable - 是否禁用
+     */
     public Integer getIsDisable() {
         return isDisable;
     }
 
+    /**
+     * 设置是否禁用
+     *
+     * @param isDisable 是否禁用
+     */
     public void setIsDisable(Integer isDisable) {
         this.isDisable = isDisable;
     }
