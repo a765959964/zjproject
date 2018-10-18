@@ -4,6 +4,7 @@ import org.apache.ibatis.exceptions.TooManyResultsException;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zf
@@ -98,6 +99,6 @@ public interface Service<T> {
      */
     T selectOne(T record);
 
-
+    List<T> getAll(Map map);
 
 }

@@ -1,7 +1,12 @@
 package com.example.demo.model;
 
+
+import com.alibaba.fastjson.annotation.JSONField;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "sys_role")
 public class SysRole {
@@ -30,6 +35,7 @@ public class SysRole {
     private String roleValue;
 
     @Column(name = "create_time")
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     @Column(name = "update_time")

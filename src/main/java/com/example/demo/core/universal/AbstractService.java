@@ -8,6 +8,7 @@ import tk.mybatis.mapper.entity.Condition;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description: 基于通用MyBatis Mapper插件的Service接口的实现
@@ -108,5 +109,10 @@ public abstract class AbstractService<T> implements Service<T> {
 	@Override
 	public T selectOne(T recoed){
 		return mapper.selectOne(recoed);
+	}
+
+	@Override
+	public List<T> getAll(Map map) {
+		return mapper.getAll(map);
 	}
 }

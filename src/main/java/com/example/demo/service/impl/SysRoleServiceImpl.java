@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @Description: SysRoleService接口实现类
@@ -20,4 +22,8 @@ public class SysRoleServiceImpl extends AbstractService<SysRole> implements SysR
     @Resource
     private SysRoleMapper sysRoleMapper;
 
+    @Override
+    public List getRoleMenu() {
+        return sysRoleMapper.getRoleMenu();
+    }
 }

@@ -5,6 +5,9 @@ import tk.mybatis.mapper.common.ConditionMapper;
 import tk.mybatis.mapper.common.IdsMapper;
 import tk.mybatis.mapper.common.special.InsertListMapper;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @Description: 定制版MyBatis Mapper插件接口，如需其他接口参考官方文档自行添加。
  * @author zf
@@ -31,7 +34,11 @@ import tk.mybatis.mapper.common.special.InsertListMapper;
  * int updateByCondition(@Param("record") T record, @Param("example") Object condition); 根据Condition条件更新实体record包含的全部属性，null值会被更新
  * int updateByConditionSelective(@Param("record") T record, @Param("example") Object condition); 根据Condition条件更新实体record包含的不是null的属性值
  * int deleteByCondition(Object condition); 根据Condition条件删除数据
+ * ****************  下面实现自定义查询，可以增加扩展条件  ************  add by zf 2018-10-9 10:54:39
+ * List<T> getAll(Map map);  根据Map 条件查询数据
  *
  */
 public interface Mapper<T> extends BaseMapper<T>, ConditionMapper<T>, IdsMapper<T>, InsertListMapper<T> {
+
+    List<T> getAll(Map map);
 }

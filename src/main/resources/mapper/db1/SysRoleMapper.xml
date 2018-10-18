@@ -10,4 +10,25 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <select id="getAll"  resultMap="BaseResultMap">
+
+    select * from sys_role
+    where 1=1
+    <if test="page !='' and page != null">
+      limit #{page}
+    </if>
+    <if test="limit !='' and limit != null">
+      , #{limit}
+    </if>
+
+  </select>
+
+  <select id="getRoleMenu"  resultType="java.util.HashMap">
+    select role.*,sm.`name` from sys_role role
+    left join sys_role_menu rm on role.id = rm.role_id
+    left join sys_menu sm on sm.id = rm .menu_id
+  </select>
+
+
 </mapper>
