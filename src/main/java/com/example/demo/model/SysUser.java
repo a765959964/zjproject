@@ -25,6 +25,9 @@ public class SysUser {
 
     private Integer isdel;
 
+    @Column(name = "dept_id")
+    private Integer deptId;
+
     /**
      * @return id
      */
@@ -149,5 +152,13 @@ public class SysUser {
      */
     public void setIsdel(Integer isdel) {
         this.isdel = isdel;
+    }
+
+    public Integer getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Integer deptId) {
+        this.deptId = deptId;
     }
 }

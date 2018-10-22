@@ -14,12 +14,31 @@
     <result column="pwd" jdbcType="VARCHAR" property="pwd" />
     <result column="sex" jdbcType="VARCHAR" property="sex" />
     <result column="isdel" jdbcType="INTEGER" property="isdel" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId"/>
   </resultMap>
 
 
   <select id="getAll"  resultMap="BaseResultMap">
-    select * from sys_user
+    select * from sys_user t
+    left join sys_dept d on t.dept_id = d.id
     where 1=1
+    
+    <choose>
+      <when test="deptId == '' or deptId == 0">
+
+      </when>
+      <otherwise>
+        and  t.dept_id = #{deptId}
+      </otherwise>
+    </choose>
+    <if test="name != '' and name !=null">
+      and t.name like concat('%',#{name},'%')
+    </if>
+    <if test="address != '' and address !=null">
+      and t.address like concat('%',#{address},'%')
+    </if>
+
+
     <if test="page !='' and page != null">
       limit #{page}
     </if>

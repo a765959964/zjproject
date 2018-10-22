@@ -45,10 +45,10 @@
     <div class="layui-form-item">
         <label class="layui-form-label">选择部门</label>
         <div class="layui-input-inline">
-            <input type="text" name="deptName" placeholder="选择部门" id="deptName" class="layui-input" readonly  onclick="getShow()"/>
+            <input type="text" name="deptName" id="deptName" class="layui-input" readonly onclick="getTree()"/>
             <input type="hidden" name="deptId" id="deptId" class="layui-input" />
             <!--<input type="text" name="deptId" id="deptId" />-->
-            <ul id="demo2" style="display: none"></ul>
+            <ul id="demo2"></ul>
         </div>
     </div>
 
@@ -91,18 +91,13 @@
 
     });
 
-
-    function getShow(){
-        $("#demo2").show();
-    }
-
     function getTree(){
         layer.open({
             type: 2
-            ,title: '选择部门'
-            ,content: 'deptTree.html'
+            ,title: '增加用户信息'
+            ,content: 'userAdd.html'
             ,maxmin: true
-            ,area: ['300px', '350px']
+            ,area: ['650px', '550px']
             ,btn: ['确定', '取消']
             ,yes: function(index, layero){
                 var iframeWindow = window['layui-layer-iframe'+ index]

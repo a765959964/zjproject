@@ -4,7 +4,9 @@ import com.example.demo.core.ret.LayuiResult;
 import com.example.demo.core.ret.RetResponse;
 import com.example.demo.core.ret.RetResult;
 import com.example.demo.model.Person;
+import com.example.demo.model.SysDept;
 import com.example.demo.model.SysUser;
+import com.example.demo.service.SysDeptService;
 import com.example.demo.service.SysUserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -29,6 +31,10 @@ public class SysUserController {
 
     @Resource
     private SysUserService sysUserService;
+
+    @Resource
+    private SysDeptService sysDeptService;
+
 
     @PostMapping("/insert")
     public RetResult<Integer> insert(SysUser sysUser) throws Exception{
@@ -60,8 +66,10 @@ public class SysUserController {
     public ModelAndView getById(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
         SysUser sysUser = sysUserService.selectById(id);
+
+        SysDept sysdept =  sysDeptService.selectById(sysUser.getDeptId().toString());
         mv.setViewName("views/user/userEdit");
-        mv.addObject("sysUser",sysUser);
+        mv.addObject("sysUser",sysUser).addObject("deptName",sysdept.getName());
         return mv;
     }
 
@@ -94,6 +102,22 @@ public class SysUserController {
         HashMap map = new HashMap();
         PageHelper.startPage(page, limit);
         QueryFilter filter = new QueryFilter(request);
+        map.put("deptId","0");
+
+        if(filter.getFilters().get("deptId")!=null){
+            String deptId = filter.getFilters().get("deptId").toString();
+            map.put("deptId",deptId);
+        }
+        if(filter.getFilters().get("name")!=null){
+            String name =  filter.getFilters().get("name").toString();
+            map.put("name",name);
+        }else if(filter.getFilters().get("address")!= null){
+            String address = filter.getFilters().get("address").toString();
+            map.put("address",address);
+        }else if(filter.getFilters().get("deptId")!=null){
+            String deptId = filter.getFilters().get("deptId").toString();
+            map.put("deptId",deptId);
+        }
         List<SysUser> list =sysUserService.getAll(map);
         PageInfo<SysUser> pageInfo = new PageInfo<SysUser>(list);
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());

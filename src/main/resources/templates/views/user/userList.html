@@ -29,30 +29,86 @@
         <div class="layui-inline">
             <input class="layui-input" name="address" id="address" autocomplete="off">
         </div>
+        <!--<input type="text" id="deptId" value="">-->
+        <span id="deptId" style="display: none;"></span>
         <button class="layui-btn" data-type="reload">搜索</button>
     </div>
 
 
-        <script type="text/html" id="toolbarSysUser">
-          <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
-          </div>
-        </script>
+    <script type="text/html" id="toolbarSysUser">
+      <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+      </div>
+    </script>
 
+    <div style="display: inline-block; width: 200px; height: 500px; padding: 10px; border: 1px solid #ddd; overflow: auto;">
+        <ul id="demo2"></ul>
+    </div>
+    <div class="site-tips" style="display: inline-block; height: 200px; width: 850px; padding: 10px; margin-left: 10px; vertical-align: top;" id="demo2-view">
         <table class="layui-hide" id="sysUserTable" lay-filter="sysUserTable"></table>
-
+    </div>
         <script type="text/html" id="barSysUser">
           <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
           <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 
-
-
         <script>
           $(function (){
               init();
+              var obj;
+              $.post("/sysdept/getTree",function (res){
+                  obj = res; // console.log(res);
+                  layui.use('tree', function(){
+                      var $ = layui.jquery;
+                      layui.tree({
+                          elem: '#demo2' //指定元素
+                          ,target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
+                          ,url : 'sysdept/getTree'
+                          ,click: function(item){ //点击节点回调
+                            //  $('#demo2-view').html('当前节名称：'+ item.name + '<br>全部参数：'+ JSON.stringify(item));
+                             if(item.pId==0){
+                                 $("#deptId").html('0');
+                             }else{
+                                 $("#deptId").html(item.id);
+                             }
+                              layui.use( 'table', function(){
+                                      var $ = layui.$
+                                          ,table = layui.table
+                                          ,form = layui.form;
+                                      table.render({
+                                          elem: '#sysUserTable'
+                                          ,url: '/sysuser/getAll?deptId='+$("#deptId").html()
+                                          ,toolbar: '#toolbarSysUser'
+                                          ,title: '用户数据表'
+                                          ,totalRow: true
+                                          ,cols: [[
+                                              {type: 'checkbox', fixed: 'left'}
+                                              ,{field:'id', width:50, title: 'ID', sort: true}
+                                              ,{field:'name', width:100, title: '用户名'}
+                                              ,{field:'sex', width:150, title: '性别', sort: true,templet:'#sexTpl'}
+                                              ,{field:'pwd', width:100, title: '密码'}
+                                              ,{field:'email', width:200, title: 'email'}
+                                              ,{fixed: 'right', width: 200, align:'center', toolbar: '#barSysUser'}
+                                          ]]
+                                          ,page: true
+                                          ,id : 'sysUserReload'
+                                      })
+
+
+                          }
+                              )}
+                          ,nodes: obj
+                      });
+                  });
+
+              });
+
           })
+
+
+
+
 
           //初始化 layui 数据表格
           function init(){
@@ -69,11 +125,10 @@
                       ,cols: [[
                           {type: 'checkbox', fixed: 'left'}
                           ,{field:'id', width:50, title: 'ID', sort: true}
-                          ,{field:'name', width:200, title: '用户名'}
+                          ,{field:'name', width:100, title: '用户名'}
                           ,{field:'sex', width:150, title: '性别', sort: true,templet:'#sexTpl'}
                           ,{field:'pwd', width:100, title: '密码'}
-                          ,{field:'email', width:100, title: 'email'}
-                          ,{field:'phone', width:200, title: '手机号'}
+                          ,{field:'email', width:200, title: 'email'}
                           ,{fixed: 'right', width: 200, align:'center', toolbar: '#barSysUser'}
                       ]]
                       ,page: true
@@ -112,8 +167,8 @@
                               ,where: {
                                   id: demoReload.val(),
                                   name : $("#name").val(),
+                                  deptId : $("#deptId").html(),
                                   address :  $("#address").val()
-
                               }
                           });
                       }
@@ -206,11 +261,11 @@
         </script>
 
         <script type="text/html" id="sexTpl">
-          {{# if(d.sex===1) { }}
-          男
-          {{# }else{ }}
-          女
-          {{# }}}
+          {{# if(d.sex==1){ }}
+            男
+          {{# } else { }}
+             女
+          {{# } }}
         </script>
 
 </body>

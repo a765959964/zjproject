@@ -49,7 +49,14 @@
             <input type="text" name="phone" th:value="${sysUser.phone}" autocomplete="off" class="layui-input">
         </div>
     </div>
-
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择部门</label>
+        <div class="layui-input-inline">
+            <input type="text"  th:value="${deptName}" placeholder="选择部门"  id="deptName" class="layui-input" readonly  onclick="getShow()"/>
+            <input type="hidden" name="deptId"  th:value="${sysUser.deptId}" id="deptId" class="layui-input" />
+            <ul id="demo2" ></ul>
+        </div>
+    </div>
 
     <div class="layui-form-item layui-hide">
         <input type="button" lay-submit lay-filter="sysUserUpdate" id="sysUserUpdate" value="确认">
@@ -57,16 +64,72 @@
 </div>
 
 <script src="/static/layui/layuiadmin/layui/layui.js"></script>
+<script src="/static/jquery/jquery-2.1.4.min.js" charset="utf-8"></script>
 <script>
     layui.use([ 'form','laydate'], function(){
         var $ = layui.$
             ,laydate = layui.laydate;
         form = layui.form;
         //常规用法
-        laydate.render({
-            elem: '#test1'
-        });
     })
+
+
+    $.post("/sysdept/getTree",function (res){
+        obj = res; // console.log(res);
+        layui.use('tree', function(){
+            var $ = layui.jquery;
+            layui.tree({
+                elem: '#demo2' //指定元素
+                ,target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
+                ,url : 'sysdept/getTree'
+                ,click: function(item){ //点击节点回调
+                    $("#deptName").val(item.name);
+                    $("#deptId").val(item.id);
+                    //$('#demo2-view').html('当前节名称：'+ item.name + '<br>全部参数：'+ JSON.stringify(item));
+                }
+                ,nodes: obj
+            });
+        });
+
+    });
+
+
+    function getShow(){
+        $("#demo2").show();
+    }
+
+    function getTree(){
+        layer.open({
+            type: 2
+            ,title: '选择部门'
+            ,content: 'deptTree.html'
+            ,maxmin: true
+            ,area: ['300px', '350px']
+            ,btn: ['确定', '取消']
+            ,yes: function(index, layero){
+                var iframeWindow = window['layui-layer-iframe'+ index]
+                    ,submitID = 'sysUserSubmit'
+                    ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                //监听提交
+                iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                    var field = data.field; //获取提交的字段
+                    $.ajax({
+                        url : '/sysuser/insert',
+                        type : 'post',
+                        dataTypep : 'json',
+                        data: field,
+                        success : function (res){
+                            layer.msg("增加成功");
+                            layui.table.reload('sysUserReload');
+                            layer.close(index); //关闭弹层
+                        }
+                    })
+                });
+                submit.trigger('click');
+            }
+        });
+
+    }
 </script>
 </body>
 </html>

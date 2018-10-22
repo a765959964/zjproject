@@ -4,6 +4,7 @@ import com.example.demo.core.ret.LayuiResult;
 import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.RetResponse;
 import com.example.demo.core.utils.ApplicationUtils;
+import com.example.demo.core.utils.LayuiTree;
 import com.example.demo.model.SysDept;
 import com.example.demo.service.SysDeptService;
 import com.github.pagehelper.PageHelper;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -120,8 +122,60 @@ public class SysDeptController {
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());
     }
 
+    /**
+     * layui demo
+     * @return
+     */
+    @RequestMapping("/getTree")
+    @ResponseBody
+    public List<LayuiTree> getTree(){
+       List<LayuiTree> layuiTreeList =new ArrayList<>();
+       List<SysDept> sysdeptList =  sysDeptService.selectAll();
+       layuiTreeList = getParentTree(sysdeptList);
+       return layuiTreeList;
+    }
 
 
+    private  List<LayuiTree> getParentTree(List<SysDept> sysdeptList){
+        List<LayuiTree>  layuiTreeList = new ArrayList<>();
+        List<LayuiTree>  ltList = new ArrayList<>();
+        LayuiTree layuiTree  = new LayuiTree();
+        for (SysDept sysdept: sysdeptList) {
+            if(sysdept.getPid()==0){
+                layuiTree.setId(sysdept.getId());
+                layuiTree.setName(sysdept.getName());
+                layuiTree.setpId(0);
+                layuiTree.setChildren(layuiTreeList);
+            }else if(sysdept.getPid().equals(layuiTree.getId())){
+                LayuiTree lt = new LayuiTree();
+                lt.setId(sysdept.getId());
+                lt.setName(sysdept.getName());
+                lt.setpId(sysdept.getPid());
+                ltList.add(lt);
+                layuiTree.setChildren(ltList);
+            }
+        }
+        layuiTreeList.add(layuiTree);
+        return layuiTreeList;
+    }
+
+    /*
+    private  List<LayuiTree> getParentTree(List<SysDept> sysdeptList){
+        List<LayuiTree>  layuiTreeList = new ArrayList<>();
+        List<LayuiTree>  ltList = new ArrayList<>();
+        LayuiTree layuiTree  = new LayuiTree();
+        for (SysDept sysdept: sysdeptList) {
+            if(sysdept.getPid()==0){
+                layuiTree.setId(sysdept.getId());
+                layuiTree.setName(sysdept.getName());
+                layuiTreeList.add(layuiTree);
+                layuiTree.setChildren(layuiTreeList);
+            }else if(sysdept.getPid().equals(layuiTree.getId())){
+                getParentTree(sysdeptList);
+            }
+        }
+        return layuiTreeList;
+    }*/
 
 
 
