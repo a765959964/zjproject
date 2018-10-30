@@ -36,6 +36,22 @@ public class SysDeptController {
     @Resource
     private SysDeptService sysDeptService;
 
+    @RequestMapping(value = "/listView",method = RequestMethod.GET)
+    public ModelAndView listView(Model model) throws Exception {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("views/user/dept/deptList");
+        return mv;
+    }
+
+
+    @RequestMapping(value = "/add",method = RequestMethod.GET)
+    public ModelAndView deptAdd(Model model) throws Exception {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("views/user/dept/add");
+        return mv;
+    }
+
+
     @PostMapping("/insert")
     public RetResult<Integer> insert(SysDept sysDept) throws Exception{
     // sysDept.setId(ApplicationUtils.getUUID());
@@ -83,7 +99,7 @@ public class SysDeptController {
         if(sysDept.getPid()==0){
            mv.addObject("pname","无");
         }else {
-            SysDept sd = sysDeptService.selectById(sysDept.getPid().toString());
+           SysDept sd = sysDeptService.selectById(sysDept.getPid().toString());
            mv.addObject("pname", sd.getName());
         }
         return mv;

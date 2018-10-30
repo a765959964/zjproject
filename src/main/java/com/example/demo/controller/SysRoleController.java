@@ -35,6 +35,21 @@ public class SysRoleController {
     @Resource
     private SysRoleService sysRoleService;
 
+    @RequestMapping(value = "/listView",method = RequestMethod.GET)
+    public ModelAndView listView(Model model) throws Exception {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("views/user/role/roleList");
+        return mv;
+    }
+
+    @RequestMapping(value = "/roleAdd",method = RequestMethod.GET)
+    public ModelAndView roleAdd(Model model) throws Exception {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("views/user/role/roleAdd");
+        return mv;
+    }
+
+
     @PostMapping("/insert")
     public RetResult<Integer> insert(SysRole sysRole) throws Exception{
     // sysRole.setId(ApplicationUtils.getUUID());

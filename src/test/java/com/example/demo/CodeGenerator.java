@@ -17,7 +17,7 @@ import java.util.*;
 /**
  * @author zf
  * @Description: 代码生成器，根据数据表名称生成对应的Model、Mapper、Service、Controller简化开发。
- * @date 2018/4/23 20:28
+ * @date 2018/10/23
  */
 public class CodeGenerator {
 
@@ -48,7 +48,7 @@ public class CodeGenerator {
      * @param args
      */
     public static void main(String[] args) {
-        genCode("sys_dept");
+        genCode("sys_menu");
     }
 
     /**

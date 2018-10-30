@@ -11,6 +11,7 @@ import com.example.demo.service.SysUserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.santint.core.web.query.QueryFilter;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,7 +26,7 @@ import java.util.List;
 * @author zf
 * @date 2018/10/08 09:36
 */
-@RestController
+@Controller
 @RequestMapping("/sysuser")
 public class SysUserController {
 
@@ -35,6 +36,29 @@ public class SysUserController {
     @Resource
     private SysDeptService sysDeptService;
 
+
+    @RequestMapping(value = "/listView",method = RequestMethod.GET)
+    public ModelAndView listView(Model model) throws Exception {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("views/user/userList");
+        return mv;
+    }
+
+
+    @RequestMapping(value = "/listViews",method = RequestMethod.GET)
+    public String listViews() throws Exception {
+       /* ModelAndView mv = new ModelAndView();
+        mv.setViewName("");*/
+        return "views/user/userLists";
+    }
+
+
+    @RequestMapping(value = "/userAdd",method = RequestMethod.GET)
+    public ModelAndView userAdd(Model model) throws Exception {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("views/user/userAdd");
+        return mv;
+    }
 
     @PostMapping("/insert")
     public RetResult<Integer> insert(SysUser sysUser) throws Exception{
