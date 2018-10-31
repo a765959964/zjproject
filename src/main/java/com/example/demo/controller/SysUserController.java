@@ -145,6 +145,9 @@ public class SysUserController {
             String deptId = filter.getFilters().get("deptId").toString();
             map.put("deptId",deptId);
         }
+
+
+
         List<SysUser> list =sysUserService.getAll(map);
         PageInfo<SysUser> pageInfo = new PageInfo<SysUser>(list);
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());

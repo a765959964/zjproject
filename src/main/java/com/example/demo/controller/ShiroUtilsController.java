@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.core.ret.ServiceException;
-import com.example.demo.model.UserInfo;
+import com.example.demo.model.SysUser;
 import com.example.demo.service.ShiroService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
@@ -33,8 +32,8 @@ public class ShiroUtilsController {
 
 
     @PostMapping("/getNowUser")
-    public UserInfo getNowUser() {
-        UserInfo u = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+    public SysUser getNowUser() {
+        SysUser u = (SysUser) SecurityUtils.getSubject().getPrincipal();
         return u;
     }
 

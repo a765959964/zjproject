@@ -9,4 +9,15 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="role_id" jdbcType="INTEGER" property="roleId" />
   </resultMap>
+
+
+   <select id="getRolesByUserId" resultType="String" parameterType="String">
+      select sr.role_value from sys_user_role sur
+      left join sys_role sr on sr.id = sur.role_id
+      where sur.user_id = #{userId};
+   </select>
+
+
+
+
 </mapper>

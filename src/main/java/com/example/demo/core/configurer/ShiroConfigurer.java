@@ -1,8 +1,8 @@
 package com.example.demo.core.configurer;
 
 import com.example.demo.core.shiro.CustomRealm;
-import com.example.demo.model.SysPermissionInit;
-import com.example.demo.service.SysPermissionInitService;
+import com.example.demo.model.SysMenu;
+import com.example.demo.service.SysMenuService;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
@@ -13,11 +13,16 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * shiro 配置
+ */
 @Configuration
 public class ShiroConfigurer {
 
+
     @Resource
-    private SysPermissionInitService sysPermissionInitService;
+    private SysMenuService sysMenuService;
+
 
     /**
      * 注入自定义的realm，告诉shiro如何获取用户信息来做登录或权限控制
@@ -48,10 +53,10 @@ public class ShiroConfigurer {
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
         DefaultShiroFilterChainDefinition chain = new DefaultShiroFilterChainDefinition();
-        List<SysPermissionInit> list = sysPermissionInitService.selectAllOrderBySort();
+        List<SysMenu> list = sysMenuService.getAll();
         for(int i = 0,length = list.size();i<length;i++){
-            SysPermissionInit sysPermissionInit = list.get(i);
-            chain.addPathDefinition(sysPermissionInit.getUrl(), sysPermissionInit.getPermissionInit());
+            SysMenu sysMenu = list.get(i);
+            chain.addPathDefinition(sysMenu.getUrl(), sysMenu.getPerms());
         }
         return chain;
     }

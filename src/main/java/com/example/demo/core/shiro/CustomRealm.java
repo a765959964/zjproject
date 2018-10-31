@@ -1,10 +1,10 @@
 package com.example.demo.core.shiro;
 
 
-import com.example.demo.model.UserInfo;
-import com.example.demo.service.RolePermService;
-import com.example.demo.service.UserInfoService;
-import com.example.demo.service.UserRoleService;
+import com.example.demo.model.SysUser;
+import com.example.demo.service.SysMenuService;
+import com.example.demo.service.SysUserRoleService;
+import com.example.demo.service.SysUserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationException;
@@ -25,12 +25,15 @@ import java.util.Set;
  */
 public class CustomRealm extends AuthorizingRealm {
 
+
     @Autowired
-    private UserInfoService userService;
+    private SysUserService sysUserService;
+
     @Autowired
-    private UserRoleService userRoleService;
+    private SysUserRoleService sysUserRoleService;
+
     @Autowired
-    private RolePermService rolePermService;
+    private SysMenuService sysMenuService;
 
     /**
      * 告诉shiro如何根据获取到的用户信息中的密码和盐值来校验密码
@@ -52,14 +55,16 @@ public class CustomRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         if (principals == null) {
-            throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
+            throw new AuthorizationException("PrincipalCollection method 参数不能为空.");
         }
-        UserInfo user = (UserInfo) getAvailablePrincipal(principals);
-        System.out.println("获取角色信息："+user.getRoles());
-        System.out.println("获取权限信息："+user.getPerms());
+        SysUser user = (SysUser) getAvailablePrincipal(principals);
+
+//        UserInfo user = (UserInfo) getAvailablePrincipal(principals);
+        System.out.println("获取角色信息："+user.getRoleIds());
+        System.out.println("获取部门信息："+user.getMenuIds());
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.setRoles(user.getRoles());
-        info.setStringPermissions(user.getPerms());
+        info.setRoles(user.getRoleIds());
+        info.setStringPermissions(user.getMenuIds());
         return info;
     }
 
@@ -71,25 +76,24 @@ public class CustomRealm extends AuthorizingRealm {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         String username = upToken.getUsername();
         if (username == null) {
-            throw new AccountException("Null usernames are not allowed by this realm.");
+            throw new AccountException("--用户名不能为空---");
         }
-        UserInfo userDB = userService.selectBy("userName",username);
-        if (userDB == null) {
-            throw new UnknownAccountException("No account found for admin [" + username + "]");
+        SysUser sysUser  = sysUserService.selectBy("name",username);
+        if(sysUser == null){
+            throw new UnknownAccountException("没有找到此账户 [" + username + "]");
         }
         //查询用户的角色和权限存到SimpleAuthenticationInfo中，这样在其它地方
         //SecurityUtils.getSubject().getPrincipal()就能拿出用户的所有信息，包括角色和权限
-        List<String> roleList = userRoleService.getRolesByUserId(userDB.getId());
-        List<String> permList = rolePermService.getPermsByUserId(userDB.getId());
-        Set<String> roles = new HashSet(roleList);
-        Set<String> perms = new HashSet(permList);
-        userDB.setRoles(roles);
-        userDB.setPerms(perms);
+        List<String> roleIds = sysUserRoleService.getRolesByUserId(sysUser.getId().toString());
+        List<String> menuIds = sysMenuService.getMenusByUserId(sysUser.getId().toString());
+        Set<String> roles = new HashSet(roleIds);
+        Set<String> menus = new HashSet(menuIds);
 
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userDB, userDB.getPassword(), getName());
-        info.setCredentialsSalt(ByteSource.Util.bytes(userDB.getSalt()));
+        sysUser.setRoleIds(roles);
+        sysUser.setMenuIds(menus);
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(sysUser,sysUser.getPwd(),getName());
+        info.setCredentialsSalt(ByteSource.Util.bytes(sysUser.getSalt()));
         return info;
-
     }
 
 }

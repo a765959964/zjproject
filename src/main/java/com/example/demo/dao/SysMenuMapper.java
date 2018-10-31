@@ -7,6 +7,13 @@ import java.util.List;
 
 public interface SysMenuMapper extends Mapper<SysMenu> {
 
+    List<SysMenu> getAll();
 
     List<SysMenu> getTreeTable();
+
+    List<SysMenu> getListByUserId(String userId);
+
+
+    List<String> getMenusByUserId(String userId);
+
 }

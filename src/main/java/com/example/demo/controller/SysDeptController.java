@@ -97,7 +97,7 @@ public class SysDeptController {
         mv.setViewName("views/user/user/deptEdit");
         mv.addObject("sysDept", sysDept);
         if(sysDept.getPid()==0){
-           mv.addObject("pname","无");
+           mv.addObject("pname","根目录");
         }else {
            SysDept sd = sysDeptService.selectById(sysDept.getPid().toString());
            mv.addObject("pname", sd.getName());

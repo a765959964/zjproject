@@ -17,10 +17,36 @@
     <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
 
+    <sql id="Base_Column_List">
+        id, pid,name, url,perms,type,icon,remark,status,sort
+    </sql>
+
+  <select id="getAll" resultMap="BaseResultMap">
+      select
+     <include refid="Base_Column_List"/>
+      from sys_menu
+  </select>
 
 
   <select id="getTreeTable" resultType="java.util.Map">
         select * from sys_menu t order by t.sort
+  </select>
+
+  <!-- 根据用户id 查询所属权限菜单 -->
+  <select id="getListByUserId" resultType="java.util.Map">
+    select sm.id,sm.pid,sm.perms,sm.`name`,sm.url,sm.type,sm.sort from sys_menu sm
+		left join sys_role_menu srm on srm.menu_id = sm.id
+		left join sys_user_role sur on sur.role_id = srm.role_id
+		where sur.user_id = #{userId}
+		order by sm.sort
+
+  </select>
+
+  <select id="getMenusByUserId" parameterType="String" resultType="String">
+    	select srm.menu_id from sys_role_menu srm
+        left join sys_role sr on srm.role_id = sr.id
+        left join sys_user_role sur on sur.role_id = sr.id
+        where sur.user_id = #{userId}
   </select>
 
 

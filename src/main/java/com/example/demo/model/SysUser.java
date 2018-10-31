@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 
 @Table(name = "sys_user")
@@ -25,8 +27,21 @@ public class SysUser {
 
     private Integer isdel;
 
+
+
+
     @Column(name = "dept_id")
     private Integer deptId;
+
+
+    private String salt;
+
+    @Transient
+    private Set<String> roleIds;
+
+    @Transient
+    private Set<String> menuIds;
+
 
     /**
      * @return id
@@ -160,5 +175,29 @@ public class SysUser {
 
     public void setDeptId(Integer deptId) {
         this.deptId = deptId;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public Set<String> getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(Set<String> roleIds) {
+        this.roleIds = roleIds;
+    }
+
+    public Set<String> getMenuIds() {
+        return menuIds;
+    }
+
+    public void setMenuIds(Set<String> menuIds) {
+        this.menuIds = menuIds;
     }
 }

@@ -5,6 +5,7 @@ import com.example.demo.core.ret.RetResponse;
 import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.ServiceException;
 import com.example.demo.core.universal.Model;
+import com.example.demo.model.SysUser;
 import com.example.demo.model.UserInfo;
 import com.example.demo.service.UserInfoService;
 import com.github.pagehelper.PageHelper;
@@ -94,7 +95,7 @@ public class UserInfoController {
     }
 
     @PostMapping("/login")
-    public RetResult<UserInfo> login(String userName, String password) {
+    public RetResult<SysUser> login(String userName, String password) {
         Subject currentUser = SecurityUtils.getSubject();
         //登录
         try {
@@ -103,7 +104,7 @@ public class UserInfoController {
             throw new ServiceException("密码输入错误");
         }
         //从session取出用户信息
-        UserInfo user = (UserInfo) currentUser.getPrincipal();
+        SysUser user = (SysUser) currentUser.getPrincipal();
         return RetResponse.makeOKRsp(user);
     }
 

@@ -14,10 +14,13 @@ import java.util.Map;
 */
 public interface SysMenuService extends Service<SysMenu> {
 
+    List<SysMenu> getAll();
 
     List<SysMenu> getAll(Map map);
 
-
     List<SysMenu> getTreeTable();
 
+    List<SysMenu> getListByUserId(String userId);
+
+    List<String> getMenusByUserId(String userId);
 }

@@ -1,8 +1,8 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.SysPermissionInit;
+import com.example.demo.model.SysMenu;
 import com.example.demo.service.ShiroService;
-import com.example.demo.service.SysPermissionInitService;
+import com.example.demo.service.SysMenuService;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
@@ -21,7 +21,8 @@ public class ShiroServiceImpl implements ShiroService {
     ShiroFilterFactoryBean shiroFilterFactoryBean;
 
     @Autowired
-    SysPermissionInitService sysPermissionInitService;
+    SysMenuService sysMenuService;
+
 
     /**
      * 初始化权限
@@ -30,10 +31,10 @@ public class ShiroServiceImpl implements ShiroService {
     public Map<String, String> loadFilterChainDefinitions() {
         // 权限控制map.从数据库获取
         Map<String, String> filterChainDefinitionMap = new HashMap<>();
-        List<SysPermissionInit> list = sysPermissionInitService.selectAllOrderBySort();
-        for (SysPermissionInit sysPermissionInit : list) {
-            filterChainDefinitionMap.put(sysPermissionInit.getUrl(),
-                    sysPermissionInit.getPermissionInit());
+        List<SysMenu> list =  sysMenuService.getAll();
+        for (SysMenu sysmenu : list) {
+            filterChainDefinitionMap.put(sysmenu.getUrl(),
+                    sysmenu.getPerms());
         }
         return filterChainDefinitionMap;
     }

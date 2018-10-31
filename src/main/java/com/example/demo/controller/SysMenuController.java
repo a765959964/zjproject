@@ -3,12 +3,18 @@ package com.example.demo.controller;
 import com.example.demo.core.ret.LayuiResult;
 import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.RetResponse;
+import com.example.demo.core.ret.ServiceException;
 import com.example.demo.core.utils.ApplicationUtils;
 import com.example.demo.model.SysMenu;
+import com.example.demo.model.SysUser;
+import com.example.demo.model.UserInfo;
 import com.example.demo.service.SysMenuService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.santint.core.web.query.QueryFilter;
+import org.apache.catalina.User;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -140,6 +146,9 @@ public class SysMenuController {
     @ResponseBody
     public LayuiResult<SysMenu> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
         @RequestParam(defaultValue = "0") Integer limit){
+
+
+
         HashMap map = new HashMap();
         PageHelper.startPage(page, limit);
         QueryFilter filter = new QueryFilter(request);
@@ -154,6 +163,13 @@ public class SysMenuController {
     @ResponseBody
     public LayuiResult<SysMenu> getTreeTable(HttpServletRequest request){
         HashMap map = new HashMap();
+     /*   Subject subject = SecurityUtils.getSubject();
+        SysUser userInfo = (SysUser) subject.getPrincipal();
+        if(userInfo == null){
+            throw  new ServiceException("没有登录");
+        }
+
+        System.out.println(userInfo.getId());*/
         List<SysMenu> list = sysMenuService.getTreeTable();
         PageInfo<SysMenu> pageInfo = new PageInfo<SysMenu>(list);
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());

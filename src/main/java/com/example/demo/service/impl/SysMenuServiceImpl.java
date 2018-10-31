@@ -23,6 +23,11 @@ public class SysMenuServiceImpl extends AbstractService<SysMenu> implements SysM
     private SysMenuMapper sysMenuMapper;
 
     @Override
+    public List<SysMenu> getAll() {
+        return sysMenuMapper.getAll();
+    }
+
+    @Override
     public List<SysMenu> getAll(Map map){
         return sysMenuMapper.getAll(map);
     }
@@ -32,4 +37,13 @@ public class SysMenuServiceImpl extends AbstractService<SysMenu> implements SysM
         return sysMenuMapper.getTreeTable();
     }
 
+    @Override
+    public List<SysMenu> getListByUserId(String userId) {
+        return sysMenuMapper.getListByUserId(userId);
+    }
+
+    @Override
+    public List<String> getMenusByUserId(String userId) {
+        return sysMenuMapper.getMenusByUserId(userId);
+    }
 }

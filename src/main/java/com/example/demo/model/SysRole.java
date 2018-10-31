@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.*;
 
 @Table(name = "sys_role")
 public class SysRole {
@@ -46,6 +47,9 @@ public class SysRole {
      */
     @Column(name = "is_disable")
     private Integer isDisable;
+
+    private List<Long> menuIds;
+
 
     /**
      * 获取角色名称
@@ -163,5 +167,13 @@ public class SysRole {
      */
     public void setIsDisable(Integer isDisable) {
         this.isDisable = isDisable;
+    }
+
+    public List<Long> getMenuIds() {
+        return menuIds;
+    }
+
+    public void setMenuIds(List<Long> menuIds) {
+        this.menuIds = menuIds;
     }
 }
