@@ -148,7 +148,7 @@ function sysUserAdd(){
                 $.ajax({
                     url : '/sysuser/insert',
                     type : 'post',
-                    dataTypep : 'json',
+                    dataType : 'json',
                     data: field,
                     success : function (res){
                         layer.msg("增加成功");
@@ -181,7 +181,7 @@ function sysUserEdit(id){
                 $.ajax({
                     url : '/sysuser/update',
                     type : 'post',
-                    dataTypep : 'json',
+                    dataType : 'json',
                     data: field,
                     success : function (res){
                         layer.msg("修改成功");
@@ -198,10 +198,10 @@ function sysUserEdit(id){
 //删除id
 function delById(id){
     layer.confirm('确定删除吗？', function(index) {
-        $.post("/sysuser/deleteById",{id:id},function (res){
+         $.post("/sysuser/deleteById",{id:id},function (res){
             layer.msg('已删除');
             layui.table.reload('sysUserReload');
             layer.close(index); //关闭弹层
-        })  ;
+        })
     });
 }

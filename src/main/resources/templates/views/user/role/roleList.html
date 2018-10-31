@@ -8,8 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="/static/layui/layuiadmin/layui/css/layui.css"  media="all">
   <link rel="stylesheet" href="/static/layui/layuiadmin/style/admin.css"  media="all">
-  <script src="/static/layui/layuiadmin/layui/layui.js" charset="utf-8"></script>
-  <script src="/static/jquery/jquery-2.1.4.min.js" charset="utf-8"></script>
+
   <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 
 
@@ -33,7 +32,8 @@
         </div>
         <button class="layui-btn" data-type="reload">搜索</button>
     </div>
-
+    <script src="/static/jquery/jquery-2.1.4.min.js" charset="utf-8"></script>
+    <script src="/static/layui/layuiadmin/layui/layui.js" charset="utf-8"></script>
 
     <script type="text/html" id="toolbarsysRole">
       <div class="layui-btn-container">
@@ -52,16 +52,12 @@
 
     <script src="/static/ht/user/role/roleList.js"  charset="utf-8"/>
     <script>
-
+        $(function (){
+            init();
+        })
     </script>
 
-    <script type="text/html" id="sexTpl">
-      {{# if(d.sex===1) { }}
-      男
-      {{# }else{ }}
-      女
-      {{# }}}
-    </script>
+
 
 </body>
 </html>

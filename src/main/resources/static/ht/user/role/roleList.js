@@ -79,7 +79,7 @@ function init(){
 function sysRoleAdd(){
     layer.open({
         type: 2
-        ,title: '增加用户信息'
+        ,title: '增加角色信息'
         ,content: '/sysrole/roleAdd'
         ,maxmin: true
         ,area: ['650px', '550px']
@@ -94,7 +94,7 @@ function sysRoleAdd(){
                 $.ajax({
                     url : '/sysrole/insert',
                     type : 'post',
-                    dataTypep : 'json',
+                    dataType : 'json',
                     data: field,
                     success : function (res){
                         layer.msg("增加成功");
@@ -125,9 +125,9 @@ function sysRoleEdit(id){
             iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                 var field = data.field; //获取提交的字段
                 $.ajax({
-                    url : '/sysRole/update',
+                    url : '/sysrole/update',
                     type : 'post',
-                    dataTypep : 'json',
+                    dataType : 'json',
                     data: field,
                     success : function (res){
                         layer.msg("修改成功");
@@ -148,6 +148,6 @@ function delById(id){
             layer.msg('已删除');
             layui.table.reload('sysRoleReload');
             layer.close(index); //关闭弹层
-        })  ;
+        })
     });
 }

@@ -3,7 +3,7 @@ layui.config({
     base: '/static/layui/layuiadmin/plugins/'
 }).extend({
     treeGrid:'treeGrid'
-}).use(['jquery','treeGrid','layer',], function(){
+}).use(['jquery','treeGrid','layer'], function(){
     var $=layui.jquery;
     treeGrid = layui.treeGrid;//很重要
     layer=layui.layer;

@@ -9,6 +9,7 @@ import com.example.demo.service.SysRoleService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.santint.core.web.query.QueryFilter;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,8 +52,9 @@ public class SysRoleController {
 
 
     @PostMapping("/insert")
+    @ResponseBody
     public RetResult<Integer> insert(SysRole sysRole) throws Exception{
-    // sysRole.setId(ApplicationUtils.getUUID());
+        //sysRole.setId(ApplicationUtils.getUUID());
     	Integer state = sysRoleService.insert(sysRole);
         return RetResponse.makeOKRsp(state);
     }

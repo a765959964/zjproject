@@ -14,7 +14,7 @@ public class SysRole {
      * 角色名称
      */
     @Id
-    private String id;
+    private Integer id;
 
     /**
      * 角色名称，用于显示
@@ -52,7 +52,7 @@ public class SysRole {
      *
      * @return id - 角色名称
      */
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -61,8 +61,8 @@ public class SysRole {
      *
      * @param id 角色名称
      */
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     /**

@@ -61,6 +61,7 @@ public class SysUserController {
     }
 
     @PostMapping("/insert")
+    @ResponseBody
     public RetResult<Integer> insert(SysUser sysUser) throws Exception{
     // sysUser.setId(ApplicationUtils.getUUID());
     	Integer state = sysUserService.insert(sysUser);
@@ -68,12 +69,14 @@ public class SysUserController {
     }
 
     @PostMapping("/deleteById")
+    @ResponseBody
     public RetResult<Integer> deleteById(@RequestParam String id) throws Exception {
         Integer state = sysUserService.deleteById(id);
         return RetResponse.makeOKRsp(state);
     }
 
     @PostMapping("/update")
+    @ResponseBody
     public RetResult<Integer> update(SysUser sysUser) throws Exception {
         Integer state = sysUserService.update(sysUser);
         return RetResponse.makeOKRsp(state);

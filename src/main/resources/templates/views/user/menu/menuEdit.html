@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+<div class="layui-form" lay-filter="menuEdit" id="menuEdit" style="padding: 20px 0 0 0;">
     <div class="layui-form-item">
         <label class="layui-form-label">上级菜单</label>
         <div class="layui-input-inline">
@@ -37,13 +37,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label">图标样式</label>
         <div class="layui-input-inline">
-            <input type="text" name="icon" th:value="${sysMenu.icon}" lay-verify="required"  autocomplete="off" class="layui-input">
+            <input type="text" name="icon" th:value="${sysMenu.icon}"   autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-inline">
-            <input type="text" name="remark" th:value="${sysMenu.remark}" lay-verify="required"  autocomplete="off" class="layui-input">
+            <input type="text" name="remark" th:value="${sysMenu.remark}"  autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">

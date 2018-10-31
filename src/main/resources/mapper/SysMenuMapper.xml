@@ -20,7 +20,7 @@
 
 
   <select id="getTreeTable" resultType="java.util.Map">
-        select * from sys_menu
+        select * from sys_menu t order by t.sort
   </select>
 
 
