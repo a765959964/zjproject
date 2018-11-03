@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Table(name = "sys_menu")
 public class SysMenu {
@@ -33,6 +34,8 @@ public class SysMenu {
     private Integer status;
 
     private Integer sort;
+
+    private List<SysMenu> children;
 
     /**
      * @return id
@@ -184,5 +187,13 @@ public class SysMenu {
      */
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    public List<SysMenu> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<SysMenu> children) {
+        this.children = children;
     }
 }

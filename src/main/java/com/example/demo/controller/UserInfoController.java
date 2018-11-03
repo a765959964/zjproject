@@ -95,11 +95,11 @@ public class UserInfoController {
     }
 
     @PostMapping("/login")
-    public RetResult<SysUser> login(String userName, String password) {
+    public RetResult<SysUser> login(String username, String password) {
         Subject currentUser = SecurityUtils.getSubject();
         //登录
         try {
-            currentUser.login(new UsernamePasswordToken(userName, password));
+            currentUser.login(new UsernamePasswordToken(username, password));
         }catch (IncorrectCredentialsException i){
             throw new ServiceException("密码输入错误");
         }

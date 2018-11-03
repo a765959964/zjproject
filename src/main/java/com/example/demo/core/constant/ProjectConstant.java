@@ -31,4 +31,5 @@ public class ProjectConstant {
 	//文件上传储存的地址
 	public static final String SAVEFILEPATH = "d://img";
 
+	public static final String WINDOW_PATH = "D://www";
 }

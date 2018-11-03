@@ -17,6 +17,10 @@
     <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
 
+
+
+
+
     <sql id="Base_Column_List">
         id, pid,name, url,perms,type,icon,remark,status,sort
     </sql>
@@ -33,7 +37,7 @@
   </select>
 
   <!-- 根据用户id 查询所属权限菜单 -->
-  <select id="getListByUserId" resultType="java.util.Map">
+  <select id="getListByUserId" resultMap="BaseResultMap">
     select sm.id,sm.pid,sm.perms,sm.`name`,sm.url,sm.type,sm.sort from sys_menu sm
 		left join sys_role_menu srm on srm.menu_id = sm.id
 		left join sys_user_role sur on sur.role_id = srm.role_id

@@ -1,19 +1,17 @@
 package com.example.demo.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.example.demo.core.ret.LayuiResult;
-import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.RetResponse;
-import com.example.demo.core.utils.ApplicationUtils;
+import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.utils.LayuiTree;
 import com.example.demo.model.SysDept;
 import com.example.demo.service.SysDeptService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.JsonObject;
+import com.santint.core.util.JSonUtils;
 import com.santint.core.web.query.QueryFilter;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -147,12 +145,130 @@ public class SysDeptController {
     public List<LayuiTree> getTree(){
        List<LayuiTree> layuiTreeList =new ArrayList<>();
        List<SysDept> sysdeptList =  sysDeptService.selectAll();
-       layuiTreeList = getParentTree(sysdeptList);
+
+       //System.out.println("list循环"+JSonUtils.toJSon(getList(sysdeptList)));
+       System.out.println("递归"+JSonUtils.toJSon(getParentTree(sysdeptList)));
+      // List<SysDept> list  = getParentTree(sysdeptList);
+      // System.out.println(JSonUtils.toJSon("JSON:"+list));
        return layuiTreeList;
     }
 
 
-    private  List<LayuiTree> getParentTree(List<SysDept> sysdeptList){
+
+    private List<SysDept> getList(List<SysDept> sysDeptList){
+        List<SysDept> sdList = new ArrayList<>();
+        for (SysDept sd:sysDeptList ) {
+            //找到根
+            if(sd.getPid()==0){
+                sdList.add(sd);
+            }
+            for (SysDept sysDept:sysDeptList) {
+                if(sysDept.getPid()==sd.getId()){
+                    if(sd.getChildren()==null){
+                        sd.setChildren(new ArrayList<SysDept>());
+                    }
+                    sd.getChildren().add(sysDept);
+                }
+            }
+        }
+     return sdList;
+    }
+
+
+    private  List<SysDept> getParentTree(List<SysDept> sysdeptList) {
+        List<SysDept> layuiTreeList = new ArrayList<SysDept>();
+        for(SysDept sysDept : sysdeptList ){
+            if(sysDept.getPid()==0){
+                layuiTreeList.add(findChildren(sysDept,sysdeptList));
+            }
+        }
+        return layuiTreeList;
+    }
+
+    /**
+     * 递归查找子节点
+     * @param sysDept
+     * @param
+     * @return
+     */
+    private SysDept findChildren(SysDept sysDept,List<SysDept> sysdeptList){
+            for(SysDept sd : sysdeptList){
+                if(sysDept.getId()==sd.getPid()){
+                    if(sysDept.getChildren()==null){
+                        sysDept.setChildren(new ArrayList<SysDept>());
+                    }
+                    sysDept.getChildren().add(findChildren(sd,sysdeptList));
+                }
+            }
+            return sysDept;
+    }
+
+
+
+    /**
+     * 求出父部门
+     * @param sysdeptList
+     * @return
+     */
+   /* private  List<LayuiTree> getParentTree(List<SysDept> sysdeptList){
+        List<LayuiTree>  layuiTreeList = new ArrayList<>();
+        LayuiTree layuiTree = null;
+        for (SysDept sysdept: sysdeptList) {
+            layuiTree = new LayuiTree();
+            if(sysdept.getPid()==0) {
+                layuiTree.setId(sysdept.getId());
+                layuiTree.setName(sysdept.getName());
+                layuiTree.setpId(0);
+                layuiTreeList.add(layuiTree);
+            }
+        }
+        return layuiTreeList;
+    }
+*/
+    /**
+     * 求出 父级和 子级
+     * @param sysdeptList
+     * @return
+     */
+    private  List<LayuiTree> getChildren(List<SysDept> sysdeptList){
+        List<LayuiTree> list = null;
+        //List<LayuiTree> parentList = getParentTree(sysdeptList);    //父级list
+        JSONArray jsonArray = new JSONArray();
+        JsonObject jsonObject = new JsonObject();
+        /*List<LayuiTree> list = new ArrayList<>();
+        List<LayuiTree> parentList = getParentTree(sysdeptList);    //父级list
+        List<LayuiTree> childrenList = new ArrayList<>();
+        LayuiTree layuiTree  =   null;
+        for(LayuiTree parent : parentList){     //先循环父级list
+            for( SysDept sysDept : sysdeptList){    //在循环全部list
+                    if(sysDept.getPid()==parent.getId()){   //判断子级是否不等于父级
+                        layuiTree  =   new LayuiTree();
+                        layuiTree.setId(sysDept.getId());
+                        layuiTree.setpId(sysDept.getPid());
+                        layuiTree.setName(sysDept.getName());
+                        childrenList.add(layuiTree);
+                        layuiTree.setChildren(childrenList);
+                    }else{
+                        layuiTree  =   new LayuiTree();
+                        layuiTree.setId(parent.getId());
+                        layuiTree.setName(parent.getName());
+                        layuiTree.setpId(parent.getpId());
+                        list.add(layuiTree);
+                    }
+
+             }
+
+        }
+      */
+        return list;
+    }
+
+
+
+
+
+
+    private  List<LayuiTree> getParentTree1(List<SysDept> sysdeptList){
         List<LayuiTree>  layuiTreeList = new ArrayList<>();
         List<LayuiTree>  ltList = new ArrayList<>();
         LayuiTree layuiTree  = new LayuiTree();

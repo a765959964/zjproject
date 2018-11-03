@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.core.ret.LayuiResult;
 import com.example.demo.core.ret.RetResponse;
 import com.example.demo.core.ret.RetResult;
+import com.example.demo.core.ret.ServiceException;
 import com.example.demo.model.Person;
 import com.example.demo.model.SysDept;
 import com.example.demo.model.SysUser;
@@ -11,6 +12,11 @@ import com.example.demo.service.SysUserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.santint.core.web.query.QueryFilter;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +41,24 @@ public class SysUserController {
 
     @Resource
     private SysDeptService sysDeptService;
+
+
+    @PostMapping("/login")
+    @ResponseBody
+    public RetResult<SysUser> login(String username, String password) {
+        Subject currentUser = SecurityUtils.getSubject();
+        //登录
+        try {
+            currentUser.login(new UsernamePasswordToken(username, password));
+        }catch (IncorrectCredentialsException i){
+            throw new ServiceException("密码输入错误");
+        }catch (UnknownAccountException e){
+            throw new ServiceException("没有找到此账户"+username);
+        }
+        //从session取出用户信息
+        SysUser user = (SysUser) currentUser.getPrincipal();
+        return RetResponse.makeOKRsp(user);
+    }
 
 
     @RequestMapping(value = "/listView",method = RequestMethod.GET)
