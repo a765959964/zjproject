@@ -16,5 +16,8 @@ public interface TFoodCommonTypeMapper extends Mapper<TFoodCommonType> {
 
     List<TreeDto>  getTreeDto(Map map);
 
+    List findByCode(Map  map);
+
+    Integer findByCount(Map map);
 
 }

@@ -104,6 +104,9 @@ public class PersonController {
         map.put("id",filter.getFilters().get("id"));
         map.put("name",filter.getFilters().get("name"));
         map.put("address",filter.getFilters().get("address"));
+
+
+
         List<Person> list = personService.getAll(map);
         PageInfo<Person> pageInfo = new PageInfo<Person>(list);
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());

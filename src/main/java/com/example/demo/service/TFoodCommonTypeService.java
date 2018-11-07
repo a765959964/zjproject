@@ -23,4 +23,7 @@ public interface TFoodCommonTypeService extends Service<TFoodCommonType> {
 
     List<TreeDto> getTreeDto(Map map);
 
+    List findByCode(Map map);
+
+    Integer findByCount(Map map);
 }

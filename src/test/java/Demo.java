@@ -1,4 +1,8 @@
+import com.santint.core.page.PageBean;
+import com.santint.core.page.PageUtils;
+
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,11 +14,27 @@ import java.util.List;
 public class Demo {
 
     public static void main(String[] args) {
-        String[] arr = { "中餐菜系", "东亚其它菜系", "西餐菜系", "清真菜系", "其它" };
-        Collator cmp = Collator.getInstance(java.util.Locale.CHINA);
-        Arrays.sort(arr, cmp);
-        List<String> list = Arrays.asList(arr);
-        System.out.println(list);
+       String field =  Demo.getPx("global");
+        System.out.println(field);
+    }
+
+    public  static final String getPx(String px){
+        String field = "";
+        switch (px){
+            case "price":
+                field = "price";
+                break;
+            case "sales":
+                field = "sales";
+                break;
+            case "score":
+                field = "score";
+                break;
+            case "global":
+                field = "global";
+                break;
+        }
+        return field;
     }
 
 }

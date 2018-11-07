@@ -15,11 +15,10 @@
   </resultMap>
 
   <resultMap id="TreeDto" type="com.example.demo.dto.TreeDto">
-    <id column="id" jdbcType="INTEGER" property="id" />
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="pcode" jdbcType="VARCHAR" property="pcode" />
-    <result column="level" jdbcType="INTEGER" property="level" />
+
   </resultMap>
 
   <!-- 获取菜系,食材，味型 -->
@@ -63,6 +62,27 @@
     order by t.code ;
   </select>
 
+  <select id="findByCode" resultType="java.util.Map" parameterType="java.util.Map">
+     select  t.foodid "CID",t.jsonpath "CPCQ" from `${table}`  t
+      <if test="field != null and field != ''">
+          order by ${field} ${px}
+      </if>
+
+      <if test="curPage != null and curPage != ''">
+          limit #{curPage}
+      </if>
+      <if test="pageSize !=null and pageSize != '' ">
+          , #{pageSize}
+      </if>
+
+
+  </select>
+
+
+  <select id="findByCount"  parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from  `${table}` t
+        where t.foodtype_field = #{code};
+  </select>
 
 
 </mapper>

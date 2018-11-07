@@ -53,11 +53,11 @@ public class ShiroConfigurer {
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
         DefaultShiroFilterChainDefinition chain = new DefaultShiroFilterChainDefinition();
-        List<SysMenu> list = sysMenuService.getAll();
+        /*List<SysMenu> list = sysMenuService.getAll();
         for(int i = 0,length = list.size();i<length;i++){
             SysMenu sysMenu = list.get(i);
             chain.addPathDefinition(sysMenu.getUrl(), sysMenu.getPerms());
         }
-        return chain;
+*/        return chain;
     }
 }

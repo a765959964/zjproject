@@ -11,25 +11,15 @@ import java.util.List;
  **/
 public class TreeDto {
 
-    private Integer id;
-
     private String code;
 
     private String name;
 
     private String pcode;
 
-    private Integer level;
-
     private List<TreeDto> children;
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getCode() {
         return code;
@@ -63,11 +53,5 @@ public class TreeDto {
         this.children = children;
     }
 
-    public Integer getLevel() {
-        return level;
-    }
 
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
 }

@@ -61,7 +61,7 @@ public class TFoodCommonTypeServiceImpl extends AbstractService<TFoodCommonType>
 
     private TreeDto getChildrenDto(TreeDto tf,List<TreeDto> foodList){
         for(TreeDto  ct:foodList){
-            if(ct.getPcode().equals(tf.getCode()) && tf.getLevel()!=3){
+            if(ct.getPcode().equals(tf.getCode())){
                 if(tf.getChildren()==null){
                     tf.setChildren(new ArrayList<TreeDto>());
                 }
@@ -102,5 +102,13 @@ public class TFoodCommonTypeServiceImpl extends AbstractService<TFoodCommonType>
         return tf;
     }
 
+    @Override
+    public List findByCode(Map map){
+        return tFoodCommonTypeMapper.findByCode(map);
+    }
 
+    @Override
+    public Integer findByCount(Map map) {
+        return tFoodCommonTypeMapper.findByCount(map);
+    }
 }
