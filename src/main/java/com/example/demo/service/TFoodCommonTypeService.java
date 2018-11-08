@@ -26,4 +26,7 @@ public interface TFoodCommonTypeService extends Service<TFoodCommonType> {
     List findByCode(Map map);
 
     Integer findByCount(Map map);
+
+
+    void createJsonAndFile();
 }
