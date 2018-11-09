@@ -26,6 +26,9 @@ public class Constant {
         return env.getProperty("system-path");
     }
 
+    public String tesk(){
+        return env.getProperty("tesk");
+    }
 
 
 
