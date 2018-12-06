@@ -30,5 +30,19 @@
     left join sys_menu sm on sm.id = rm .menu_id
   </select>
 
+  <select id="getRoleList" resultType="java.util.HashMap">
+       select  t.id value,t.role_name name from sys_role t;
+
+  </select>
+
+  <!-- 根据用户id 获取 roleList 数据 -->
+  <select id="getRoleListByUserId" resultType="java.util.HashMap" parameterType="java.lang.String">
+     select sr.id value,sr.role_name name from sys_user_role sur
+        left join sys_role sr on sr.id = sur.role_id
+        where sur.user_id = #{userId};
+
+
+  </select>
+
 
 </mapper>

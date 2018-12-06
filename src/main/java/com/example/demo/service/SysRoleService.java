@@ -13,5 +13,13 @@ import java.util.Map;
 * @date 2018/10/09 09:37
 */
 public interface SysRoleService extends Service<SysRole> {
+
+    List<SysRole> getAll();
+
     List getRoleMenu();
+
+    List getRoleList();
+
+    List getRoleListByUserId(String userId);
+
 }

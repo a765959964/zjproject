@@ -16,7 +16,15 @@
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
+    
+    
+  <resultMap id="BaseTreeMap" type="com.example.demo.dto.TreeListDto">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="alias" jdbcType="VARCHAR" property="alias" />
+      <result column="palias" jdbcType="VARCHAR" property="palias" />
+      <result column="name" jdbcType="VARCHAR" property="name" />
 
+  </resultMap>
 
 
 
@@ -32,13 +40,16 @@
   </select>
 
 
-  <select id="getTreeTable" resultType="java.util.Map">
+  <select id="getTreeTable" resultMap="BaseResultMap">
         select * from sys_menu t order by t.sort
   </select>
 
+
+
+
   <!-- 根据用户id 查询所属权限菜单 -->
   <select id="getListByUserId" resultMap="BaseResultMap">
-    select sm.id,sm.pid,sm.perms,sm.`name`,sm.url,sm.type,sm.sort from sys_menu sm
+    select sm.id,sm.pid,sm.perms,sm.`name`,sm.url,sm.type,sm.sort,sm.icon from sys_menu sm
 		left join sys_role_menu srm on srm.menu_id = sm.id
 		left join sys_user_role sur on sur.role_id = srm.role_id
 		where sur.user_id = #{userId}
@@ -53,5 +64,15 @@
         where sur.user_id = #{userId}
   </select>
 
+   <select id="getTreeList" resultMap="BaseTreeMap" >
+      select t.id,t.`name`,t.id 'alias',t.pid 'palias' from sys_menu t;
+   </select>
+
+    <select id="getByRoleIdTreeList" resultMap="BaseTreeMap" parameterType="String">
+        select m.id,m.`name`,m.id 'alias',m.pid 'palias' from sys_menu m
+        left join sys_role_menu srm on srm.menu_id = m.id
+        left join sys_role sr on sr.id = srm.role_id
+        where sr.id = #{roleId}
+    </select>
 
 </mapper>

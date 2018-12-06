@@ -53,17 +53,17 @@ public class WebConfigurer extends WebMvcConfigurationSupport {
 
         registry.addResourceHandler("/favicon.ico")
                 .addResourceLocations("classpath:/META-INF/resources/favicon.ico");
-      /*  registry.addResourceHandler("swagger-ui.html")
+        registry.addResourceHandler("swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars*//**")
+        registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
-        */
+
         super.addResourceHandlers(registry);
     }
 
     /**
      * 修改自定义消息转换器
-     *
+     * 使用fastJSON
      * @param converters
      */
     @Override
@@ -85,10 +85,18 @@ public class WebConfigurer extends WebMvcConfigurationSupport {
     }
 
     /**
+     *
      * 添加拦截器
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
+
+            // 添加排除拦截 表示 不拦截
+            List<String> excludePatterns = new ArrayList<>();
+            excludePatterns.add("/css/**");
+            excludePatterns.add("/image/**");
+            excludePatterns.add("/index");
             registry.addInterceptor(
                 //注意，HandlerInterceptorAdapter  这里可以修改为自己创建的拦截器
                 new Interceptor1() {
@@ -106,8 +114,8 @@ public class WebConfigurer extends WebMvcConfigurationSupport {
                         }
                     }
                 }
-                //这里添加的是拦截的路径  /**为全部拦截
-            ).addPathPatterns("/userInfo/selectAlla");
+                //这里添加的是拦截的路径  /**为全部拦截  exclud 为不拦截
+            ).addPathPatterns("/userInfo/selectAlla").excludePathPatterns(excludePatterns);
     }
 
     private void responseResult(HttpServletResponse response, RetResult<Object> result) {

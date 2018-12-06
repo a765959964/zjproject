@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>添加角色信息-add</title>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -14,13 +15,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label">角色名</label>
         <div class="layui-input-inline">
-            <input type="text" name="roleName" lay-verify="required" placeholder="请输入角色名" autocomplete="off" class="layui-input">
+            <input type="text" name="roleName" id="roleName"  placeholder="请输入角色名" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">角色描述</label>
         <div class="layui-input-inline">
-            <input type="text" name="roleDesc" lay-verify="required" placeholder="请输入角色描述" autocomplete="off" class="layui-input">
+            <input type="text" name="roleDesc"  placeholder="请输入角色描述" autocomplete="off" class="layui-input">
         </div>
     </div>
 
@@ -30,7 +31,13 @@
             <input type="text" name="roleValue"  placeholder="请输入权限标识" autocomplete="off" class="layui-input">
         </div>
     </div>
-
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择权限</label>
+        <div class="layui-input-block">
+            <input type="hidden" id="roleMenu" name="roleMenu" />
+            <div id="LAY-auth-tree-index"></div>
+        </div>
+    </div>
 
     <div class="layui-form-item layui-hide">
         <input type="button" lay-submit lay-filter="sysRoleSubmit" id="sysRoleSubmit" value="确认">
@@ -41,12 +48,50 @@
 <script src="/static/layui/layuiadmin/layui/layui.js"></script>
 <script src="/static/jquery/jquery-2.1.4.min.js" charset="utf-8"></script>
 <script>
-    layui.use([ 'form','laydate'], function(){
-        var $ = layui.$
-            ,laydate = layui.laydate;
-        form = layui.form;
+    layui.config({
+        base: '/static/layui/layuiadmin/plugins/',
+    }).extend({
+        authtree: 'authtree',
+    });
+    layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
+        var $ = layui.jquery;
+        var authtree = layui.authtree;
+        var form = layui.form;
+        var layer = layui.layer;
 
-    })
+        $.ajax({
+            url: '/sysmenu/getTreeList',
+            type : 'get',
+            dataType: 'json',
+            success: function(res){
+                // 支持自定义递归字段、数组权限判断等
+                // 深坑注意：如果API返回的数据是字符串，那么 startPid 的数据类型也需要是字符串
+                var trees = authtree.listConvert(res.data.list, {
+                    primaryKey: 'alias'
+                    ,startPid: '0'
+                    ,parentKey: 'palias'
+                    ,nameKey: 'name'
+                    ,valueKey: 'alias'
+                    ,checkedKey: res.data.checkedAlias
+                });
+                // 如果页面中多个树共存，需要注意 layfilter 需要不一样
+                authtree.render('#LAY-auth-tree-index', trees, {
+                    inputname: 'authids[]',
+                    layfilter: 'lay-check-auth',
+                    // openall: true,
+                    autowidth: true,
+                });
+
+                authtree.on('change(lay-check-auth)', function(data) {
+                    // 获取所有已选中节点
+                    var checked = authtree.getChecked('#LAY-auth-tree-index');
+                    $("#roleMenu").val(checked);
+                    console.log('checked', checked);
+                });
+            }
+        });
+
+    });
 </script>
 </body>
 </html>

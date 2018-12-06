@@ -142,15 +142,14 @@ public class SysDeptController {
      */
     @RequestMapping("/getTree")
     @ResponseBody
-    public List<LayuiTree> getTree(){
+    public List<SysDept> getTree(){
        List<LayuiTree> layuiTreeList =new ArrayList<>();
        List<SysDept> sysdeptList =  sysDeptService.selectAll();
-
        //System.out.println("list循环"+JSonUtils.toJSon(getList(sysdeptList)));
-       System.out.println("递归"+JSonUtils.toJSon(getParentTree(sysdeptList)));
+//       System.out.println("递归"+JSonUtils.toJSon(getParentTree(sysdeptList)));
       // List<SysDept> list  = getParentTree(sysdeptList);
       // System.out.println(JSonUtils.toJSon("JSON:"+list));
-       return layuiTreeList;
+       return getParentTree(sysdeptList);
     }
 
 
@@ -165,7 +164,7 @@ public class SysDeptController {
             for (SysDept sysDept:sysDeptList) {
                 if(sysDept.getPid()==sd.getId()){
                     if(sd.getChildren()==null){
-                        sd.setChildren(new ArrayList<SysDept>());
+                //        sd.setChildren(new ArrayList<SysDept>());
                     }
                     sd.getChildren().add(sysDept);
                 }

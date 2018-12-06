@@ -23,6 +23,11 @@ public class SysUserRoleServiceImpl extends AbstractService<SysUserRole> impleme
     private SysUserRoleMapper sysUserRoleMapper;
 
     @Override
+    public List<SysUserRole> getByUserIdAndRoleId(Map params) {
+        return sysUserRoleMapper.getByUserIdAndRoleId(params);
+    }
+
+    @Override
     public List<SysUserRole> getAll(Map map){
         return sysUserRoleMapper.getAll(map);
     }
@@ -30,5 +35,15 @@ public class SysUserRoleServiceImpl extends AbstractService<SysUserRole> impleme
     @Override
     public List<String> getRolesByUserId(String userId) {
         return sysUserRoleMapper.getRolesByUserId(userId);
+    }
+
+    @Override
+    public List<String> getRoleIdsByUserId(String userId) {
+        return sysUserRoleMapper.getRoleIdsByUserId(userId);
+    }
+
+    @Override
+    public void deleteByUserIdOrRoleId(Map map) {
+        sysUserRoleMapper.deleteByUserIdOrRoleId(map);
     }
 }

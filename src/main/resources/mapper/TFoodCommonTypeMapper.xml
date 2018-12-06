@@ -1,85 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.TFoodCommonTypeMapper">
-  <resultMap id="BaseResultMap" type="com.example.demo.model.TFoodCommonType">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="code" jdbcType="VARCHAR" property="code" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="level" jdbcType="INTEGER" property="level" />
-    <result column="pcode" jdbcType="VARCHAR" property="pcode" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="isdel" jdbcType="INTEGER" property="isdel" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.example.demo.model.TFoodCommonType">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="pcode" jdbcType="VARCHAR" property="pcode"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="isdel" jdbcType="INTEGER" property="isdel"/>
+    </resultMap>
 
-  <resultMap id="TreeDto" type="com.example.demo.dto.TreeDto">
-    <result column="code" jdbcType="VARCHAR" property="code" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="pcode" jdbcType="VARCHAR" property="pcode" />
+    <resultMap id="TreeDto" type="com.example.demo.dto.TreeDto">
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="pcode" jdbcType="VARCHAR" property="pcode"/>
 
-  </resultMap>
+    </resultMap>
 
-  <!-- 获取菜系,食材，味型 -->
-  <select id="getFoodFiledLevel"  resultMap="BaseResultMap" >
-      select *  from t_food_common_type t
+    <!-- 获取菜系,食材，味型 -->
+    <select id="getFoodFiledLevel" resultMap="BaseResultMap">
+        select * from t_food_common_type t
 
-      where 1=1
-      <if test="level != null and level != '' ">
-          and t.level = #{level}
-      </if>
+        where 1=1
+        <if test="level != null and level != '' ">
+            and t.level = #{level}
+        </if>
 
-      <if test="noLevel != null and noLevel != '' ">
-          and t.level != #{noLevel}
-      </if>
+        <if test="noLevel != null and noLevel != '' ">
+            and t.level != #{noLevel}
+        </if>
 
-      <if test="status !=null and status != ''">
-          and  t.status = #{status}
-      </if>
+        <if test="status !=null and status != ''">
+            and t.status = #{status}
+        </if>
 
-      and t.isdel = 0
-      order by t.code ;
-  </select>
-
-
-  <select id="getTreeDto"  resultMap="TreeDto" >
-    select *  from t_food_common_type t
-    where 1=1
-    <if test="level != null and level != '' ">
-      and t.level = #{level}
-    </if>
-
-    <if test="noLevel != null and noLevel != '' ">
-       and t.level != #{noLevel}
-    </if>
-
-    <if test="status !=null and status != ''">
-      and  t.status = #{status}
-    </if>
-
-    and t.isdel = 0
-    order by t.code ;
-  </select>
-
-  <select id="findByCode" resultType="java.util.Map" parameterType="java.util.Map">
-     select  t.foodid "CID",t.jsonpath "CPCQ" from `${table}`  t
-      <if test="field != null and field != ''">
-          order by ${field} ${px}
-      </if>
-
-      <if test="curPage != null and curPage != ''">
-          limit #{curPage}
-      </if>
-      <if test="pageSize !=null and pageSize != '' ">
-          , #{pageSize}
-      </if>
+        and t.isdel = 0
+        order by t.code ;
+    </select>
 
 
-  </select>
+    <select id="getTreeDto" resultMap="TreeDto">
+        select * from t_food_common_type t
+        where 1=1
+        <if test="level != null and level != '' ">
+            and t.level = #{level}
+        </if>
+
+        <if test="noLevel != null and noLevel != '' ">
+            and t.level != #{noLevel}
+        </if>
+
+        <if test="status !=null and status != ''">
+            and t.status = #{status}
+        </if>
+
+        and t.isdel = 0
+        order by t.code ;
+    </select>
+
+    <select id="findByCode" resultType="java.util.Map" parameterType="java.util.Map">
+        select t.foodid "CID",t.jsonpath "CPCQ" from `${table}` t
+        <if test="field != null and field != ''">
+            order by ${field} ${px}
+        </if>
+
+        <if test="curPage != null and curPage != ''">
+            limit #{curPage}
+        </if>
+        <if test="pageSize !=null and pageSize != '' ">
+            , #{pageSize}
+        </if>
 
 
-  <select id="findByCount"  parameterType="java.util.Map" resultType="java.lang.Integer">
+    </select>
+
+
+    <select id="findByCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(*) from  `${table}` t
         where t.foodtype_field = #{code};
   </select>

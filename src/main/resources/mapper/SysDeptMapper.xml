@@ -13,6 +13,9 @@
 
   </resultMap>
 
+  <select id="getAll"  resultMap="BaseResultMap">
+      select * from  sys_dept;
+  </select>
 
   <select id="getTreeData" resultType="java.util.Map">
       select id,pid as pId,name,sort,isdel from sys_dept order by sort

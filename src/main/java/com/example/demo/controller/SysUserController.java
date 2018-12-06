@@ -4,10 +4,10 @@ import com.example.demo.core.ret.LayuiResult;
 import com.example.demo.core.ret.RetResponse;
 import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.ServiceException;
-import com.example.demo.model.Person;
-import com.example.demo.model.SysDept;
-import com.example.demo.model.SysUser;
+import com.example.demo.model.*;
 import com.example.demo.service.SysDeptService;
+import com.example.demo.service.SysRoleService;
+import com.example.demo.service.SysUserRoleService;
 import com.example.demo.service.SysUserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -26,6 +26,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @Description: SysUserController类
@@ -42,8 +43,14 @@ public class SysUserController {
     @Resource
     private SysDeptService sysDeptService;
 
+    @Resource
+    private SysUserRoleService sysUserRoleService;
 
-    @PostMapping("/login")
+    @Resource
+    private SysRoleService sysRoleService;
+
+
+    @GetMapping("/login")
     @ResponseBody
     public RetResult<SysUser> login(String username, String password) {
         Subject currentUser = SecurityUtils.getSubject();
@@ -86,9 +93,19 @@ public class SysUserController {
 
     @PostMapping("/insert")
     @ResponseBody
-    public RetResult<Integer> insert(SysUser sysUser) throws Exception{
-    // sysUser.setId(ApplicationUtils.getUUID());
-    	Integer state = sysUserService.insert(sysUser);
+    public RetResult<Integer> insert(SysUser sysUser,String roleIds) throws Exception{
+
+        Integer state = sysUserService.insert(sysUser);
+        SysUser sysUser1 = sysUserService.selectOne(sysUser);
+        if(roleIds != null){
+            SysUserRole sysUserRole = new SysUserRole();
+            sysUserRole.setUserId(sysUser1.getId());
+            String [] roles = roleIds.split(",");
+            for(int i=0;i<roles.length;i++){
+                sysUserRole.setRoleId(Integer.parseInt(roles[i]));
+                sysUserRoleService.insert(sysUserRole);
+            }
+        }
         return RetResponse.makeOKRsp(state);
     }
 
@@ -101,7 +118,25 @@ public class SysUserController {
 
     @PostMapping("/update")
     @ResponseBody
-    public RetResult<Integer> update(SysUser sysUser) throws Exception {
+    public RetResult<Integer> update(SysUser sysUser,String roleIds) throws Exception {
+        String[] ids = roleIds.split(",");
+        Map params = new HashMap();
+        params.put("userId",sysUser.getId());
+        if(!ids.equals("")){
+            for (String roleId: ids) {
+                params.put("roleId",roleId);
+                //roleId 是否存在，存在的话，删除，不存在的话，添加
+                List<SysUserRole> sysUserRoleList  =  sysUserRoleService.getByUserIdAndRoleId(params);
+                if(sysUserRoleList.size() > 0){
+                    sysUserRoleService.deleteByUserIdOrRoleId(params);
+                }else{
+                    SysUserRole sysUserRole = new SysUserRole();
+                    sysUserRole.setUserId(sysUser.getId());
+                    sysUserRole.setRoleId(Integer.parseInt(roleId));
+                    sysUserRoleService.insert(sysUserRole);
+                }
+            }
+        }
         Integer state = sysUserService.update(sysUser);
         return RetResponse.makeOKRsp(state);
     }
@@ -118,9 +153,32 @@ public class SysUserController {
         ModelAndView mv = new ModelAndView();
         SysUser sysUser = sysUserService.selectById(id);
 
-        SysDept sysdept =  sysDeptService.selectById(sysUser.getDeptId().toString());
+        Map params = new HashMap<>();
+        StringBuilder sb  = new StringBuilder();
+        sb.append("<select  name=\"roleIds\"\n" +
+                "                   xm-select-show-count=\"2\" xm-select=\"select1\">");
+        List<SysRole> roleList = sysRoleService.getAll();
+        List<String> roleIds = sysUserRoleService.getRoleIdsByUserId(id);
+        for (SysRole  role: roleList){
+            sb.append("<option value='"+role.getId()+"' ");
+            if(roleIds.size() > 0){
+                for (String roleId : roleIds){
+                    if(roleId.equals(role.getId()+"")){
+                        sb.append(" selected=\"selected\"");
+                    }
+                }
+            }
+            sb.append("> "+role.getRoleName()+"</option>");
+        }
+        sb.append("</select>");
+        if(sysUser.getDeptId() != null){
+            SysDept sysdept =  sysDeptService.selectById(sysUser.getDeptId().toString());
+            mv.addObject("deptName",sysdept.getName());
+        }else{
+            mv.addObject("deptName","");
+        }
         mv.setViewName("views/user/userEdit");
-        mv.addObject("sysUser",sysUser).addObject("deptName",sysdept.getName());
+        mv.addObject("sysUser",sysUser).addObject("sb",sb);
         return mv;
     }
 

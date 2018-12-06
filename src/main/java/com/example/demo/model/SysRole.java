@@ -176,4 +176,5 @@ public class SysRole {
     public void setMenuIds(List<Long> menuIds) {
         this.menuIds = menuIds;
     }
+
 }

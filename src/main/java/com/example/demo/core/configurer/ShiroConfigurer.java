@@ -47,6 +47,7 @@ public class ShiroConfigurer {
     }
 
     /**
+     * 用于实现权限
      * 这里统一做鉴权，即判断哪些请求路径需要用户登录，哪些请求路径不需要用户登录
      * @return
      */
@@ -58,6 +59,22 @@ public class ShiroConfigurer {
             SysMenu sysMenu = list.get(i);
             chain.addPathDefinition(sysMenu.getUrl(), sysMenu.getPerms());
         }
-*/        return chain;
+*/
+        /**
+         *  使用shiro 配置可访问的页面
+         */
+        chain.addPathDefinition("/static/**", "anon");//可以匿名访问
+        chain.addPathDefinition("/webjars/**", "anon");
+        chain.addPathDefinition("/template/**", "anon");
+        chain.addPathDefinition("/login.html", "anon");
+        chain.addPathDefinition("/reg", "anon");
+        chain.addPathDefinition("/login*", "anon");
+        chain.addPathDefinition("/login", "anon");
+        chain.addPathDefinition("/logout", "anon");
+        chain.addPathDefinition("/sysuser/login", "anon");
+        chain.addPathDefinition("/index.html", "anon");
+        chain.addPathDefinition("/index", "anon");
+        chain.addPathDefinition("/**", "anon");
+        return chain;
     }
 }

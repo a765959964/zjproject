@@ -52,6 +52,14 @@ public class AspectLog {
     public void methodCachePointcut() {
     }
 
+    /**
+     * 5 中advice 注解
+     * @Before 前置通知
+     * @After 后置通知，方法执行完之后
+     * @AfterReturning 返回通知，成功执行之后
+     * @AfterThrowing 异常通知，抛出异常之后
+     * @Around 环绕通知
+     */
     @Before("methodCachePointcut()")
     public void doBefore(JoinPoint p) throws Exception{
         SystemLog systemLog =getSystemLogInit(p);

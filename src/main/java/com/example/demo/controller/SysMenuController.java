@@ -5,16 +5,20 @@ import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.RetResponse;
 import com.example.demo.core.ret.ServiceException;
 import com.example.demo.core.utils.ApplicationUtils;
+import com.example.demo.core.utils.TreeList;
+import com.example.demo.dto.TreeListDto;
 import com.example.demo.model.SysMenu;
 import com.example.demo.model.SysUser;
 import com.example.demo.model.UserInfo;
 import com.example.demo.service.SysMenuService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.santint.core.util.JSonUtils;
 import com.santint.core.web.query.QueryFilter;
 import org.apache.catalina.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,8 +29,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @Description: SysMenuController类
@@ -41,16 +47,13 @@ public class SysMenuController {
     private SysMenuService sysMenuService;
 
 
-    @GetMapping("/listView")
+
+    @RequestMapping(value = "/listView",method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("views/user/menu/menuList");
         return mv;
     }
-
-
-
-
 
     @PostMapping("/insert")
     public RetResult<Integer> insert(SysMenu sysMenu) throws Exception{
@@ -146,9 +149,6 @@ public class SysMenuController {
     @ResponseBody
     public LayuiResult<SysMenu> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
         @RequestParam(defaultValue = "0") Integer limit){
-
-
-
         HashMap map = new HashMap();
         PageHelper.startPage(page, limit);
         QueryFilter filter = new QueryFilter(request);
@@ -174,6 +174,24 @@ public class SysMenuController {
         PageInfo<SysMenu> pageInfo = new PageInfo<SysMenu>(list);
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());
     }
+
+
+    @RequestMapping("/getTreeList")
+    @ResponseBody
+    public  Map getTreeList(){
+        Map params = new HashMap();
+        List<TreeListDto> list = sysMenuService.getTreeList();
+        Map<String,List> mapList = new HashMap<>();
+        mapList.put("list",list);
+        params.put("code",0);
+        params.put("msg","成功");
+        params.put("data",mapList);
+        return params;
+    }
+
+
+
+
 
 
 

@@ -12,29 +12,19 @@ import java.util.List;
  * @Description:
  **/
 public class Demo {
-
+    //求出 1，1，2，3,5,8
     public static void main(String[] args) {
-       String field =  Demo.getPx("global");
-        System.out.println(field);
+        int jieCheng = 1;
+        for(int i=1;i<=5;i++){
+            jieCheng *= i;
+        }
+//        System.out.println(jieCheng);
+        System.out.println(jieCheng(50000));
     }
 
-    public  static final String getPx(String px){
-        String field = "";
-        switch (px){
-            case "price":
-                field = "price";
-                break;
-            case "sales":
-                field = "sales";
-                break;
-            case "score":
-                field = "score";
-                break;
-            case "global":
-                field = "global";
-                break;
-        }
-        return field;
+    public static int jieCheng(int num){
+        return num ==0 ? 0 : num + jieCheng(num-1);
     }
+
 
 }

@@ -36,6 +36,7 @@ $(function (){
                                     ,{field:'sex', width:150, title: '性别', sort: true,templet:'#sexTpl'}
                                     ,{field:'pwd', width:100, title: '密码'}
                                     ,{field:'email', width:200, title: 'email'}
+                                    ,{field:'phone', width:200, title: 'tests'}
                                     ,{fixed: 'right', width: 200, align:'center', toolbar: '#barSysUser'}
                                 ]]
                                 ,page: true
@@ -145,6 +146,7 @@ function sysUserAdd(){
             //监听提交
             iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                 var field = data.field; //获取提交的字段
+                console.log(field);
                 $.ajax({
                     url : '/sysuser/insert',
                     type : 'post',

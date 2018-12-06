@@ -1,7 +1,6 @@
 package com.example.demo.core.shiro;
 
 
-import com.example.demo.core.ret.RetResult;
 import com.example.demo.model.SysUser;
 import com.example.demo.service.SysMenuService;
 import com.example.demo.service.SysUserRoleService;

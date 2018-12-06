@@ -1,0 +1,57 @@
+{
+  "code": 0,
+  "msg": "获取成功",
+  "data": {
+    "list": [
+    {
+        "id": 1,
+        "name": "系统管理",
+        "alias": "1",
+        "palias": "0"
+    },
+    {
+        "id": 2,
+        "name": "基础数据",
+        "alias": "2",
+        "palias": "0"
+    },
+    {
+        "id": 3,
+        "name": "用户管理",
+        "alias": "3",
+        "palias": "1"
+    },
+    {
+        "id": 4,
+        "name": "角色管理",
+        "alias": "4",
+        "palias": "1"
+    },
+    {
+        "id": 5,
+        "name": "资源管理",
+        "alias": "5",
+        "palias": "1"
+    },
+    {
+        "id": 6,
+        "name": "部门管理",
+        "alias": "6",
+        "palias": "1"
+    },
+    {
+        "id": 7,
+        "name": "字典管理",
+        "alias": "7",
+        "palias": "2"
+    },
+    {
+        "id": 13,
+        "name": "1",
+        "alias": "13",
+        "palias": "6"
+    }
+]
+    
+  }
+}

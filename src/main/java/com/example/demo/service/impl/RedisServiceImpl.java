@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.example.demo.service.RedisService;
+import com.example.demo.service.SysDeptService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
@@ -23,6 +24,9 @@ public class RedisServiceImpl implements RedisService {
 
     @Resource
     private RedisTemplate<String, ?> redisTemplate;
+
+
+    private SysDeptService sysDeptService;
 
     @Override
     public boolean set(final String key, final String value) {

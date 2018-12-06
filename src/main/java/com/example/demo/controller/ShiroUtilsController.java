@@ -5,6 +5,8 @@ import com.example.demo.service.ShiroService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.apache.shiro.subject.Subject;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-
-@RestController
+@Controller
 @RequestMapping("shiroUtils")
 public class ShiroUtilsController {
 
@@ -21,8 +22,8 @@ public class ShiroUtilsController {
     private ShiroService shiroService;
 
     @GetMapping("/noLogin")
-    public void noLogin() {
-        throw new UnauthenticatedException();
+    public String noLogin() {
+        return "redirect:/login";
     }
 
     @GetMapping("/noAuthorize")
@@ -44,6 +45,14 @@ public class ShiroUtilsController {
     @PostMapping("/updatePermission")
     public void updatePermission() throws Exception {
         shiroService.updatePermission();
+    }
+
+    @RequestMapping("/logout")
+    public String logOut() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+//        session.removeAttribute("user");
+        return "redirect:/login";
     }
 
 }

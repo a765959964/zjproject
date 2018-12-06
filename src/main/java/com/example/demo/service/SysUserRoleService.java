@@ -15,8 +15,14 @@ import java.util.Map;
 public interface SysUserRoleService extends Service<SysUserRole> {
 
 
+    List<SysUserRole> getByUserIdAndRoleId(Map params);
+
     List<SysUserRole> getAll(Map map);
 
     List<String> getRolesByUserId(String userId);
+
+    List<String> getRoleIdsByUserId(String userId);
+
+    void deleteByUserIdOrRoleId(Map map);
 
 }

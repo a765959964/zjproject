@@ -10,13 +10,38 @@
     <result column="role_id" jdbcType="INTEGER" property="roleId" />
   </resultMap>
 
+    <!--  根据用户id 或者角色id 查询角色值 -->
+   <select id="getByUserIdAndRoleId"  resultMap="BaseResultMap" >
+      select * from sys_user_role t
+      where t.user_id = #{userId}
+       <if test="roleId !=null and roleId !=''">
+           and t.role_id = #{roleId}
+       </if>
+   </select>
 
+    <!-- 根据用户id获取角色值 -->
    <select id="getRolesByUserId" resultType="String" parameterType="String">
       select sr.role_value from sys_user_role sur
       left join sys_role sr on sr.id = sur.role_id
       where sur.user_id = #{userId};
    </select>
 
+
+    <!--  根据用户id 获取所有角色id -->
+    <select id="getRoleIdsByUserId" resultType="String" parameterType="String">
+       select  sur.role_id from sys_user_role sur
+       left join sys_user su on su.id = sur.user_id
+       where sur.user_id = #{userId}
+    </select>
+
+    <!-- 根据用户id或者角色iD 删除 -->
+    <delete id="deleteByUserIdOrRoleId" parameterType="java.lang.String">
+      delete from sys_user_role where user_id = #{userId}
+      <if test="roleId != null">
+          and role_id != #{roleId}
+      </if>
+
+    </delete>
 
 
 

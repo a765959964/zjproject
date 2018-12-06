@@ -7,7 +7,8 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="/static/layui/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" th:href="@{/static/layui/layuiadmin/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/layui/layuiadmin/modules/formSelects/formSelects-v4.css}"/>
 </head>
 <body>
 
@@ -15,7 +16,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">用户名</label>
         <div class="layui-input-inline">
-            <input type="hidden"  name="id" th:value="${sysUser.id}" />
+            <input type="hidden" id="userId" name="id" th:value="${sysUser.id}" />
             <input type="text" name="name" th:value="${sysUser.name}" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
         </div>
     </div>
@@ -50,6 +51,15 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">所属角色</label>
+        <div class="layui-input-inline" th:utext="${sb}">
+         <!--   <select style="width: 350px;display: inline-block;" name="roleIds"
+                               xm-select="select1" xm-select-show-count="2"
+                               xm-select-search="/sysrole/getRoleList" >
+        </select>-->
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">选择部门</label>
         <div class="layui-input-inline">
             <input type="text"  th:value="${deptName}" placeholder="选择部门"  id="deptName" class="layui-input" readonly  onclick="getShow()"/>
@@ -63,16 +73,24 @@
     </div>
 </div>
 
-<script src="/static/layui/layuiadmin/layui/layui.js"></script>
-<script src="/static/jquery/jquery-2.1.4.min.js" charset="utf-8"></script>
+<script th:src="@{/static/layui/layuiadmin/layui/layui.all.js}"></script>
+<script th:src="@{/static/layui/layuiadmin/modules/formSelects/formSelects-v4.js}"></script>
+<script th:src="@{/static/jquery/jquery-2.1.4.min.js}" charset="utf-8"></script>
 <script>
+    var formSelects = layui.formSelects;
+/*    formSelects.config('select1', {
+        type: 'get',                //请求方式: post, get, put, delete...
+        searchUrl: '/sysrole/getRoleList',
+        searchName: 'userId',
+        searchVal : $("#userId").val()
+    });*/
+
     layui.use([ 'form','laydate'], function(){
         var $ = layui.$
             ,laydate = layui.laydate;
         form = layui.form;
         //常规用法
     })
-
 
     $.post("/sysdept/getTree",function (res){
         obj = res; // console.log(res);

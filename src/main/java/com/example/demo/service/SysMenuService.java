@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
+import com.example.demo.core.utils.TreeList;
 import com.example.demo.dto.SysMenuDto;
+import com.example.demo.dto.TreeListDto;
 import com.example.demo.model.SysMenu;
 import com.example.demo.core.universal.Service;
 
@@ -24,4 +26,9 @@ public interface SysMenuService extends Service<SysMenu> {
     List<SysMenu> getListByUserId(String userId);
 
     List<String> getMenusByUserId(String userId);
+
+    List<TreeListDto> getTreeList();
+
+    List<TreeListDto> getByRoleIdTreeList(String roleId);
+
 }

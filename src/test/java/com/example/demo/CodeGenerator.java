@@ -48,7 +48,7 @@ public class CodeGenerator {
      * @param args
      */
     public static void main(String[] args) {
-        genCode("t_food_common_type");
+        genCode("sys_role_menu");
     }
 
     /**

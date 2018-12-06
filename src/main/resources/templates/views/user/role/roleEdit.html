@@ -11,25 +11,32 @@
 </head>
 <body>
 
-<div class="layui-form" lay-filter="sysRoleForm" id="sysRoleForm" style="padding: 20px 0 0 0;">
-    <div class="layui-form-item">
+<div class="layui-form" lay-filter="sysRoleForm" id="sysRoleForm" style="padding: 20px 0 0 0;" th:object="${sysRole}">
+    <div class="layui-form-item" >
         <label class="layui-form-label">角色名称</label>
         <div class="layui-input-inline">
-            <input type="hidden"  name="id" th:value="${sysRole.id}" />
-            <input type="text" name="roleName" th:value="${sysRole.roleName}" lay-verify="required" placeholder="请输入角色名称" autocomplete="off" class="layui-input">
+            <input type="hidden"  id="id" name="id" th:value="${sysRole.id}" />
+            <input type="text" name="roleName" th:value="*{roleName}" lay-verify="required" placeholder="请输入角色名称" autocomplete="off" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">角色描述</label>
         <div class="layui-input-inline">
-            <input type="text" name="roleDesc" th:value="${sysRole.roleDesc}" lay-verify="required" placeholder="请输入描述" autocomplete="off" class="layui-input">
+            <input type="text" name="roleDesc" th:value="*{roleDesc}" lay-verify="required" placeholder="请输入描述" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">角色值</label>
         <div class="layui-input-inline">
-            <input type="text" name="roleValue"  th:value="${sysRole.roleValue}" placeholder="请输入角色值" autocomplete="off" class="layui-input">
+            <input type="text" name="roleValue"  th:value="*{roleValue}" placeholder="请输入角色值" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择权限</label>
+        <div class="layui-input-block">
+            <input type="hidden" id="roleMenu" name="roleMenu" />
+            <div id="LAY-auth-tree-index"></div>
         </div>
     </div>
 
@@ -38,14 +45,51 @@
     </div>
 </div>
 
-<script src="/static/layui/layuiadmin/layui/layui.js"></script>
+<script th:src="@{/static/layui/layuiadmin/layui/layui.js}"></script>
 <script>
-    layui.use([ 'form','laydate'], function(){
-        var $ = layui.$
-            ,laydate = layui.laydate;
-        form = layui.form;
+    layui.config({
+        base: '/static/layui/layuiadmin/plugins/',
+    }).extend({
+        authtree: 'authtree',
+    });
+    layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
+        var $ = layui.jquery;
+        var authtree = layui.authtree;
+        var form = layui.form;
+        var layer = layui.layer;
+        console.log($("#id").val());
+        $.ajax({
+            url: '/sysrole/findByRoleId?roleId='+$("#id").val(),
+            dataType: 'json',
+            success: function(res){
+                // 支持自定义递归字段、数组权限判断等
+                // 深坑注意：如果API返回的数据是字符串，那么 startPid 的数据类型也需要是字符串
+                var trees = authtree.listConvert(res.data.list, {
+                    primaryKey: 'alias'
+                    ,startPid: '0'
+                    ,parentKey: 'palias'
+                    ,nameKey: 'name'
+                    ,valueKey: 'alias'
+                    ,checkedKey: res.data.checkedAlias
+                });
+                // 如果页面中多个树共存，需要注意 layfilter 需要不一样
+                authtree.render('#LAY-auth-tree-index', trees, {
+                    inputname: 'authids[]',
+                    layfilter: 'lay-check-auth',
+                    // openall: true,
+                    autowidth: true,
+                });
 
-    })
+                authtree.on('change(lay-check-auth)', function(data) {
+                    // 获取所有已选中节点
+                    var checked = authtree.getChecked('#LAY-auth-tree-index');
+                    $("#roleMenu").val(checked);
+                    console.log('checked', checked);
+                });
+            }
+        });
+
+    });
 </script>
 </body>
 </html>

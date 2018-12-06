@@ -7,14 +7,31 @@ $(function (){
 
 //初始化 layui 数据表格
 function init(){
-    layui.use( 'table', function(){
+    layui.config({
+        base: '/static/layui/layuiadmin/plugins/',
+    }).extend({
+        authtree: 'authtree',
+    });
+
+    layui.use( ['table', 'authtree','form', 'layer'], function(){
         var $ = layui.$
             ,table = layui.table
             ,form = layui.form;
+        var authtree = layui.authtree;
+        var layer = layui.layer;
+
         table.render({
             elem: '#sysRoleTable'
             ,url: '/sysrole/getAll'
-            ,toolbar: '#toolbarsysRole'
+            ,parseData: function(res){
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
+            }
+                ,toolbar: '#toolbarsysRole'
             ,title: '角色管理'
             ,totalRow: true
             ,cols: [[
@@ -87,6 +104,7 @@ function sysRoleAdd(){
         ,yes: function(index, layero){
             var iframeWindow = window['layui-layer-iframe'+ index]
                 ,submitID = 'sysRoleSubmit'
+                ,treeIndex = 'LAY-auth-tree-index'
                 ,submit = layero.find('iframe').contents().find('#'+ submitID);
             //监听提交
             iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
