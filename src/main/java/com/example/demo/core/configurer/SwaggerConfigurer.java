@@ -34,9 +34,9 @@ public class SwaggerConfigurer {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("mySpringBoot 使用Swagger2构建RESTful APIs")
-                .description("更多Spring Boot相关文章请关注：https://juejin.im/user/59e7fb9451882578e1406a51/posts")
+                .description("")
                 .termsOfServiceUrl("https://juejin.im/user/59e7fb9451882578e1406a51/posts")
-                .contact(new Contact("Mr_初晨", "https://gitee.com/beany/mySpringBoot", null))
+                .contact(new Contact("zf","", null))
                 .version("1.0")
                 .build();
     }

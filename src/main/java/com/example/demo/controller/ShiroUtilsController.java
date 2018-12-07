@@ -51,7 +51,6 @@ public class ShiroUtilsController {
     public String logOut() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
-//        session.removeAttribute("user");
         return "redirect:/login";
     }
 

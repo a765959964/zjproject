@@ -1,6 +1,8 @@
 package com.example.demo;
 
-import com.example.demo.model.SysDept;
+import com.example.demo.core.dbtable.CreateTableUtils;
+import com.example.demo.core.dbtable.DbTableUtils;
+import com.example.demo.model.TFoodCommonType;
 import com.example.demo.service.RedisService;
 import com.example.demo.service.SysDeptService;
 import org.junit.Test;
@@ -10,10 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.nio.MappedByteBuffer;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,18 +29,32 @@ public class DemoApplicationTests {
     @Autowired
     SysDeptService  sysDeptService;
 
+
+    @Test
+    public void getList(){
+        String sql = "select t.`code`,t.`name` from t_food_common_type t where t.`level` = 2 and t.`status` = 1 and t.isdel =0";
+        List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+        for (Map<String, Object> l : list ){
+            DbTableUtils dbTableUtils = new DbTableUtils();
+            dbTableUtils.setTableName(l.get("code").toString());
+            dbTableUtils.setMsg(l.get("name").toString());
+            String sb =  CreateTableUtils.getSQL(dbTableUtils);
+            jdbcTemplate.execute(sb);
+        }
+
+    }
+
 	@Test
 	public void contextLoads() {
-   /*     List<SysDept> sysDeptList = sysDeptService.getAll(null);
-        Map<String,String> map = new HashMap<>();
-        for (SysDept sysDept :sysDeptList){
-            map.put("id",sysDept.getId()+"");
-            map.put("name",sysDept.getName());
-            map.put("sort",sysDept.getSort()+"");
-            redisService.lpush("sys_dept:"+sysDept.getId(),map);
-        }*/
-        String s = redisService.get("sys_dept:16");
-        System.out.println("取值"+s);
+
+	    StringBuilder sb = new StringBuilder();
+
+	    sb.append("create table aa1");
+	    sb.append("(id int(11) NOT NULL AUTO_INCREMENT,name varchar(80), ");
+	    sb.append("age int,address varchar(220),");
+	    sb.append(" primary key(id)  )");
+        System.out.println(sb.toString());
+//        jdbcTemplate.execute(sb.toString());
     }
 
 
