@@ -37,7 +37,7 @@ public class SysDeptController {
     @RequestMapping(value = "/listView",method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/user/dept/deptList");
+        mv.setViewName("views/system/dept/deptList");
         return mv;
     }
 
@@ -45,7 +45,7 @@ public class SysDeptController {
     @RequestMapping(value = "/add",method = RequestMethod.GET)
     public ModelAndView deptAdd(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/user/dept/add");
+        mv.setViewName("views/system/dept/add");
         return mv;
     }
 
@@ -81,7 +81,7 @@ public class SysDeptController {
     public ModelAndView getById(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
         SysDept sysDept =sysDeptService.selectById(id);
-        mv.setViewName("views/user/user/deptAdd");
+        mv.setViewName("views/system/user/deptAdd");
         mv.addObject("sysDept",sysDept);
         return mv;
     }
@@ -92,7 +92,7 @@ public class SysDeptController {
     public ModelAndView getByIdEdit(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
         SysDept sysDept =sysDeptService.selectById(id);
-        mv.setViewName("views/user/user/deptEdit");
+        mv.setViewName("views/system/user/deptEdit");
         mv.addObject("sysDept", sysDept);
         if(sysDept.getPid()==0){
            mv.addObject("pname","根目录");
@@ -145,10 +145,6 @@ public class SysDeptController {
     public List<SysDept> getTree(){
        List<LayuiTree> layuiTreeList =new ArrayList<>();
        List<SysDept> sysdeptList =  sysDeptService.selectAll();
-       //System.out.println("list循环"+JSonUtils.toJSon(getList(sysdeptList)));
-//       System.out.println("递归"+JSonUtils.toJSon(getParentTree(sysdeptList)));
-      // List<SysDept> list  = getParentTree(sysdeptList);
-      // System.out.println(JSonUtils.toJSon("JSON:"+list));
        return getParentTree(sysdeptList);
     }
 
@@ -164,7 +160,7 @@ public class SysDeptController {
             for (SysDept sysDept:sysDeptList) {
                 if(sysDept.getPid()==sd.getId()){
                     if(sd.getChildren()==null){
-                //        sd.setChildren(new ArrayList<SysDept>());
+                        sd.setChildren(new ArrayList<SysDept>());
                     }
                     sd.getChildren().add(sysDept);
                 }
@@ -204,66 +200,6 @@ public class SysDeptController {
 
 
 
-    /**
-     * 求出父部门
-     * @param sysdeptList
-     * @return
-     */
-   /* private  List<LayuiTree> getParentTree(List<SysDept> sysdeptList){
-        List<LayuiTree>  layuiTreeList = new ArrayList<>();
-        LayuiTree layuiTree = null;
-        for (SysDept sysdept: sysdeptList) {
-            layuiTree = new LayuiTree();
-            if(sysdept.getPid()==0) {
-                layuiTree.setId(sysdept.getId());
-                layuiTree.setName(sysdept.getName());
-                layuiTree.setpId(0);
-                layuiTreeList.add(layuiTree);
-            }
-        }
-        return layuiTreeList;
-    }
-*/
-    /**
-     * 求出 父级和 子级
-     * @param sysdeptList
-     * @return
-     */
-    private  List<LayuiTree> getChildren(List<SysDept> sysdeptList){
-        List<LayuiTree> list = null;
-        //List<LayuiTree> parentList = getParentTree(sysdeptList);    //父级list
-        JSONArray jsonArray = new JSONArray();
-        JsonObject jsonObject = new JsonObject();
-        /*List<LayuiTree> list = new ArrayList<>();
-        List<LayuiTree> parentList = getParentTree(sysdeptList);    //父级list
-        List<LayuiTree> childrenList = new ArrayList<>();
-        LayuiTree layuiTree  =   null;
-        for(LayuiTree parent : parentList){     //先循环父级list
-            for( SysDept sysDept : sysdeptList){    //在循环全部list
-                    if(sysDept.getPid()==parent.getId()){   //判断子级是否不等于父级
-                        layuiTree  =   new LayuiTree();
-                        layuiTree.setId(sysDept.getId());
-                        layuiTree.setpId(sysDept.getPid());
-                        layuiTree.setName(sysDept.getName());
-                        childrenList.add(layuiTree);
-                        layuiTree.setChildren(childrenList);
-                    }else{
-                        layuiTree  =   new LayuiTree();
-                        layuiTree.setId(parent.getId());
-                        layuiTree.setName(parent.getName());
-                        layuiTree.setpId(parent.getpId());
-                        list.add(layuiTree);
-                    }
-
-             }
-
-        }
-      */
-        return list;
-    }
-
-
-
 
 
 
@@ -289,26 +225,6 @@ public class SysDeptController {
         layuiTreeList.add(layuiTree);
         return layuiTreeList;
     }
-
-    /*
-    private  List<LayuiTree> getParentTree(List<SysDept> sysdeptList){
-        List<LayuiTree>  layuiTreeList = new ArrayList<>();
-        List<LayuiTree>  ltList = new ArrayList<>();
-        LayuiTree layuiTree  = new LayuiTree();
-        for (SysDept sysdept: sysdeptList) {
-            if(sysdept.getPid()==0){
-                layuiTree.setId(sysdept.getId());
-                layuiTree.setName(sysdept.getName());
-                layuiTreeList.add(layuiTree);
-                layuiTree.setChildren(layuiTreeList);
-            }else if(sysdept.getPid().equals(layuiTree.getId())){
-                getParentTree(sysdeptList);
-            }
-        }
-        return layuiTreeList;
-    }*/
-
-
 
    /**
     * lay ui 分页

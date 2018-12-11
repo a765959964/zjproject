@@ -71,7 +71,7 @@ public class SysUserController {
     @RequestMapping(value = "/listView",method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/user/userList");
+        mv.setViewName("views/system/user/userList");
         return mv;
     }
 
@@ -87,7 +87,7 @@ public class SysUserController {
     @RequestMapping(value = "/userAdd",method = RequestMethod.GET)
     public ModelAndView userAdd(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/user/userAdd");
+        mv.setViewName("views/system/user/userAdd");
         return mv;
     }
 
@@ -177,7 +177,7 @@ public class SysUserController {
         }else{
             mv.addObject("deptName","");
         }
-        mv.setViewName("views/user/userEdit");
+        mv.setViewName("views/system/user/userEdit");
         mv.addObject("sysUser",sysUser).addObject("sb",sb);
         return mv;
     }

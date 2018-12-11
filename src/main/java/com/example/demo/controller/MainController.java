@@ -50,6 +50,27 @@ public class MainController {
         return "views/reg";
     }
 
+    @RequestMapping("/404")
+    public String r404(Model model){
+        return "views/commons/404";
+    }
+
+    @RequestMapping("/500")
+    public String r500(Model model){
+        return "views/commons/500";
+    }
+
+    @RequestMapping("/600")
+    public String r600(Model model){
+        return "views/commons/600";
+    }
+
+    @RequestMapping("/err")
+    public String err(Model model){
+        return "views/commons/error";
+    }
+
+
     @RequestMapping("/logout")
     public String logOut() {
         Subject subject = SecurityUtils.getSubject();

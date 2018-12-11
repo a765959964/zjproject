@@ -32,7 +32,7 @@ public class DemoApplicationTests {
 
     @Test
     public void getList(){
-        String sql = "select t.`code`,t.`name` from t_food_common_type t where t.`level` = 2 and t.`status` = 1 and t.isdel =0";
+     /*   String sql = "select t.`code`,t.`name` from t_food_common_type t where t.`level` = 2 and t.`status` = 1 and t.isdel =0";
         List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
         for (Map<String, Object> l : list ){
             DbTableUtils dbTableUtils = new DbTableUtils();
@@ -40,7 +40,7 @@ public class DemoApplicationTests {
             dbTableUtils.setMsg(l.get("name").toString());
             String sb =  CreateTableUtils.getSQL(dbTableUtils);
             jdbcTemplate.execute(sb);
-        }
+        }*/
 
     }
 

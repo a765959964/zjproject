@@ -67,6 +67,8 @@ public class ShiroConfigurer {
         chain.addPathDefinition("/webjars/**", "anon");
         chain.addPathDefinition("/template/**", "anon");
         chain.addPathDefinition("/login.html", "anon");
+        chain.addPathDefinition("/error**", "anon");
+        chain.addPathDefinition("/404", "anon");
         chain.addPathDefinition("/reg", "anon");
         chain.addPathDefinition("/login*", "anon");
         chain.addPathDefinition("/login", "anon");

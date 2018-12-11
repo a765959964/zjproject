@@ -58,14 +58,14 @@ public class SysRoleController {
     @RequestMapping(value = "/listView",method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/user/role/roleList");
+        mv.setViewName("views/system/role/roleList");
         return mv;
     }
 
     @RequestMapping(value = "/roleAdd",method = RequestMethod.GET)
     public ModelAndView roleAdd(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/user/role/roleAdd");
+        mv.setViewName("views/system/role/roleAdd");
         return mv;
     }
 
@@ -78,12 +78,15 @@ public class SysRoleController {
         Integer state = sysRoleService.insert(sysRole);
         SysRole sr = sysRoleService.selectOne(sysRole);
 //        System.out.println("获得id值:"+sr.getId());
-        String [] s = roleMenu.split(",");
-        SysRoleMenu sysRoleMenu = new SysRoleMenu();
-        sysRoleMenu.setRoleId(sr.getId());
-        for (String s1: s) {
-            sysRoleMenu.setMenuId(Integer.parseInt(s1));
-            sysRoleMenuService.insert(sysRoleMenu);
+        System.out.println(roleMenu=="" +"==="+roleMenu.equals(""));
+        if(!roleMenu.equals("")) {
+            String[] s = roleMenu.split(",");
+            SysRoleMenu sysRoleMenu = new SysRoleMenu();
+            sysRoleMenu.setRoleId(sr.getId());
+            for (String s1 : s) {
+                sysRoleMenu.setMenuId(Integer.parseInt(s1));
+                sysRoleMenuService.insert(sysRoleMenu);
+            }
         }
         return RetResponse.makeOKRsp(state);
     }
@@ -123,7 +126,7 @@ public class SysRoleController {
         ModelAndView mv = new ModelAndView();
         SysRole sysRole =sysRoleService.selectById(id);
         System.out.println("原始"+id);
-        mv.setViewName("views/user/role/roleEdit");
+        mv.setViewName("views/system/role/roleEdit");
         mv.addObject("sysRole",sysRole).addObject("roleId",id);
         return mv;
     }

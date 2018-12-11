@@ -10,9 +10,14 @@ import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -25,11 +30,31 @@ public class GlobalExceptionResolver {
 
     private final Logger logger = LoggerFactory.getLogger(GlobalExceptionResolver.class);
 
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String notFoundPage404(HttpServletResponse response) {
+        response.setStatus(200);
+        return "views/commons/404.html";
+
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public void notFoundPage500(HttpServletResponse response) {
+        RetResult<Object> result = new RetResult<>();
+        result.setCode(RetCode.INTERNAL_SERVER_ERROR).setMsg("内部服务器出错").setData(null);
+        responseResult(response, result);
+    }
+
+
+
     @ExceptionHandler(UnauthenticatedException.class)
-    public void page401(HttpServletResponse response, UnauthenticatedException e) {
+    public void page401(HttpServletRequest req,HttpServletResponse response, UnauthenticatedException e) throws ServletException, IOException {
         RetResult<Object> result = new RetResult<>();
             result.setCode(RetCode.UNAUTHEN).setMsg("用户未登录").setData(null);
         responseResult(response, result);
+        req.getRequestDispatcher("/login").forward(req,response);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
@@ -47,16 +72,17 @@ public class GlobalExceptionResolver {
         result.setCode(RetCode.FAIL).setMsg(e.getMessage()).setData(null);
         responseResult(response, result);
     }
-    /**
+/*    *//**
      * 其他异常统一处理
-     */
+     *//*
     @ExceptionHandler(value = Exception.class)
-    public void exceptionHandler(HttpServletResponse response, Exception e) {
+    public String exceptionHandler(HttpServletResponse response, Exception e) throws IOException {
         RetResult<Object> result = new RetResult<>();
-        result.setCode(RetCode.INTERNAL_SERVER_ERROR).setMsg("服务器打酱油了，请稍后再试~");
-        logger.error(e.getMessage(), e);
-        responseResult(response, result);
-    }
+//        result.setCode(RetCode.INTERNAL_SERVER_ERROR).setMsg("服务器打酱油了，请稍后再试~");
+//        logger.error(e.getMessage(), e);
+//        responseResult(response, result);
+        return "views/commons/500.html";
+    }*/
     /**
      * @param response
      * @param result

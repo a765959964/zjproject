@@ -13,6 +13,8 @@ public enum RetCode {
 	// 失败
 	FAIL(400),
 
+	ERROR(404),
+
 	// 未认证（签名错误）
 	UNAUTHORIZED(401),
 

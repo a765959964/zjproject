@@ -51,7 +51,7 @@ public class SysMenuController {
     @RequestMapping(value = "/listView",method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/user/menu/menuList");
+        mv.setViewName("views/system/menu/menuList");
         return mv;
     }
 
@@ -85,7 +85,7 @@ public class SysMenuController {
     public ModelAndView getParentId(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
         SysMenu sysMenu =sysMenuService.selectById(id);
-        mv.setViewName("views/user/menu/menuAdd");
+        mv.setViewName("views/system/menu/menuAdd");
         mv.addObject("sysMenu",sysMenu);
         return mv;
     }
@@ -118,7 +118,7 @@ public class SysMenuController {
             SysMenu sm =sysMenuService.selectById(sysMenu.getPid().toString());
             mv.addObject("pname",sm.getName());
         }
-        mv.setViewName("views/user/menu/menuEdit");
+        mv.setViewName("views/system/menu/menuEdit");
         return mv;
     }
 
