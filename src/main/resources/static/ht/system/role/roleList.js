@@ -1,6 +1,7 @@
 /**
  * Created by 张帆 on 2018/10/30.
  */
+var prefix = "/sys/role/";
 $(function (){
     init();
 })
@@ -22,7 +23,7 @@ function init(){
 
         table.render({
             elem: '#sysRoleTable'
-            ,url: '/sysrole/getAll'
+            ,url:prefix+ 'getAll'
             ,parseData: function(res){
                 return {
                     "code": res.code, //解析接口状态
@@ -70,7 +71,7 @@ function init(){
                 var demoReload = $('#demoReload');
                 //执行重载
                 table.reload('sysRoleReload', {
-                    url : '/sysrole/getAll'
+                    url :prefix+ 'getAll'
                     ,page: {
                         curr: 1 //重新从第 1 页开始
                     }
@@ -97,7 +98,7 @@ function sysRoleAdd(){
     layer.open({
         type: 2
         ,title: '增加角色信息'
-        ,content: '/sysrole/roleAdd'
+        ,content:prefix+ 'roleAdd'
         ,maxmin: true
         ,area: ['650px', '550px']
         ,btn: ['确定', '取消']
@@ -110,7 +111,7 @@ function sysRoleAdd(){
             iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                 var field = data.field; //获取提交的字段
                 $.ajax({
-                    url : '/sysrole/insert',
+                    url :prefix+ 'insert',
                     type : 'post',
                     dataType : 'json',
                     data: field,
@@ -130,8 +131,8 @@ function sysRoleAdd(){
 function sysRoleEdit(id){
     layer.open({
         type: 2
-        ,title: '修改用户信息'
-        ,content: '/sysrole/getById?id='+id
+        ,title: '修改角色信息'
+        ,content: prefix+'getById?id='+id
         ,maxmin: true
         ,area: ['650px', '550px']
         ,btn: ['确定', '取消']
@@ -143,7 +144,7 @@ function sysRoleEdit(id){
             iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                 var field = data.field; //获取提交的字段
                 $.ajax({
-                    url : '/sysrole/update',
+                    url : prefix+'update',
                     type : 'post',
                     dataType : 'json',
                     data: field,
@@ -162,7 +163,7 @@ function sysRoleEdit(id){
 //删除id
 function delById(id){
     layer.confirm('确定删除吗？', function(index) {
-        $.post("/sysrole/deleteById",{id:id},function (res){
+        $.post(prefix+"deleteById",{id:id},function (res){
             layer.msg('已删除');
             layui.table.reload('sysRoleReload');
             layer.close(index); //关闭弹层

@@ -18,9 +18,17 @@
             <input type="text"  th:value="${pname}" readonly disabled autocomplete="off" class="layui-input">
             <input type="hidden" name="id" th:value="${sysMenu.id}" />
             <input type="hidden" name="pid" th:value="${sysMenu.pid}" />
-            <input type="hidden" name="type" th:value="${sysMenu.type}" />
+            <input type="hidden" id="type" th:value="${sysMenu.type}" />
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单类型</label>
+        <input type="radio" name="type" value="1" title="目录" >
+        <input type="radio" name="type" value="2" title="菜单" >
+        <input type="radio" name="type" value="3" title="按钮" >
+    </div>
+
+
     <div class="layui-form-item">
         <label class="layui-form-label">资源名称</label>
         <div class="layui-input-inline">
@@ -60,8 +68,21 @@
     </div>
 </div>
 
-<script src="/static/layui/layuiadmin/layui/layui.js"></script>
+<head th:include="include :: footer"></head>
+
 <script>
+    $(function (){
+        var type = $("#type").val();
+        $('input:radio[name=type]').each(function (i,e){
+            if(type==1){
+                $('input:radio[name=type]')[0].checked =true;
+            }else if(type==2){
+                $('input:radio[name=type]')[1].checked =true;
+            }else{
+                $('input:radio[name=type]')[2].checked =true;
+            }
+        })
+    })
     layui.use([ 'form','laydate'], function(){
         var $ = layui.$
             ,laydate = layui.laydate;

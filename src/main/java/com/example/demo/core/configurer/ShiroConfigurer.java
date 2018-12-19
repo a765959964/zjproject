@@ -1,5 +1,6 @@
 package com.example.demo.core.configurer;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.example.demo.core.shiro.CustomRealm;
 import com.example.demo.model.SysMenu;
 import com.example.demo.service.SysMenuService;
@@ -23,6 +24,16 @@ public class ShiroConfigurer {
     @Resource
     private SysMenuService sysMenuService;
 
+
+     /**
+     * ShiroDialect，为了在thymeleaf里使用shiro的标签的bean
+     *
+     * @return
+     */
+    @Bean
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
+    }
 
     /**
      * 注入自定义的realm，告诉shiro如何获取用户信息来做登录或权限控制
@@ -54,16 +65,11 @@ public class ShiroConfigurer {
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
         DefaultShiroFilterChainDefinition chain = new DefaultShiroFilterChainDefinition();
-        /*List<SysMenu> list = sysMenuService.getAll();
-        for(int i = 0,length = list.size();i<length;i++){
-            SysMenu sysMenu = list.get(i);
-            chain.addPathDefinition(sysMenu.getUrl(), sysMenu.getPerms());
-        }
-*/
         /**
          *  使用shiro 配置可访问的页面
          */
         chain.addPathDefinition("/static/**", "anon");//可以匿名访问
+        chain.addPathDefinition("/dict/**", "anon");//可以匿名访问
         chain.addPathDefinition("/webjars/**", "anon");
         chain.addPathDefinition("/template/**", "anon");
         chain.addPathDefinition("/login.html", "anon");

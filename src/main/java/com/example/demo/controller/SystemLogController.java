@@ -29,7 +29,6 @@ public class SystemLogController {
 
     @PostMapping("/insert")
     public RetResult<Integer> insert(SystemLog systemLog) throws Exception{
-		systemLog.setId(ApplicationUtils.getUUID());
     	Integer state = systemLogService.insert(systemLog);
         return RetResponse.makeOKRsp(state);
     }

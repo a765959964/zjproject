@@ -1,6 +1,7 @@
 /**
  * Created by 张帆 on 2018/11/29.
  */
+var prefix = "/sys/menu/"
 var renderTable;
 layui.config({
     base: '/static/layui/layuiadmin/modules/'   //静态文件所在地址
@@ -20,24 +21,27 @@ layui.config({
             treeIdName: 'id',
             treePidName: 'pid',
             elem: '#auth-table',
-            url: '/sysmenu/getTreeTable',
+            url:prefix+ 'getTreeTable',
             page: false,
             cols: [[
                 {type: 'numbers'},
-                {field: 'name', minWidth: 50, title: '权限名称'},
-                // {field: 'perms', title: '权限标识'},
-                {field: 'url', title: '菜单url'},
-                {field: 'sort', width: 80, align: 'center', title: '排序号'},
+                {field: 'name', minWidth: 50, title: '名称'},
                 {
                     field: 'type', width: 80, align: 'center', templet: function (d) {
-                    if (d.type == 2) {
-                        return '<span class="layui-badge layui-bg-gray">目录</span>';
+                    if (d.type == 1) {
+                        return '<span class="layui-badge layui-bg-blue">目录</span>';
                     }
-                    if (d.pid == 0) {
-                        return '<span class="layui-badge layui-bg-blue">菜单</span>';
+                    if (d.type == 2) {
+                        return '<span class="layui-badge layui-bg-gray">菜单</span>';
+                    }
+                    if (d.type == 3) {
+                        return '<span class="layui-badge layui-bg-orange">按钮</span>';
                     }
                 }, title: '类型'
                 },
+                {field: 'url', title: '菜单url'},
+                {field: 'perms', title: '权限标识'},
+                {field: 'sort', width: 80, align: 'center', title: '排序号'},
                 {templet: '#auth-state', width: 200, align: 'center', title: '操作'}
             ]],
             done: function () {
@@ -79,7 +83,7 @@ function add(){
     layer.open({
         type: 2
         ,title: '增加资源'
-        ,content: 'add.html'
+        ,content: prefix+'add'
         ,maxmin: true
         ,area: ['650px', '550px']
         ,btn: ['确定', '取消']
@@ -91,7 +95,7 @@ function add(){
             iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                 var field = data.field; //获取提交的字段
                 $.ajax({
-                    url : '/sysmenu/insert',
+                    url : prefix + 'insert',
                     type : 'post',
                     dataType : 'json',
                     data: field,
@@ -112,7 +116,7 @@ function parentAdd(id){
     layer.open({
         type: 2
         ,title: '增加资源'
-        ,content: '/sysmenu/getParentId?id='+id
+        ,content: prefix + 'getParentId?id='+id
         ,maxmin: true
         ,area: ['650px', '550px']
         ,btn: ['确定', '取消']
@@ -124,7 +128,7 @@ function parentAdd(id){
             iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                 var field = data.field; //获取提交的字段
                 $.ajax({
-                    url : '/sysmenu/insert',
+                    url : prefix + 'insert',
                     type : 'post',
                     dataType : 'json',
                     data: field,
@@ -143,7 +147,7 @@ function parentAdd(id){
 function delById(id){
     layer.confirm("你确定删除数据吗？如果存在下级节点则一并删除，此操作不能撤销！", {icon: 3, title:'提示'},
         function(index){//确定回调
-            $.post("/sysmenu/deleteById",{id:id},function (res){
+            $.post(prefix + "deleteById",{id:id},function (res){
                 layer.msg('已删除');
             });
             renderTable();
@@ -158,7 +162,7 @@ function menuEdit(id){
     layer.open({
         type: 2
         ,title: '增加资源'
-        ,content: '/sysmenu/getByIdEdit?id='+id
+        ,content: prefix +'getByIdEdit?id='+id
         ,maxmin: true
         ,area: ['650px', '550px']
         ,btn: ['确定', '取消']
@@ -170,7 +174,7 @@ function menuEdit(id){
             iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                 var field = data.field; //获取提交的字段
                 $.ajax({
-                    url : '/sysmenu/update',
+                    url : prefix + 'update',
                     type : 'post',
                     dataType : 'json',
                     data: field,

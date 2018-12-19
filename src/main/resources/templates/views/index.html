@@ -84,27 +84,10 @@
     <div class="layui-side layui-side-menu">
       <div class="layui-side-scroll">
         <div class="layui-logo" lay-href="/templates/views/home/console.html">
-          <span>layuiAdmin</span>
+          <span id="layuiAdmin">layuiAdmin</span>
         </div>
 
         <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-     <!--     <li data-name="home" class="layui-nav-item layui-nav-itemed">
-            <a href="javascript:;" lay-tips="主页" lay-direction="2">
-              <i class="layui-icon layui-icon-home"></i>
-              <cite>主页</cite>
-            </a>
-            <dl class="layui-nav-child">
-              <dd data-name="console" class="layui-this">
-                <a lay-href="/templates/views/home/console.html">控制台</a>
-              </dd>
-              <dd data-name="console">
-                <a lay-href="/templates/views/home/homepage1.html">主页一</a>
-              </dd>
-              <dd data-name="console">
-                <a lay-href="/templates/views/person/personList.html">人员信息</a>
-              </dd>
-            </dl>
-          </li>-->
 
           <li  class="layui-nav-item" th:each="m,iterStat : ${sysMenuList}">
             <a href="javascript:;"  lay-direction="2">
@@ -118,46 +101,6 @@
             </dl>
           </li>
 
-
-         <!-- <li data-name="系统权限管理" class="layui-nav-item">
-            <a href="javascript:;" lay-tips="系统权限" lay-direction="2">
-              <i class="layui-icon layui-icon-user"></i>
-              <cite>系统权限管理</cite>
-            </a>
-
-            <dl class="layui-nav-child">
-              <dd>
-                <a lay-href="/sysuser/listView">用户管理</a>
-              </dd>
-              <dd>
-                <a lay-href="/sysrole/listView">角色</a>
-              </dd>
-              <dd>
-                <a lay-href="/templates/views/user/menu/menuList.html">资源管理</a>
-              </dd>
-              <dd>
-                <a lay-href="/sysdept/listView">部门管理</a>
-              </dd>
-            </dl>
-          </li>
-
-          <li data-name="user" class="layui-nav-item">
-            <a href="javascript:;" lay-tips="用户" lay-direction="2">
-              <i class="layui-icon layui-icon-user"></i>
-              <cite>用户</cite>
-            </a>
-            <dl class="layui-nav-child">
-              <dd>
-                <a lay-href="/templates/views/user/user/list.html">网站用户</a>
-              </dd>
-              <dd>
-                <a lay-href="/templates/views/user/administrators/list.html">后台管理员</a>
-              </dd>
-              <dd>
-                <a lay-href="/templates/views/user/administrators/role.html">角色管理</a>
-              </dd>
-            </dl>
-          </li>-->
           <li data-name="set" class="layui-nav-item">
             <a href="javascript:;" lay-tips="设置" lay-direction="2">
               <i class="layui-icon layui-icon-set"></i>

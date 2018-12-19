@@ -6,6 +6,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface AnnotationLog {
-    String remark() default "";
+    String value() default "";
 
 }

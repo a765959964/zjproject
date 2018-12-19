@@ -1,6 +1,7 @@
 package com.example.demo.core.shiro;
 
 
+import com.example.demo.model.SysMenu;
 import com.example.demo.model.SysUser;
 import com.example.demo.service.SysMenuService;
 import com.example.demo.service.SysUserRoleService;
@@ -60,11 +61,11 @@ public class CustomRealm extends AuthorizingRealm {
         SysUser user = (SysUser) getAvailablePrincipal(principals);
 
 //        UserInfo user = (UserInfo) getAvailablePrincipal(principals);
-        System.out.println("获取角色信息："+user.getRoleIds());
-        System.out.println("获取部门信息："+user.getMenuIds());
+
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        Set<String> perms =  sysMenuService.listPerms(user.getId()+"");
         info.setRoles(user.getRoleIds());
-        info.setStringPermissions(user.getMenuIds());
+        info.setStringPermissions(perms);
         return info;
     }
 

@@ -16,8 +16,14 @@
         <div class="layui-input-inline">
             <input type="text"  value="根目录" readonly disabled autocomplete="off" class="layui-input">
             <input type="hidden" name="pid" value="0" />
-            <input type="hidden" name="type" value="1" />
+            <!--<input type="hidden" name="type" value="1" />-->
         </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单类型</label>
+            <input type="radio" name="type" value="1" title="目录" checked>
+            <input type="radio" name="type" value="2" title="菜单" >
+            <input type="radio" name="type" value="3" title="按钮" >
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">资源名称</label>

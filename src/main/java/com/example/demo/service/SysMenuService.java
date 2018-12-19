@@ -9,6 +9,7 @@ import com.example.demo.core.universal.Service;
 import javax.swing.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
 * @Description: SysMenuService接口
@@ -30,5 +31,7 @@ public interface SysMenuService extends Service<SysMenu> {
     List<TreeListDto> getTreeList();
 
     List<TreeListDto> getByRoleIdTreeList(String roleId);
+
+    Set<String> listPerms(String userId);
 
 }

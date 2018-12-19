@@ -1,3 +1,4 @@
+var prefix = "/sys/dept/";
 var editObj=null,ptable=null,treeGrid=null,tableId='treeTable',layer=null;
 layui.config({
     base: '/static/layui/layuiadmin/plugins/'
@@ -10,7 +11,7 @@ layui.config({
     ptable=treeGrid.render({
         id:tableId
         ,elem: '#'+tableId
-        ,url:'/sysdept/getTreeData'
+        ,url:prefix + 'getTreeData'
         ,cellMinWidth: 100
         ,idField:'id'//必須字段
         ,treeId:'id'//树形id字段名称
@@ -30,14 +31,7 @@ layui.config({
             ,{field:'name', width:300, title: '部门名称',edit:'text',sort:true}
             ,{field:'sort',width:100, title: '排序',sort:true}
             ,{field:'isdel', title: '状态',sort:true}
-            ,{width:150,title: '操作', align:'center'/*toolbar: '#barDemo'*/
-                ,templet: function(d){
-                    var html='';
-                    var addBtn='<a class="layui-btn layui-btn-sm layui-btn-xs" lay-event="add">添加</a>';
-                    var editBtn='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>';
-                    var delBtn='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
-                    return addBtn+editBtn+delBtn;
-                }
+            ,{width:150,title: '操作', align:'center',toolbar: '#barSysDept'
             }
         ]]
         ,isPage:false
@@ -69,7 +63,7 @@ layui.config({
 function del(id) {
     layer.confirm("你确定删除数据吗？如果存在下级节点则一并删除，此操作不能撤销！", {icon: 3, title:'提示'},
         function(index){//确定回调
-            $.post("/sysdept/deleteById",{id:id},function (res){
+            $.post(prefix + "deleteById",{id:id},function (res){
                 layer.msg("删除部门成功");
             });
             query();
@@ -86,7 +80,7 @@ function deptAdd(id){
     layer.open({
         type: 2
         ,title: '增加部门信息'
-        ,content: '/sysdept/getByIdAdd?id='+id
+        ,content: prefix+ 'getByIdAdd?id='+id
         //    ,maxmin: true
         ,area: ['450px', '400px']
         ,btn: ['确定', '取消']
@@ -99,7 +93,7 @@ function deptAdd(id){
                 var field = data.field; //获取提交的字段
                 field.pid = id;
                 $.ajax({
-                    url : '/sysdept/insert',
+                    url : prefix +'insert',
                     type : 'post',
                     dataType : 'json',
                     data: field,
@@ -121,7 +115,7 @@ function deptEdit(id){
     layer.open({
         type: 2
         ,title: '修改部门信息'
-        ,content: '/sysdept/getByIdEdit?id='+id
+        ,content:prefix +  'getByIdEdit?id='+id
         //    ,maxmin: true
         ,area: ['450px', '400px']
         ,btn: ['确定', '取消']
@@ -133,7 +127,7 @@ function deptEdit(id){
             iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                 var field = data.field; //获取提交的字段
                 $.ajax({
-                    url : '/sysdept/update',
+                    url :prefix +  'update',
                     type : 'post',
                     dataType : 'json',
                     data: field,
@@ -155,7 +149,7 @@ function addParent(){
     layer.open({
         type: 2
         ,title: '新增部门信息'
-        ,content: '/sysdept/add'
+        ,content:prefix + 'add'
         //    ,maxmin: true
         ,area: ['450px', '400px']
         ,btn: ['确定', '取消']
@@ -168,7 +162,7 @@ function addParent(){
                 var field = data.field; //获取提交的字段
                 field.pid = 0;
                 $.ajax({
-                    url : '/sysdept/insert',
+                    url :prefix + 'insert',
                     type : 'post',
                     dataType : 'json',
                     data: field,

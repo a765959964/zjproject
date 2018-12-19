@@ -12,6 +12,7 @@ import com.github.pagehelper.PageInfo;
 import com.google.gson.JsonObject;
 import com.santint.core.util.JSonUtils;
 import com.santint.core.web.query.QueryFilter;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,20 +29,21 @@ import java.util.List;
 * @date 2018/10/11 09:36
 */
 @RestController
-@RequestMapping("/sysdept")
+@RequestMapping("/sys/dept/")
 public class SysDeptController {
 
     @Resource
     private SysDeptService sysDeptService;
 
-    @RequestMapping(value = "/listView",method = RequestMethod.GET)
+    @RequiresPermissions("sys:dept:dept")
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("views/system/dept/deptList");
         return mv;
     }
 
-
+    @RequiresPermissions("sys:dept:add")
     @RequestMapping(value = "/add",method = RequestMethod.GET)
     public ModelAndView deptAdd(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
@@ -49,7 +51,7 @@ public class SysDeptController {
         return mv;
     }
 
-
+    @RequiresPermissions("sys:dept:add")
     @PostMapping("/insert")
     public RetResult<Integer> insert(SysDept sysDept) throws Exception{
     // sysDept.setId(ApplicationUtils.getUUID());
@@ -57,12 +59,13 @@ public class SysDeptController {
         return RetResponse.makeOKRsp(state);
     }
 
+    @RequiresPermissions("sys:dept:remove")
     @PostMapping("/deleteById")
     public RetResult<Integer> deleteById(@RequestParam String id) throws Exception {
         Integer state = sysDeptService.deleteById(id);
         return RetResponse.makeOKRsp(state);
     }
-
+    @RequiresPermissions("sys:dept:edit")
     @PostMapping("/update")
     public RetResult<Integer> update(SysDept sysDept) throws Exception {
         Integer state = sysDeptService.update(sysDept);
@@ -75,7 +78,7 @@ public class SysDeptController {
         return RetResponse.makeOKRsp(sysDept);
     }
 
-
+    @RequiresPermissions("sys:dept:add")
     @RequestMapping(value = "/getByIdAdd",method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getById(String id, Model model) throws Exception {
@@ -86,7 +89,7 @@ public class SysDeptController {
         return mv;
     }
 
-
+    @RequiresPermissions("sys:dept:edit")
     @RequestMapping(value = "/getByIdEdit",method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getByIdEdit(String id, Model model) throws Exception {
@@ -103,21 +106,9 @@ public class SysDeptController {
         return mv;
     }
 
-   /**
-	* @Description: 分页查询
-	* @param page 页码
-	* @param size 每页条数
-	* @Reutrn RetResult<PageInfo<SysDept>>
-	*/
-    @PostMapping("/list")
-    public RetResult<PageInfo<SysDept>> list(@RequestParam(defaultValue = "0") Integer page,
-					@RequestParam(defaultValue = "0") Integer size) throws Exception {
-        PageHelper.startPage(page, size);
-        List<SysDept> list = sysDeptService.selectAll();
-        PageInfo<SysDept> pageInfo = new PageInfo<SysDept>(list);
-        return RetResponse.makeOKRsp(pageInfo);
-    }
 
+
+    @RequiresPermissions("sys:dept:dept")
     @RequestMapping("/treeList")
     @ResponseBody
     public List<SysDept> treeList() throws Exception {
@@ -125,7 +116,7 @@ public class SysDeptController {
         return list;
     }
 
-
+    @RequiresPermissions("sys:dept:dept")
     @RequestMapping("/getTreeData")
     @ResponseBody
     public LayuiResult<SysDept> getTreeData(HttpServletRequest request){
@@ -140,6 +131,7 @@ public class SysDeptController {
      * layui demo
      * @return
      */
+    @RequiresPermissions("sys:dept:dept")
     @RequestMapping("/getTree")
     @ResponseBody
     public List<SysDept> getTree(){
@@ -232,6 +224,7 @@ public class SysDeptController {
     * @param limit 每页条数
     * @return
     */
+    @RequiresPermissions("sys:dept:dept")
     @RequestMapping("/getAll")
     @ResponseBody
     public LayuiResult<SysDept> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,

@@ -5,7 +5,7 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" jdbcType="VARCHAR" property="id" />
+    <id column="id" jdbcType="INTEGER" property="id" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="method" jdbcType="VARCHAR" property="method" />
     <result column="log_type" jdbcType="VARCHAR" property="logType" />
@@ -24,13 +24,13 @@
 
   <insert id="insertByBatch" parameterType="java.util.List" >
     insert into system_log (
-      id, description, method, log_type, request_ip, exception_code,
+       description, method, log_type, request_ip, exception_code,
       exception_detail, params, user_id, create_time
     )
     values
     <foreach collection="list" item="item" index= "index" separator =",">
       (
-        #{item.id,jdbcType=VARCHAR},
+
         #{item.description,jdbcType=VARCHAR},
         #{item.method,jdbcType=VARCHAR},
         #{item.logType,jdbcType=VARCHAR},

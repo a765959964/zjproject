@@ -17,6 +17,7 @@ import com.santint.core.util.JSonUtils;
 import com.santint.core.web.query.QueryFilter;
 import org.apache.catalina.User;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,34 +41,44 @@ import java.util.Map;
 * @date 2018/10/30 10:48
 */
 @RestController
-@RequestMapping("/sysmenu")
+@RequestMapping("/sys/menu/")
 public class SysMenuController {
 
     @Resource
     private SysMenuService sysMenuService;
 
 
-
-    @RequestMapping(value = "/listView",method = RequestMethod.GET)
+    @RequiresPermissions("sys:menu:menu")
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("views/system/menu/menuList");
         return mv;
     }
 
+    @RequiresPermissions("sys:menu:add")
+    @RequestMapping(value = "/add",method = RequestMethod.GET)
+    public ModelAndView add(Model model) throws Exception {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("views/system/menu/add");
+        return mv;
+    }
+
+    @RequiresPermissions("sys:menu:add")
     @PostMapping("/insert")
     public RetResult<Integer> insert(SysMenu sysMenu) throws Exception{
     // sysMenu.setId(ApplicationUtils.getUUID());
     	Integer state = sysMenuService.insert(sysMenu);
         return RetResponse.makeOKRsp(state);
     }
-
+    @RequiresPermissions("sys:menu:remove")
     @PostMapping("/deleteById")
     public RetResult<Integer> deleteById(@RequestParam String id) throws Exception {
         Integer state = sysMenuService.deleteById(id);
         return RetResponse.makeOKRsp(state);
     }
 
+    @RequiresPermissions("sys:menu:edit")
     @PostMapping("/update")
     public RetResult<Integer> update(SysMenu sysMenu) throws Exception {
         Integer state = sysMenuService.update(sysMenu);
@@ -80,7 +91,7 @@ public class SysMenuController {
         return RetResponse.makeOKRsp(sysMenu);
     }
 
-
+    @RequiresPermissions("sys:menu:menu")
     @RequestMapping(value = "/getParentId",method = RequestMethod.GET)
     public ModelAndView getParentId(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
@@ -95,7 +106,7 @@ public class SysMenuController {
 
 
 
-
+    @RequiresPermissions("sys:menu:menu")
     @RequestMapping(value = "/getById",method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getById(String id, Model model) throws Exception {
@@ -106,6 +117,7 @@ public class SysMenuController {
         return mv;
     }
 
+    @RequiresPermissions("sys:menu:edit")
     @RequestMapping(value = "/getByIdEdit",method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getByIdEdit(String id, Model model) throws Exception {
@@ -145,6 +157,7 @@ public class SysMenuController {
     * @param limit 每页条数
     * @return
     */
+    @RequiresPermissions("sys:menu:menu")
     @RequestMapping("/getAll")
     @ResponseBody
     public LayuiResult<SysMenu> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
@@ -158,7 +171,7 @@ public class SysMenuController {
     }
 
 
-
+    @RequiresPermissions("sys:menu:menu")
     @RequestMapping("/getTreeTable")
     @ResponseBody
     public LayuiResult<SysMenu> getTreeTable(HttpServletRequest request){
@@ -175,7 +188,7 @@ public class SysMenuController {
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());
     }
 
-
+    @RequiresPermissions("sys:menu:menu")
     @RequestMapping("/getTreeList")
     @ResponseBody
     public  Map getTreeList(){

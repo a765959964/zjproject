@@ -1,17 +1,18 @@
 /**
  * Created by 张帆 on 2018/10/30.
  */
+var prefix = "/sys/user/"
 $(function (){
     init();
     var obj;
-    $.post("/sysdept/getTree",function (res){
+    $.post("/sys/dept/getTree",function (res){
         obj = res; // console.log(res);
         layui.use('tree', function(){
             var $ = layui.jquery;
             layui.tree({
                 elem: '#demo2' //指定元素
                 ,target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
-                ,url : 'sysdept/getTree'
+                ,url : '/sys/dept/getTree'
                 ,click: function(item){ //点击节点回调
                     //  $('#demo2-view').html('当前节名称：'+ item.name + '<br>全部参数：'+ JSON.stringify(item));
                     if(item.pId==0){
@@ -25,7 +26,7 @@ $(function (){
                                 ,form = layui.form;
                             table.render({
                                 elem: '#sysUserTable'
-                                ,url: '/sysuser/getAll?deptId='+$("#deptId").html()
+                                ,url: prefix+'getAll?deptId='+$("#deptId").html()
                                 ,toolbar: '#toolbarSysUser'
                                 ,title: '用户数据表'
                                 ,totalRow: true
@@ -66,7 +67,7 @@ function init(){
             ,form = layui.form;
         table.render({
             elem: '#sysUserTable'
-            ,url: '/sysuser/getAll'
+            ,url: prefix+'getAll'
             ,toolbar: '#toolbarSysUser'
             ,title: '用户数据表'
             ,totalRow: true
@@ -108,7 +109,7 @@ function init(){
                 var demoReload = $('#demoReload');
                 //执行重载
                 table.reload('sysUserReload', {
-                    url : '/sysuser/getAll'
+                    url :prefix+ 'getAll'
                     ,page: {
                         curr: 1 //重新从第 1 页开始
                     }
@@ -135,7 +136,7 @@ function sysUserAdd(){
     layer.open({
         type: 2
         ,title: '增加用户信息'
-        ,content: '/sysuser/userAdd'
+        ,content: prefix+'userAdd'
         ,maxmin: true
         ,area: ['650px', '550px']
         ,btn: ['确定', '取消']
@@ -143,12 +144,11 @@ function sysUserAdd(){
             var iframeWindow = window['layui-layer-iframe'+ index]
                 ,submitID = 'sysUserSubmit'
                 ,submit = layero.find('iframe').contents().find('#'+ submitID);
-            //监听提交
             iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                 var field = data.field; //获取提交的字段
                 console.log(field);
                 $.ajax({
-                    url : '/sysuser/insert',
+                    url :prefix + 'insert',
                     type : 'post',
                     dataType : 'json',
                     data: field,
@@ -169,7 +169,7 @@ function sysUserEdit(id){
     layer.open({
         type: 2
         ,title: '修改用户信息'
-        ,content: '/sysuser/getById?id='+id
+        ,content: prefix + 'getById?id='+id
         ,maxmin: true
         ,area: ['650px', '550px']
         ,btn: ['确定', '取消']
@@ -181,7 +181,7 @@ function sysUserEdit(id){
             iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                 var field = data.field; //获取提交的字段
                 $.ajax({
-                    url : '/sysuser/update',
+                    url : prefix + 'update',
                     type : 'post',
                     dataType : 'json',
                     data: field,
@@ -200,7 +200,7 @@ function sysUserEdit(id){
 //删除id
 function delById(id){
     layer.confirm('确定删除吗？', function(index) {
-         $.post("/sysuser/deleteById",{id:id},function (res){
+         $.post(prefix+"deleteById",{id:id},function (res){
             layer.msg('已删除');
             layui.table.reload('sysUserReload');
             layer.close(index); //关闭弹层

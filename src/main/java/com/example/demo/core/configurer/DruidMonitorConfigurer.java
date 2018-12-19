@@ -24,14 +24,15 @@ public class DruidMonitorConfigurer {
         ServletRegistrationBean bean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");
         /** 初始化参数配置，initParams**/
         //白名单多个ip逗号隔开
-        bean.addInitParameter("allow", "127.0.0.1,192.168.0.102");
+        bean.addInitParameter("allow", "");
+        bean.addUrlMappings("/druid/*");
         //IP黑名单 (存在共同时，deny优先于allow) : 如果满足deny的话提示:Sorry, you are not permitted to view this page.
-        bean.addInitParameter("deny", "192.168.1.110");
+    /*    bean.addInitParameter("deny", "192.168.1.110");
         //登录查看信息的账号密码.
         bean.addInitParameter("loginUsername", "admin");
         bean.addInitParameter("loginPassword", "123456");
         //是否能够重置数据.
-        bean.addInitParameter("resetEnable", "false");
+        bean.addInitParameter("resetEnable", "false");*/
         return bean;
     }
 

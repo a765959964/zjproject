@@ -5,6 +5,7 @@ import com.example.demo.core.ret.ServiceException;
 import com.example.demo.core.systemlog.SystemLogQueue;
 import com.example.demo.core.utils.ApplicationUtils;
 import com.example.demo.core.utils.IpUtils;
+import com.example.demo.model.SysUser;
 import com.example.demo.model.SystemLog;
 import com.example.demo.model.UserInfo;
 import org.apache.ibatis.javassist.*;
@@ -104,7 +105,7 @@ public class AspectLog {
             String clazzName = clazz.getName();
             //请求参数名+参数值的map
             Map<String, Object> nameAndArgs = getFieldsName(this.getClass(), clazzName, tartgetMethod, p.getArgs());
-            systemLog.setId(ApplicationUtils.getUUID());
+            //systemLog.setId(ApplicationUtils.getUUID());
             systemLog.setDescription(getMthodRemark(p));
             systemLog.setMethod(targetClass+"."+tartgetMethod);
             systemLog.setRequestIp(IpUtils.getIp(request));
@@ -168,7 +169,7 @@ public class AspectLog {
                 if (tmpCs.length == arguments.length) {
                     AnnotationLog methodCache = m.getAnnotation(AnnotationLog.class);
                     if (methodCache != null) {
-                        methode = methodCache.remark();
+                        methode = methodCache.value();
                     }
                     break;
                 }
@@ -179,9 +180,9 @@ public class AspectLog {
 
     private static String getUserId() {
         String userId = "";
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        if(userInfo != null){
-            userId = userInfo.getId();
+        SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        if(sysUser != null){
+            userId = sysUser.getId()+"";
         }
         return userId;
     }

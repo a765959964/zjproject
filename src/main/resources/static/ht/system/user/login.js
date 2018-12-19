@@ -5,7 +5,7 @@ function keyLogin(){
     if(event.keyCode==13){
         var username = $("#username").val();
         var password = $("#password").val();
-        $.get('/sysuser/login', {username: username, password: password}, function (res) {
+        $.get('/sys/user/login', {username: username, password: password}, function (res) {
             if (res.code == 200) {
                 location.href = "/index";
             } else if (res.code == 400) {
@@ -23,7 +23,7 @@ function keyLogin(){
 $("#login-submit").click(function (){
     var username = $("#username").val();
     var password = $("#password").val();
-    $.get('/sysuser/login', {username: username, password: password}, function (res) {
+    $.get('/sys/user/login', {username: username, password: password}, function (res) {
         if (res.code == 200) {
             location.href = "/index";
         } else if (res.code == 400) {

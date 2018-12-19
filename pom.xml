@@ -174,11 +174,11 @@
         </dependency>
 
         <!--
-                <dependency>
-                    <groupId>org.apache.shiro</groupId>
-                    <artifactId>shiro-spring</artifactId>
-                    <version>1.4.0</version>
-                </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.4.0</version>
+        </dependency>
         -->
 
 
@@ -263,6 +263,13 @@
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
+        </dependency>
+		
+	   <!-- 在thymeleaf中使用shiro  -->		
+	   <dependency>
+            <groupId>com.github.theborakompanioni</groupId>
+            <artifactId>thymeleaf-extras-shiro</artifactId>
+            <version>2.0.0</version>
         </dependency>
 
         <!-- 使用tomcat 启动  -->

@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "system_log")
 public class SystemLog {
     @Id
-    private String id;
+    private Integer id;
 
     /**
      * 日志信息描述
@@ -71,15 +71,15 @@ public class SystemLog {
     /**
      * @return id
      */
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * @param id
      */
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Integer id) {
+        this.id = id ;
     }
 
     /**

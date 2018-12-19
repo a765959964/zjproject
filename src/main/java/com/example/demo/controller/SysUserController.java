@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.core.aop.AnnotationLog;
 import com.example.demo.core.ret.LayuiResult;
 import com.example.demo.core.ret.RetResponse;
 import com.example.demo.core.ret.RetResult;
@@ -16,6 +17,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +37,7 @@ import java.util.Map;
 * @date 2018/10/08 09:36
 */
 @Controller
-@RequestMapping("/sysuser")
+@RequestMapping("/sys/user/")
 public class SysUserController {
 
     @Resource
@@ -67,8 +70,8 @@ public class SysUserController {
         return RetResponse.makeOKRsp(user);
     }
 
-
-    @RequestMapping(value = "/listView",method = RequestMethod.GET)
+    @RequiresPermissions("sys:user:user")
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("views/system/user/userList");
@@ -83,7 +86,8 @@ public class SysUserController {
         return "views/user/userLists";
     }
 
-
+    @AnnotationLog("添加用户")
+    @RequiresPermissions("sys:user:add")
     @RequestMapping(value = "/userAdd",method = RequestMethod.GET)
     public ModelAndView userAdd(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
@@ -91,6 +95,8 @@ public class SysUserController {
         return mv;
     }
 
+    @AnnotationLog("保存用户")
+    @RequiresPermissions("sys:user:add")
     @PostMapping("/insert")
     @ResponseBody
     public RetResult<Integer> insert(SysUser sysUser,String roleIds) throws Exception{
@@ -109,6 +115,8 @@ public class SysUserController {
         return RetResponse.makeOKRsp(state);
     }
 
+    @AnnotationLog("删除用户")
+    @RequiresPermissions("sys:user:remove")
     @PostMapping("/deleteById")
     @ResponseBody
     public RetResult<Integer> deleteById(@RequestParam String id) throws Exception {
@@ -116,6 +124,8 @@ public class SysUserController {
         return RetResponse.makeOKRsp(state);
     }
 
+    @AnnotationLog("更新用户")
+    @RequiresPermissions("sys:user:edit")
     @PostMapping("/update")
     @ResponseBody
     public RetResult<Integer> update(SysUser sysUser,String roleIds) throws Exception {
@@ -146,7 +156,7 @@ public class SysUserController {
         SysUser sysUser = sysUserService.selectById(id);
         return RetResponse.makeOKRsp(sysUser);
     }
-
+    @RequiresPermissions("sys:user:user")
     @RequestMapping(value = "/getById",method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getById(String id, Model model) throws Exception {
@@ -204,6 +214,8 @@ public class SysUserController {
      * @param limit 每页条数
      * @return
      */
+    @AnnotationLog("用户分页列表")
+    @RequiresPermissions("sys:user:user")
     @RequestMapping("/getAll")
     @ResponseBody
     public LayuiResult<SysUser> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
@@ -227,8 +239,6 @@ public class SysUserController {
             String deptId = filter.getFilters().get("deptId").toString();
             map.put("deptId",deptId);
         }
-
-
 
         List<SysUser> list =sysUserService.getAll(map);
         PageInfo<SysUser> pageInfo = new PageInfo<SysUser>(list);

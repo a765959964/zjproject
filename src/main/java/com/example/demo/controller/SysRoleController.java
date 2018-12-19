@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.core.aop.AnnotationLog;
 import com.example.demo.core.ret.LayuiResult;
 import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.RetResponse;
@@ -15,6 +16,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.santint.core.util.StringUtil;
 import com.santint.core.web.query.QueryFilter;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +40,7 @@ import java.util.Map;
 * @date 2018/10/09 09:37
 */
 @RestController
-@RequestMapping("/sysrole")
+@RequestMapping("/sys/role/")
 public class SysRoleController {
 
     @Resource
@@ -54,14 +56,17 @@ public class SysRoleController {
     @Resource
     private SysUserRoleService sysUserRoleService;
 
-
-    @RequestMapping(value = "/listView",method = RequestMethod.GET)
+    @RequiresPermissions("sys:role:role")
+    @AnnotationLog("查询角色页面")
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("views/system/role/roleList");
         return mv;
     }
 
+    @AnnotationLog("添加角色")
+    @RequiresPermissions("sys:role:add")
     @RequestMapping(value = "/roleAdd",method = RequestMethod.GET)
     public ModelAndView roleAdd(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
@@ -69,7 +74,8 @@ public class SysRoleController {
         return mv;
     }
 
-
+    @AnnotationLog("保存角色")
+    @RequiresPermissions("sys:role:add")
     @PostMapping("/insert")
     @ResponseBody
     public RetResult<Integer> insert(SysRole sysRole,String roleMenu) throws Exception{
@@ -91,14 +97,18 @@ public class SysRoleController {
         return RetResponse.makeOKRsp(state);
     }
 
+    @AnnotationLog("删除角色")
+    @RequiresPermissions("sys:role:remove")
     @PostMapping("/deleteById")
     public RetResult<Integer> deleteById(@RequestParam String id) throws Exception {
         Integer state = sysRoleService.deleteById(id);
         return RetResponse.makeOKRsp(state);
     }
 
+    @AnnotationLog("更新角色")
+    @RequiresPermissions("sys:role:edit")
     @PostMapping("/update")
-        public RetResult<Integer> update(SysRole sysRole,String roleMenu) throws Exception {
+    public RetResult<Integer> update(SysRole sysRole,String roleMenu) throws Exception {
         SysRoleMenu sysRoleMenu = new SysRoleMenu();
         sysRoleMenuService.deleteByRoleId(sysRole.getId()+"");
         Integer state = sysRoleService.update(sysRole);
@@ -119,7 +129,7 @@ public class SysRoleController {
         return RetResponse.makeOKRsp(sysRole);
     }
 
-
+    @RequiresPermissions("sys:role:role")
     @RequestMapping(value = "/getById",method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getById(String id, Model model) throws Exception {
@@ -131,6 +141,7 @@ public class SysRoleController {
         return mv;
     }
 
+    @RequiresPermissions("sys:role:role")
     @RequestMapping(value = "/findByRoleId",method = RequestMethod.GET)
     @ResponseBody
     public Map findByRoleId(String roleId){
@@ -148,27 +159,12 @@ public class SysRoleController {
 
 
    /**
-	* @Description: 分页查询
-	* @param page 页码
-	* @param size 每页条数
-	* @Reutrn RetResult<PageInfo<SysRole>>
-	*/
-    @PostMapping("/list")
-    public RetResult<PageInfo<SysRole>> list(@RequestParam(defaultValue = "0") Integer page,
-					@RequestParam(defaultValue = "0") Integer size) throws Exception {
-        PageHelper.startPage(page, size);
-        List<SysRole> list = sysRoleService.selectAll();
-        PageInfo<SysRole> pageInfo = new PageInfo<SysRole>(list);
-        return RetResponse.makeOKRsp(pageInfo);
-    }
-
-
-   /**
     * lay ui 分页
     * @param page 当前页
     * @param limit 每页条数
     * @return
     */
+    @RequiresPermissions("sys:role:role")
     @RequestMapping("/getAll")
     @ResponseBody
     public LayuiResult<SysRole> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
@@ -181,12 +177,14 @@ public class SysRoleController {
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());
     }
 
+    @RequiresPermissions("sys:role:role")
     @RequestMapping("/getRoleMenu")
     @ResponseBody
     public List getRoleMenu(){
       return  sysRoleService.getRoleMenu();
     }
 
+    @RequiresPermissions("sys:role:role")
     @RequestMapping("/getRoleList")
     @ResponseBody
     public Map  getRoleList(String userId){

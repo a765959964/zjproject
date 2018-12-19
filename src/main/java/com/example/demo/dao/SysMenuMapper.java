@@ -6,6 +6,7 @@ import com.example.demo.dto.TreeListDto;
 import com.example.demo.model.SysMenu;
 
 import java.util.List;
+import java.util.Set;
 
 public interface SysMenuMapper extends Mapper<SysMenu> {
 
@@ -22,4 +23,9 @@ public interface SysMenuMapper extends Mapper<SysMenu> {
     List<TreeListDto> getTreeList();
 
     List<TreeListDto> getByRoleIdTreeList(String roleId);
+
+    List<String> listUserPerms(String userId);
+
+
+
 }

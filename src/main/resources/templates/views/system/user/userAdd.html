@@ -46,7 +46,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">状态</label>
         <div class="layui-input-inline">
-            <input type="checkbox" name="status" lay-skin="switch" lay-text="正常|禁用" checked>
+            <input type="checkbox" id="status" value="1" name="status" lay-filter="lfStatus" lay-skin="switch" lay-text="正常|禁用" checked>
         </div>
     </div>
     <div class="layui-form-item">
@@ -87,7 +87,6 @@
         var $ = layui.$
             ,laydate = layui.laydate;
             form = layui.form;
-
         //常规用法
         laydate.render({
             elem: '#test1'

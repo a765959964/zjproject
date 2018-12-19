@@ -56,7 +56,7 @@ public class UserInfoController {
                     dataType = "String", paramType = "query")
     })
     @PostMapping("/selectById")
-    @AnnotationLog(remark = "查询")
+    @AnnotationLog("查询")
     public RetResult<UserInfo> selectById(@RequestParam String id) {
         UserInfo userInfo = userInfoService.selectById(id);
         return RetResponse.makeOKRsp(userInfo);

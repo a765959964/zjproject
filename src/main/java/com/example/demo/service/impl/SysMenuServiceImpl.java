@@ -1,18 +1,17 @@
 package com.example.demo.service.impl;
 
+import antlr.StringUtils;
 import com.example.demo.core.universal.AbstractService;
 import com.example.demo.core.utils.TreeList;
 import com.example.demo.dao.SysMenuMapper;
 import com.example.demo.dto.TreeListDto;
 import com.example.demo.model.SysMenu;
 import com.example.demo.service.SysMenuService;
+import com.santint.core.util.StringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
 * @Description: SysMenuService接口实现类
@@ -91,5 +90,18 @@ public class SysMenuServiceImpl extends AbstractService<SysMenu> implements SysM
     @Override
     public List<TreeListDto> getByRoleIdTreeList(String roleId) {
         return sysMenuMapper.getByRoleIdTreeList(roleId);
+    }
+
+
+    @Override
+    public Set<String> listPerms(String userId) {
+        List<String> perms = sysMenuMapper.listUserPerms(userId);
+        Set<String> permsSet = new HashSet<>();
+        for (String perm : perms){
+            if(StringUtil.isNotEmpty(perm)){
+                permsSet.addAll(Arrays.asList(perm.trim().split(",")));
+            }
+        }
+        return permsSet;
     }
 }

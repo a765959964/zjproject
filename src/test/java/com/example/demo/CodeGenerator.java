@@ -48,7 +48,7 @@ public class CodeGenerator {
      * @param args
      */
     public static void main(String[] args) {
-        genCode("demo3");
+        genCode("sys_dictionary");
     }
 
     /**

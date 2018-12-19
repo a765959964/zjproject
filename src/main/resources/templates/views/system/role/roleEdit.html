@@ -47,6 +47,7 @@
 
 <script th:src="@{/static/layui/layuiadmin/layui/layui.js}"></script>
 <script>
+    var prefix = "/sys/role/";
     layui.config({
         base: '/static/layui/layuiadmin/plugins/',
     }).extend({
@@ -59,7 +60,7 @@
         var layer = layui.layer;
         console.log($("#id").val());
         $.ajax({
-            url: '/sysrole/findByRoleId?roleId='+$("#id").val(),
+            url: prefix+'findByRoleId?roleId='+$("#id").val(),
             dataType: 'json',
             success: function(res){
                 // 支持自定义递归字段、数组权限判断等
