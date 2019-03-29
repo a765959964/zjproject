@@ -29,6 +29,21 @@ public class DemoApplicationTests {
     @Autowired
     SysDeptService  sysDeptService;
 
+    @Test
+    public void getKitList(){
+        String kitchenId ="";
+        String sql = "select * from t_kitchen";
+        List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(sql);
+        if(queryForList.size() > 0){
+            for (Map<String,Object> m:queryForList) {
+                kitchenId =   m.get("kitchen_id")+"";
+                String kitName =  m.get("name")+"";
+                System.out.println("门店id是："+kitchenId+",门店名称"+kitName);
+            }
+        }
+    }
+
+
 
     @Test
     public void getList(){
@@ -36,7 +51,7 @@ public class DemoApplicationTests {
         List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
         for (Map<String, Object> l : list ){
             DbTableUtils dbTableUtils = new DbTableUtils();
-            dbTableUtils.setTableName(l.get("code").toString());
+            dbTableUtils.setTableName("t"+l.get("code").toString());
             dbTableUtils.setMsg(l.get("name").toString());
             String sb =  CreateTableUtils.getSQL(dbTableUtils);
 //            jdbcTemplate.execute(sb);

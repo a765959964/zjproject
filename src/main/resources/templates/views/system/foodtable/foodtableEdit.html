@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>增加门店菜品信息-add</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" th:href="@{/static/layui/layuiadmin/layui/css/layui.css}" media="all">
+</head>
+<body>
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
+     style="padding: 20px 0 0 0;" th:object="${foodtable}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜品名称</label>
+        <div class="layui-input-inline">
+            <input type="hidden" th:name="id" id="id"/>
+            <input type="hidden" th:name="foodId" th:value="*{foodid}"/>
+            <input type="hidden" th:name="jsonpath" th:value="*{jsonpath}"/>
+            <input type="hidden" th:name="foodtypeField" th:value="*{foodtypeField}"/>
+            <input type="text" name="foodName" id="foodName" lay-verify="required" th:value="*{foodname}" readonly autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择门店</label>
+        <div class="layui-input-inline">
+            <select name="kitchenId" lay-verify="required" lay-filter="sel" id="sel">
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜品分类</label>
+        <div class="layui-input-inline">
+            <select name="foodtypeId" lay-verify="required" lay-filter="foodtypeId" id="foodtypeId">
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">门店价格</label>
+        <div class="layui-input-inline">
+            <input type="text" name="kichenPrice" id="kichenPrice" placeholder="请输入门店价格" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜品评分</label>
+        <div class="layui-input-inline">
+            <input type="text" name="score" id="score" placeholder="请输入菜品评分" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <select name="status" lay-filter="aihao">
+                <option value=""></option>
+                <option value="1" selected="">上线</option>
+                <option value="2">下线</option>
+                <option value="3">试吃</option>
+                <option value="4">收藏</option>
+                <option value="5">删除</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="foodtypeAddSubmit"  id="foodtypeAddSubmit" value="确认">
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+</div>
+</body>
+<script th:src="@{/static/layui/layuiadmin/layui/layui.js}"></script>
+<script th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+<script>
+    var foodName = $("#foodName").val();  console.log(foodName);
+    $("select#seltest").change(function (){
+       var sel =   $(this).val();
+       console.log(sel);
+       debugger;
+        $.get("/sys/foodtype/getByKitId?id="+sel+"&foodName="+foodName,function (rs){
+            if(rs.code==200){
+                if(!rs.data.length){    //没有数据 就增加， 有数据就更新
+                    $("input[type='button']").attr("id","foodtypeAddSubmit");
+                    $("input[type='button']").attr("lay-filter","foodtypeAddSubmit");
+                    $("#sel").val("");
+                    $("#kichenPrice").val("");
+                    $("#score").val("");
+                    $("#id").val("");
+                    return;
+                }
+                $("input[type='button']").attr("id","foodtypeUpdateSubmit");
+                $("input[type='button']").attr("lay-filter","foodtypeUpdateSubmit");
+                $("#sel").val(rs.data[0].kitchenId);
+                $("#foodtypeId").val(rs.data[0].foodtypeId);
+                $("#id").val(rs.data[0].id);
+                $("#kichenPrice").val(rs.data[0].kichenPrice);
+                $("#score").val(rs.data[0].score);
+                form.render('select');
+            }
+        })
+    })
+
+    layui.use(['form', 'laydate'], function () {
+        var $ = layui.$
+            , laydate = layui.laydate;
+        form = layui.form;
+        //常规用法
+        laydate.render({
+            elem: '#test1'
+        });
+        var _sel = $("#sel");
+        var html = "";
+
+        $.get('/sys/tKitchen/list', function (rsp) {
+            for (var i = 0; i < rsp.data.length; i++) {
+                html += "<option value=" + rsp.data[i].kitchenId + ">" + rsp.data[i].name + "</option>";
+            }
+            _sel.append(html);
+            form.render('select');
+            var sel =   $("#sel").val();
+            var foodName = $("#foodName").val();
+            $.get("/sys/foodtype/getByKitId?id="+sel+"&foodName="+foodName,function (rs){
+                if(rs.code==200){
+                    if(!rs.data.length){    //没有数据 就增加， 有数据就更新
+                        return;
+                    }
+                    $("input[type='button']").attr("id","foodtypeUpdateSubmit");
+                    $("input[type='button']").attr("lay-filter","foodtypeUpdateSubmit");
+                    $("#sel").val(rs.data[0].kitchenId);
+                    $("#foodtypeId").val(rs.data[0].foodtypeId);
+                    $("#id").val(rs.data[0].id);
+                    $("#kichenPrice").val(rs.data[0].kichenPrice);
+                    $("#score").val(rs.data[0].score);
+                    form.render('select');
+                }
+            })
+
+        })
+
+        var _foodtype = $("#foodtypeId");
+        var _html = "";
+
+        $.get('/sys/tFoodtype/list', function (rsp) {
+            for (var i = 0; i < rsp.data.length; i++) {
+                _html += "<option value=" + rsp.data[i].id + ">" + rsp.data[i].name + "</option>";
+            }
+            _foodtype.append(_html);
+            form.render('select');
+
+        })
+
+        form.on('select(sel)', function(data){
+            console.log(foodName);
+            $.get("/sys/foodtype/getByKitId?id="+data.value+"&foodName="+foodName,function (rs){
+                if(rs.code==200){
+                    if(!rs.data.length){    //没有数据 就增加， 有数据就更新
+                        $("input[type='button']").attr("id","foodtypeAddSubmit");
+                        $("input[type='button']").attr("lay-filter","foodtypeAddSubmit");
+                        $("#sel").val("");
+                        $("#kichenPrice").val("");
+                        $("#score").val("");
+                        $("#id").val("");
+                        $("#sel").val(data.value);
+                        return;
+                    }
+                    $("input[type='button']").attr("id","foodtypeUpdateSubmit");
+                    $("input[type='button']").attr("lay-filter","foodtypeUpdateSubmit");
+                    $("#sel").val(rs.data[0].kitchenId);
+                    $("#foodtypeId").val(rs.data[0].foodtypeId);
+                    $("#id").val(rs.data[0].id);
+                    $("#kichenPrice").val(rs.data[0].kichenPrice);
+                    $("#score").val(rs.data[0].score);
+                    form.render('select');
+                }
+            })
+
+        })
+
+        form.on('select(foodtypeId)', function(data){
+            console.log(data.value);
+        })
+    })
+
+</script>
+
+
+</html>

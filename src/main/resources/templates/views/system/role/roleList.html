@@ -9,17 +9,12 @@
     <div class="sysRoleTable">
         ID：
         <div class="layui-inline">
-            <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+            <input class="layui-input" name="demoReload" id="demoReload" autocomplete="off">
         </div>
 
-        用户名：
+       角色名：
         <div class="layui-inline">
-            <input class="layui-input" name="name" id="name" autocomplete="off">
-        </div>
-
-        地址：
-        <div class="layui-inline">
-            <input class="layui-input" name="address" id="address" autocomplete="off">
+            <input class="layui-input" name="roleName" id="roleName" autocomplete="off">
         </div>
         <button class="layui-btn" data-type="reload">搜索</button>
     </div>
@@ -45,7 +40,7 @@
     <div th:include="include::footer"></div>
 
 
-    <script  th:src="@{/static/ht/system/role/roleList.js?v=122}"  charset="utf-8"/>
+    <script  th:src="@{/static/ht/system/role/roleList.js?v=12233}"  charset="utf-8"/>
     <script>
         $(function (){
             init();

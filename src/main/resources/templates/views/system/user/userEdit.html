@@ -92,14 +92,14 @@
         //常规用法
     })
 
-    $.post("/sysdept/getTree",function (res){
+    $.post("/sys/dept/getTree",function (res){
         obj = res; // console.log(res);
         layui.use('tree', function(){
             var $ = layui.jquery;
             layui.tree({
                 elem: '#demo2' //指定元素
                 ,target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
-                ,url : 'sysdept/getTree'
+                ,url : 'sys/dept/getTree'
                 ,click: function(item){ //点击节点回调
                     $("#deptName").val(item.name);
                     $("#deptId").val(item.id);
@@ -132,7 +132,7 @@
                 iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                     var field = data.field; //获取提交的字段
                     $.ajax({
-                        url : '/sysuser/insert',
+                        url : '/sys/user/insert',
                         type : 'post',
                         dataTypep : 'json',
                         data: field,

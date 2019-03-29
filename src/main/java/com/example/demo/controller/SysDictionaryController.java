@@ -57,10 +57,15 @@ public class SysDictionaryController {
         return mv;
     }
 
+    /**
+     *
+     * @param ids
+     * @return
+     * @throws Exception
+     */
     @RequiresPermissions("sys:dict:batchRemove")
     @PostMapping("/batchRemove")
     public RetResult<Integer> batchRemove(String ids) throws Exception{
-        // sysDictionary.setId(ApplicationUtils.getUUID());
         Integer state = sysDictionaryService.deleteByIds(ids);
         return RetResponse.makeOKRsp(state);
     }

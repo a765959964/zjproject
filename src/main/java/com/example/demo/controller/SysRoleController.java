@@ -113,7 +113,7 @@ public class SysRoleController {
         sysRoleMenuService.deleteByRoleId(sysRole.getId()+"");
         Integer state = sysRoleService.update(sysRole);
         sysRoleMenu.setRoleId(sysRole.getId());
-        if(roleMenu!=null) {
+        if(roleMenu!="") {
             String[] menuIds = roleMenu.split(",");
             for(int i=0;i<menuIds.length;i++){
                 sysRoleMenu.setMenuId(Integer.parseInt(menuIds[i]));
@@ -123,7 +123,7 @@ public class SysRoleController {
         return RetResponse.makeOKRsp(state);
     }
 
-    @PostMapping("/selectById")
+    @GetMapping("/selectById")
     public RetResult<SysRole> selectById(@RequestParam String id) throws Exception {
         SysRole sysRole = sysRoleService.selectById(id);
         return RetResponse.makeOKRsp(sysRole);
@@ -172,6 +172,17 @@ public class SysRoleController {
         HashMap map = new HashMap();
         PageHelper.startPage(page, limit);
         QueryFilter filter = new QueryFilter(request);
+
+        if(filter.getFilters().get("id")!=null){
+            String id = filter.getFilters().get("id").toString();
+            map.put("id",id);
+        }
+
+        if(filter.getFilters().get("roleName")!=null){
+            String roleName = filter.getFilters().get("roleName").toString();
+            map.put("roleName",roleName);
+        }
+
         List<SysRole> list = sysRoleService.getAll(map);
         PageInfo<SysRole> pageInfo = new PageInfo<SysRole>(list);
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());

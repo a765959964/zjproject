@@ -9,6 +9,7 @@ import ${basePackageService}.${modelNameUpperCamel}Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.santint.core.web.query.QueryFilter;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,11 +29,31 @@ import java.util.List;
 * @date ${date}
 */
 @RestController
-@RequestMapping("/${baseRequestMapping}")
+@RequestMapping("/sys/${baseRequestMapping}")
 public class ${modelNameUpperCamel}Controller {
 
     @Resource
     private ${modelNameUpperCamel}Service ${modelNameLowerCamel}Service;
+
+    @RequiresPermissions("sys:${modelNameLowerCamel}:${modelNameLowerCamel}")
+    @RequestMapping(method = RequestMethod.GET)
+    public ModelAndView listView(Model model) throws Exception {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("views/system/${modelNameLowerCamel}/${modelNameLowerCamel}List");
+        return mv;
+    }
+
+    /**
+     * 添加页面
+     **/
+    @RequestMapping(value = "/${modelNameLowerCamel}Add",method = RequestMethod.GET)
+    public ModelAndView ${modelNameLowerCamel}Add() throws Exception {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("views/system/${modelNameLowerCamel}/${modelNameLowerCamel}Add");
+        return mv;
+    }
+
+
 
     @PostMapping("/insert")
     public RetResult<Integer> insert(${modelNameUpperCamel} ${modelNameLowerCamel}) throws Exception{
@@ -41,6 +62,20 @@ public class ${modelNameUpperCamel}Controller {
         return RetResponse.makeOKRsp(state);
     }
 
+
+    /**
+    * 批量删除
+    * @param ids [1,2,3]
+    * @return
+    */
+    @RequiresPermissions("sys:${modelNameLowerCamel}:batchRemove")
+    @PostMapping("/batchRemove")
+    public RetResult<Integer> batchRemove(String ids) throws Exception{
+        Integer state = ${modelNameLowerCamel}Service.deleteByIds(ids);
+        return RetResponse.makeOKRsp(state);
+    }
+
+    @RequiresPermissions("sys:${modelNameLowerCamel}:remove")
     @PostMapping("/deleteById")
     public RetResult<Integer> deleteById(@RequestParam String id) throws Exception {
         Integer state = ${modelNameLowerCamel}Service.deleteById(id);
@@ -53,36 +88,30 @@ public class ${modelNameUpperCamel}Controller {
         return RetResponse.makeOKRsp(state);
     }
 
-    @PostMapping("/selectById")
+    @GetMapping("/selectById")
     public RetResult<${modelNameUpperCamel}> selectById(@RequestParam String id) throws Exception {
         ${modelNameUpperCamel} ${modelNameLowerCamel} = ${modelNameLowerCamel}Service.selectById(id);
         return RetResponse.makeOKRsp(${modelNameLowerCamel});
     }
 
 
-    @RequestMapping(value = "/getById",method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping("/getById")
     public ModelAndView getById(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
         ${modelNameUpperCamel} ${modelNameLowerCamel} =${modelNameLowerCamel}Service.selectById(id);
-        mv.setViewName("views/${modelNameLowerCamel}/${modelNameLowerCamel}Edit");
+        mv.setViewName("views/system/${modelNameLowerCamel}/${modelNameLowerCamel}Edit");
         mv.addObject("${modelNameLowerCamel}",${modelNameLowerCamel});
         return mv;
     }
 
    /**
 	* @Description: 分页查询
-	* @param page 页码
-	* @param size 每页条数
 	* @Reutrn RetResult<PageInfo<${modelNameUpperCamel}>>
 	*/
-    @PostMapping("/list")
-    public RetResult<PageInfo<${modelNameUpperCamel}>> list(@RequestParam(defaultValue = "0") Integer page,
-					@RequestParam(defaultValue = "0") Integer size) throws Exception {
-        PageHelper.startPage(page, size);
+    @GetMapping("/list")
+    public RetResult<List<${modelNameUpperCamel}>> list() throws Exception {
         List<${modelNameUpperCamel}> list = ${modelNameLowerCamel}Service.selectAll();
-        PageInfo<${modelNameUpperCamel}> pageInfo = new PageInfo<${modelNameUpperCamel}>(list);
-        return RetResponse.makeOKRsp(pageInfo);
+        return RetResponse.makeOKRsp(list);
     }
 
 
@@ -92,8 +121,7 @@ public class ${modelNameUpperCamel}Controller {
     * @param limit 每页条数
     * @return
     */
-    @RequestMapping("/getAll")
-    @ResponseBody
+    @GetMapping("/getAll")
     public LayuiResult<${modelNameUpperCamel}> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
         @RequestParam(defaultValue = "0") Integer limit){
         HashMap map = new HashMap();

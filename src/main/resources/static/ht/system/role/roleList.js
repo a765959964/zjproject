@@ -68,7 +68,9 @@ function init(){
 
         var $ = layui.$, active = {
             reload: function(){
-                var demoReload = $('#demoReload');
+                var demoReload = $('#demoReload').val();
+                var roleName =  $("#roleName").val();
+
                 //执行重载
                 table.reload('sysRoleReload', {
                     url :prefix+ 'getAll'
@@ -76,10 +78,8 @@ function init(){
                         curr: 1 //重新从第 1 页开始
                     }
                     ,where: {
-                        id: demoReload.val(),
-                        name : $("#name").val(),
-                        address :  $("#address").val()
-
+                        id: demoReload,
+                        roleName: roleName
                     }
                 });
             }

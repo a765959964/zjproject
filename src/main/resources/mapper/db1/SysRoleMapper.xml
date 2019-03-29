@@ -15,6 +15,16 @@
 
     select * from sys_role
     where 1=1
+
+    <if test="roleName !='' and roleName != null">
+      and role_name like concat('%',#{roleName},'%')
+    </if>
+
+    <if test="id != '' and id != null">
+      and id = #{id}
+    </if>
+
+
     <if test="page !='' and page != null">
       limit #{page}
     </if>

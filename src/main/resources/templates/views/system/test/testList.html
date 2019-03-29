@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<body>
+
+<div class="demoTable">
+    ID：
+    <div class="layui-inline">
+        <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+    </div>
+
+    用户名：
+    <div class="layui-inline">
+        <input class="layui-input" name="name" id="name" autocomplete="off">
+    </div>
+
+    地址：
+    <div class="layui-inline">
+        <input class="layui-input" name="address" id="address" autocomplete="off">
+    </div>
+    <button class="layui-btn" data-type="reload">搜索</button>
+</div>
+
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button shiro:hasPermission="sys:test:add" class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button shiro:hasPermission="sys:test:batchRemove" class="layui-btn layui-btn-sm" lay-event="batchRemove">删除</button>
+    </div>
+</script>
+
+<table class="layui-hide" id="test-table-totalRow" lay-filter="test-table-totalRow"></table>
+
+<div th:include="include :: footer"></div>
+<script th:src="@{/static/ht/system/test/testList.js?v=1}"></script>
+
+<script type="text/html" id="barTest">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="tabAdd">增加项</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+</body>
+</html>

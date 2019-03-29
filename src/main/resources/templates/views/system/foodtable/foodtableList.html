@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include :: header"></head>
+<body>
+
+<div class="demoTable">
+    ID：
+    <div class="layui-inline">
+        <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+    </div>
+
+    菜品名称：
+    <div class="layui-inline">
+        <input class="layui-input" name="foodname" id="foodname" autocomplete="off">
+    </div>
+
+    <button class="layui-btn" data-type="reload">搜索</button>
+</div>
+
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+       <!-- <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="batchRemove">删除</button>-->
+    </div>
+</script>
+
+<table class="layui-hide" id="test-table-totalRow" lay-filter="test-table-totalRow" style="height:500px"></table>
+
+<div th:include="include :: footer"></div>
+<script th:src="@{/static/ht/system/foodtable/foodtable.js?v=12}"></script>
+
+<script type="text/html" id="barFoodtable">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="tabAdd">增加至门店</a>
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.TFoodtableMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.model.TFoodtable">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="foodid" jdbcType="DECIMAL" property="foodid" />
+    <result column="global" jdbcType="DECIMAL" property="global" />
+    <result column="score" jdbcType="DECIMAL" property="score" />
+    <result column="scorecount" jdbcType="INTEGER" property="scorecount" />
+    <result column="sales" jdbcType="DECIMAL" property="sales" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="iconaddress" jdbcType="VARCHAR" property="iconaddress" />
+    <result column="imageaddress" jdbcType="VARCHAR" property="imageaddress" />
+    <result column="foodname" jdbcType="VARCHAR" property="foodname" />
+    <result column="sour" jdbcType="INTEGER" property="sour" />
+    <result column="sweet" jdbcType="INTEGER" property="sweet" />
+    <result column="salty" jdbcType="INTEGER" property="salty" />
+    <result column="hot" jdbcType="INTEGER" property="hot" />
+    <result column="authorname" jdbcType="VARCHAR" property="authorname" />
+    <result column="authorbrief" jdbcType="VARCHAR" property="authorbrief" />
+    <result column="authoricon" jdbcType="VARCHAR" property="authoricon" />
+    <result column="authordetail" jdbcType="VARCHAR" property="authordetail" />
+    <result column="foodbrief" jdbcType="VARCHAR" property="foodbrief" />
+    <result column="fooddetail" jdbcType="VARCHAR" property="fooddetail" />
+    <result column="matchfoodnum" jdbcType="VARCHAR" property="matchfoodnum" />
+    <result column="matchfoodid" jdbcType="VARCHAR" property="matchfoodid" />
+    <result column="foodstat" jdbcType="INTEGER" property="foodstat" />
+    <result column="jsonpath" jdbcType="VARCHAR" property="jsonpath" />
+    <result column="foodtype_id" jdbcType="INTEGER" property="foodtypeId" />
+    <result column="isdel" jdbcType="INTEGER" property="isdel" />
+    <result column="food_common_id" jdbcType="VARCHAR" property="foodCommonId" />
+    <result column="material_id" jdbcType="VARCHAR" property="materialId" />
+    <result column="taste_id" jdbcType="VARCHAR" property="tasteId" />
+    <result column="foodtype_field" jdbcType="VARCHAR" property="foodtypeField" />
+    <result column="foodcommon_id" jdbcType="INTEGER" property="foodcommonId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="wastetime" jdbcType="INTEGER" property="wastetime" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+  </resultMap>
+
+
+  <select id="getAll"  resultMap="BaseResultMap">
+
+    select * from t_foodtable
+    where 1=1
+
+    <if test="foodname != '' and foodname != null">
+      and foodname like  concat('%',#{foodname},'%')
+    </if>
+
+    <if test="id != '' and id != null">
+      and id = #{id}
+    </if>
+
+    <if test="orderField !='' and orderField !=null  ">
+      order by  ${orderField}
+    </if>
+    <if test="sort !='' and sort !=null ">
+      ${sort}
+    </if>
+
+
+    <if test="page !='' and page != null">
+      limit #{page}
+    </if>
+    <if test="limit !='' and limit != null">
+      , #{limit}
+    </if>
+
+  </select>
+
+
+</mapper>

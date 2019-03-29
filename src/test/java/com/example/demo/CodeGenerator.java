@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * @author zf
- * @Description: 代码生成器，根据数据表名称生成对应的Model、Mapper、Service、Controller简化开发。
+ * @Description: 代码生成器，根据数据表名称生成对应的Model、Mapper、Service、Controller简化开发。  后续增加html页面
  * @date 2018/10/23
  */
 public class CodeGenerator {
@@ -30,6 +30,10 @@ public class CodeGenerator {
     private static final String TEMPLATE_FILE_PATH = "src/test/java/resources/template/generator";
     private static final String JAVA_PATH = "src/main/java/"; // java文件路径
     private static final String RESOURCES_PATH = "src/main/resources";// 资源文件路径
+
+    private static final String RESOURCES_HTML_PATH = "/templates/views/system/"; //html 文件路径
+    private static final String RESOURCES_JS_PATH = "/static/ht/system/"; //js 文件路径
+
     // 生成的Service存放路径
     private static final String PACKAGE_PATH_SERVICE = packageConvertPath(ProjectConstant.SERVICE_PACKAGE);
     // 生成的Service实现存放路径
@@ -40,6 +44,7 @@ public class CodeGenerator {
     private static final String PACKAGE_PATH_MAPPERR = packageConvertPath(ProjectConstant.MAPPER_PACKAGE);
     // @author
     private static final String AUTHOR = "zf";
+
     // @date
     private static final String DATE = new SimpleDateFormat("yyyy/MM/dd HH:mm").format(new Date());
 
@@ -48,7 +53,7 @@ public class CodeGenerator {
      * @param args
      */
     public static void main(String[] args) {
-        genCode("sys_dictionary");
+        genCode("t_foodtype");
     }
 
     /**
@@ -66,13 +71,15 @@ public class CodeGenerator {
     /**
      * 通过数据表名称生成代码 如输入表名称 "user_info"
      * 将生成 UserInfo、UserInfoMapper、UserInfoService ...
-     *
+     * userList.html userAdd.html userEdit.html
      * @param tableName 数据表名称
      */
     public static void genCode(String tableName) {
         genModelAndMapper(tableName);
         genService(tableName);
         genController(tableName);
+        genHtml(tableName);
+        genJs(tableName);
     }
 
     /**
@@ -194,6 +201,81 @@ public class CodeGenerator {
         }
 
     }
+
+
+    /**
+     * 生成html 文件
+     */
+    public static void genHtml(String tableName){
+        try {
+            freemarker.template.Configuration cfg = getConfiguration();
+            Map<String, Object> data = new HashMap<>();
+            data.put("date", DATE);
+            data.put("author", AUTHOR);
+            String modelNameUpperCamel = tableNameConvertUpperCamel(tableName);
+            data.put("baseRequestMapping", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
+            data.put("modelNameUpperCamel", modelNameUpperCamel);
+            String modelNameLowerCamel =CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel);
+            data.put("modelNameLowerCamel", modelNameLowerCamel);
+
+            //生成html 存放的路径
+            File file = new File(RESOURCES_PATH + RESOURCES_HTML_PATH +modelNameLowerCamel+"/"+ modelNameLowerCamel + "List.html");
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            cfg.getTemplate("html.ftl").process(data, new FileWriter(file));
+            System.out.println(modelNameLowerCamel + "List.html 生成成功");
+
+
+            File file1 = new File(RESOURCES_PATH + RESOURCES_HTML_PATH +modelNameLowerCamel+"/"+ modelNameLowerCamel + "Add.html");
+            if (!file1.getParentFile().exists()) {
+                file1.getParentFile().mkdirs();
+            }
+            cfg.getTemplate("html-add.ftl").process(data, new FileWriter(file1));
+            System.out.println(modelNameLowerCamel + "Add.html 生成成功");
+
+            File file2 = new File(RESOURCES_PATH + RESOURCES_HTML_PATH +modelNameLowerCamel+"/"+ modelNameLowerCamel + "Edit.html");
+            if (!file2.getParentFile().exists()) {
+                file2.getParentFile().mkdirs();
+            }
+            cfg.getTemplate("html-edit.ftl").process(data, new FileWriter(file2));
+            System.out.println(modelNameLowerCamel + "edit.html 生成成功");
+
+        } catch (Exception e) {
+            throw new RuntimeException("生成html失败", e);
+        }
+    }
+
+
+    /**
+     * 生成js 文件
+     */
+    public static void genJs(String tableName){
+        try {
+            freemarker.template.Configuration cfg = getConfiguration();
+            Map<String, Object> data = new HashMap<>();
+            data.put("date", DATE);
+            data.put("author", AUTHOR);
+            String modelNameUpperCamel = tableNameConvertUpperCamel(tableName);
+            data.put("baseRequestMapping", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
+            data.put("modelNameUpperCamel", modelNameUpperCamel);
+            String modelNameLowerCamel =CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel);
+            data.put("modelNameLowerCamel", modelNameLowerCamel);
+
+            //生成html 存放的路径
+            File file = new File(RESOURCES_PATH + RESOURCES_JS_PATH +modelNameLowerCamel+"/"+ modelNameLowerCamel + "List.js");
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            cfg.getTemplate("js.ftl").process(data, new FileWriter(file));
+            System.out.println(modelNameLowerCamel + "List.js 生成成功");
+
+        } catch (Exception e) {
+            throw new RuntimeException("生成js失败", e);
+        }
+    }
+
+
 
     private static Context getContext() {
         Context context = new Context(ModelType.FLAT);
