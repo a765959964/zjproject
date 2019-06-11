@@ -17,10 +17,10 @@ public class RabbitUtils {
         Connection connection = null;
 
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("10.10.2.33");
+        factory.setHost("192.168.217.128");
         factory.setPort(5672);
-        factory.setUsername("zf");
-        factory.setPassword("zf");
+        factory.setUsername("admin");
+        factory.setPassword("admin123");
         factory.setVirtualHost("/zf");
         try {
             connection = factory.newConnection();

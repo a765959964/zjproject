@@ -22,9 +22,9 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">菜单类型</label>
-        <div class="layui-input-inline">
-            <input type="text" name="type" lay-verify="required" placeholder="请输入资源名称" autocomplete="off" class="layui-input">
-        </div>
+        <input type="radio" name="type" value="1" title="目录" >
+        <input type="radio" name="type" value="2" title="菜单" checked>
+        <input type="radio" name="type" value="3" title="按钮" >
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">资源名称</label>
@@ -35,26 +35,32 @@
     <div class="layui-form-item">
         <label class="layui-form-label">资源路径</label>
         <div class="layui-input-inline">
-            <input type="text" name="url" lay-verify="required" placeholder="请输入资源路径" autocomplete="off" class="layui-input">
+            <input type="text" name="url" lay-verify="" placeholder="请输入资源路径" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限标识</label>
+        <div class="layui-input-inline">
+            <input type="text" name="perms" lay-verify="required" placeholder="请输入权限标识" autocomplete="off" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">图标样式</label>
         <div class="layui-input-inline">
-            <input type="text" name="icon" lay-verify="required" placeholder="请输入资源路径" autocomplete="off" class="layui-input">
+            <input type="text" name="icon" placeholder="" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-inline">
-            <input type="text" name="remark" lay-verify="required" placeholder="请输入资源路径" autocomplete="off" class="layui-input">
+            <input type="text" name="remark"  placeholder="" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">排序</label>
         <div class="layui-input-inline">
-            <input type="text" name="sort"  placeholder="请输入排序"  autocomplete="off" class="layui-input">
+            <input type="text" name="sort"  placeholder=""  autocomplete="off" class="layui-input">
         </div>
     </div>
 

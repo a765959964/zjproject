@@ -55,11 +55,12 @@ public class AspectLog {
 
     /**
      * 5 中advice 注解
-     * @Before 前置通知
-     * @After 后置通知，方法执行完之后
+     * @Before 前置通知  方法前调用 advice
+     * @After 后置通知，方法执行完之后 advice
      * @AfterReturning 返回通知，成功执行之后
      * @AfterThrowing 异常通知，抛出异常之后
      * @Around 环绕通知
+     * @auound 执行方法前后调用 advice
      */
     @Before("methodCachePointcut()")
     public void doBefore(JoinPoint p) throws Exception{
@@ -90,6 +91,11 @@ public class AspectLog {
         }
     }
 
+    /**
+     *  请求访问参数
+     * @param p
+     * @return
+     */
     private SystemLog getSystemLogInit(JoinPoint p){
         SystemLog systemLog = new SystemLog();
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
@@ -178,6 +184,10 @@ public class AspectLog {
         return methode;
     }
 
+    /**
+     * 获取当前用户id
+     * @return
+     */
     private static String getUserId() {
         String userId = "";
         SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();

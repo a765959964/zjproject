@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h1>Spring Boot - Upload Status</h1>
+
+<div th:if="${fileName}">
+    <h2 id="fileName" th:text="${fileName}"/>
+</div>
+
+<div th:if="${message}">
+    <h2 th:text="${message}"/>
+</div>
+
+<div th:if="${path}">
+    <h2 th:text="${path}"/>
+</div>	
+<image th:src="${path}">
+
+<button onclick="download()">下载</button>
+<button onclick="delFile()"> 删除</button>
+<script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.js"></script>
+<script>
+
+	
+	function download(){
+	  var fileName =	$("#fileName").text();
+	  console.log(fileName);
+	  var data = {fileName : fileName};
+	  window.location="/fastdfs/download?fileName="+fileName;
+	}
+	
+	function delFile(){
+		 var fileName =	$("#fileName").text();
+		 var data = {fileName : fileName};
+		$.get("/fastdfs/delFile",data,function(res){
+			console.log(res.msg);
+		})
+	}
+		
+</script>
+
+</body>
+</html>

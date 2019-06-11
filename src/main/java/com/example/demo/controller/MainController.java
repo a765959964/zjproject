@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.core.aop.AnnotationLog;
 import com.example.demo.model.SysMenu;
 import com.example.demo.model.SysUser;
 import com.example.demo.service.SysMenuService;
@@ -24,14 +25,16 @@ public class MainController {
     @Autowired
     private SysMenuService sysMenuService;
 
+
+    @AnnotationLog("y，系统主页面")
     @RequiresAuthentication
     @RequestMapping("/index")
     public String index(Model model){
         Subject cur = SecurityUtils.getSubject();
         SysUser sysUser = (SysUser) cur.getPrincipal();
 //        List<SysMenu> sysMenuList = sysMenuService.getListByUserId(sysUser.getId()+"");
-        List<SysMenu> sysMenuList = sysMenuService.getListByUserId(1+"");
-        System.out.println("循环list={1}"+JSonUtils.toJSon(sysMenuList));
+        List<SysMenu> sysMenuList = sysMenuService.getListByUserId(sysUser.getId()+"");
+//        System.out.println("循环list={1}"+JSonUtils.toJSon(sysMenuList));
         model.addAttribute("username",sysUser.getName());
         model.addAttribute("sysMenuList",sysMenuList);
         return "views/index";
@@ -50,11 +53,13 @@ public class MainController {
         return "views/reg";
     }
 
+    @AnnotationLog("跳转到404页面")
     @RequestMapping("/404")
     public String r404(Model model){
         return "views/commons/404";
     }
 
+    @AnnotationLog("跳转到500页面")
     @RequestMapping("/500")
     public String r500(Model model){
         return "views/commons/500";

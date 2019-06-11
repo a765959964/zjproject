@@ -223,6 +223,13 @@
             <version>0.4.8</version>
         </dependency>
 
+        <!-- Hutool  Java工具包 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>4.5.3</version>
+        </dependency>
+
         <!-- 热部署 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -278,6 +285,14 @@
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
         </dependency>-->
+
+
+       <!-- fastdfs 客户端  -->
+		<dependency>
+		    <groupId>net.oschina.zcx7878</groupId>
+		    <artifactId>fastdfs-client-java</artifactId>
+		    <version>1.27.0.0</version>
+		</dependency>
     </dependencies>
 
     <build>

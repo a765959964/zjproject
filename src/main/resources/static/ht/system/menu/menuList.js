@@ -161,7 +161,7 @@ function delById(id){
 function menuEdit(id){
     layer.open({
         type: 2
-        ,title: '增加资源'
+        ,title: '修改资源'
         ,content: prefix +'getByIdEdit?id='+id
         ,maxmin: true
         ,area: ['650px', '550px']
@@ -179,7 +179,7 @@ function menuEdit(id){
                     dataType : 'json',
                     data: field,
                     success : function (res){
-                        layer.msg("增加成功");
+                        layer.msg("修改成功");
                         renderTable();
                         layer.close(index); //关闭弹层
                     }

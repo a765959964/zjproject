@@ -22,6 +22,22 @@
     exception_detail, params, user_id, create_time
   </sql>
 
+
+  <select id="getAll"  resultMap="BaseResultMap">
+    select * from system_log t
+
+    order by t.create_time desc
+    <if test="page !='' and page != null">
+      limit #{page}
+    </if>
+    <if test="limit !='' and limit != null">
+      , #{limit}
+    </if>
+
+  </select>
+
+
+
   <insert id="insertByBatch" parameterType="java.util.List" >
     insert into system_log (
        description, method, log_type, request_ip, exception_code,

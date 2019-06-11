@@ -57,7 +57,7 @@ public class SysRoleController {
     private SysUserRoleService sysUserRoleService;
 
     @RequiresPermissions("sys:role:role")
-    @AnnotationLog("查询角色页面")
+    @AnnotationLog("访问角色管理页面")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
@@ -135,7 +135,6 @@ public class SysRoleController {
     public ModelAndView getById(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
         SysRole sysRole =sysRoleService.selectById(id);
-        System.out.println("原始"+id);
         mv.setViewName("views/system/role/roleEdit");
         mv.addObject("sysRole",sysRole).addObject("roleId",id);
         return mv;

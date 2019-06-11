@@ -12,6 +12,9 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 系统日志消费服务
+ */
 @Component
 public class SystemLogConsumer implements Runnable{
 

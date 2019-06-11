@@ -52,7 +52,7 @@ public class SysUserController {
     @Resource
     private SysRoleService sysRoleService;
 
-
+    @AnnotationLog("用户登录")
     @GetMapping("/login")
     @ResponseBody
     public RetResult<SysUser> login(String username, String password) {
@@ -214,7 +214,6 @@ public class SysUserController {
      * @param limit 每页条数
      * @return
      */
-    @AnnotationLog("用户分页列表")
     @RequiresPermissions("sys:user:user")
     @RequestMapping("/getAll")
     @ResponseBody

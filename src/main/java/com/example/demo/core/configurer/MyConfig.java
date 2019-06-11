@@ -25,8 +25,11 @@ import java.util.Locale;
 public class MyConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+        //将url 请求转到对模板的渲染上
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/index").setViewName("index");
+        // 所有以.do 结尾的请求重定向到/login 请求
+        registry.addRedirectViewController("/**/*.do","/login");
     }
 
     @Override

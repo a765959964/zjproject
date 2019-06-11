@@ -27,7 +27,7 @@ layui.config({
         ,cols: [[
             {type:'numbers'}
             ,{type:'radio'}
-            ,{type:'checkbox',sort:true}
+            // ,{type:'checkbox',sort:true}
             ,{field:'name', width:300, title: '部门名称',edit:'text',sort:true}
             ,{field:'sort',width:100, title: '排序',sort:true}
             ,{field:'isdel', title: '状态',sort:true}

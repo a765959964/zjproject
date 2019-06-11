@@ -26,6 +26,13 @@ public class WebLogAspect {
     public void logPointCut() {
     }
 
+
+    /**
+     *  Jointpoint 在程序中明确定义的点，包括方法调用，类成员的访问
+     *  以及异常处理程序块的执行， 只支持方法调用
+     * @param joinPoint
+     * @throws Throwable
+     */
     @Before("logPointCut()")
     public void doBefore(JoinPoint joinPoint) throws Throwable {
         // 接收到请求，记录请求内容
@@ -44,11 +51,17 @@ public class WebLogAspect {
 
     }
 
+    /**
+     * poimtcut 表示一组Joint point 方法名，参数类型，返回类型
+     * @param ret
+     * @throws Throwable
+     */
     @AfterReturning(returning = "ret", pointcut = "logPointCut()")// returning的值和doAfterReturning的参数名一致
     public void doAfterReturning(Object ret) throws Throwable {
         // 处理完请求，返回内容(返回值太复杂时，打印的是物理存储空间的地址)
         logger.debug("返回值 : " + ret);
     }
+
 
     @Around("logPointCut()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {

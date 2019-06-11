@@ -53,7 +53,7 @@ public class CodeGenerator {
      * @param args
      */
     public static void main(String[] args) {
-        genCode("t_foodtype");
+        genCode("system_log");
     }
 
     /**
@@ -75,8 +75,8 @@ public class CodeGenerator {
      * @param tableName 数据表名称
      */
     public static void genCode(String tableName) {
-        genModelAndMapper(tableName);
-        genService(tableName);
+//        genModelAndMapper(tableName);
+//        genService(tableName);
         genController(tableName);
         genHtml(tableName);
         genJs(tableName);

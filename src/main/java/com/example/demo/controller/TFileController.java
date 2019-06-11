@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.core.aop.AnnotationLog;
+import com.example.demo.core.fastdfs.FastDFSClient;
 import com.example.demo.core.ret.LayuiResult;
 import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.RetResponse;
 import com.example.demo.core.utils.ApplicationUtils;
-import com.example.demo.model.SystemLog;
-import com.example.demo.service.SystemLogService;
+import com.example.demo.model.TFile;
+import com.example.demo.service.TFileService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.santint.core.web.query.QueryFilter;
@@ -25,42 +25,42 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
-* @Description: SystemLogController类
+* @Description: TFileController类
 * @author zf
-* @date 2019/06/11 11:05
+* @date 2019/04/22 16:09
 */
 @RestController
-@RequestMapping("/sys/systemLog")
-public class SystemLogController {
+@RequestMapping("/sys/tFile")
+public class TFileController {
 
     @Resource
-    private SystemLogService systemLogService;
+    private TFileService tFileService;
 
-    @RequiresPermissions("sys:log:log")
+    @RequiresPermissions("sys:tFile:tFile")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/system/systemLog/systemLogList");
+        mv.setViewName("views/system/tFile/tFileList");
         return mv;
     }
 
     /**
      * 添加页面
      **/
-    @RequiresPermissions("sys:log:add")
-    @RequestMapping(value = "/systemLogAdd",method = RequestMethod.GET)
-    public ModelAndView systemLogAdd() throws Exception {
+    @RequiresPermissions("sys:tFile:add")
+    @RequestMapping(value = "/tFileAdd",method = RequestMethod.GET)
+    public ModelAndView tFileAdd() throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/system/systemLog/systemLogAdd");
+        mv.setViewName("views/system/tFile/tFileAdd");
         return mv;
     }
 
-    @AnnotationLog("添加操作")
-    @RequiresPermissions("sys:log:add")
+
+
     @PostMapping("/insert")
-    public RetResult<Integer> insert(SystemLog systemLog) throws Exception{
-    // systemLog.setId(ApplicationUtils.getUUID());
-    	Integer state = systemLogService.insert(systemLog);
+    public RetResult<Integer> insert(TFile tFile) throws Exception{
+    // tFile.setId(ApplicationUtils.getUUID());
+    	Integer state = tFileService.insert(tFile);
         return RetResponse.makeOKRsp(state);
     }
 
@@ -70,53 +70,49 @@ public class SystemLogController {
     * @param ids [1,2,3]
     * @return
     */
-    @AnnotationLog("进行批量删除")
-    @RequiresPermissions("sys:log:batchRemove")
+    @RequiresPermissions("sys:tFile:batchRemove")
     @PostMapping("/batchRemove")
     public RetResult<Integer> batchRemove(String ids) throws Exception{
-        Integer state = systemLogService.deleteByIds(ids);
+        Integer state = tFileService.deleteByIds(ids);
         return RetResponse.makeOKRsp(state);
     }
 
-    @AnnotationLog("进行删除操作")
-    @RequiresPermissions("sys:log:remove")
+    @RequiresPermissions("sys:tFile:remove")
     @PostMapping("/deleteById")
-    public RetResult<Integer> deleteById(@RequestParam String id) throws Exception {
-        Integer state = systemLogService.deleteById(id);
+    public RetResult<Integer> deleteById(String id) throws Exception {
+        Integer state = tFileService.deleteById(id);
         return RetResponse.makeOKRsp(state);
     }
 
-    @AnnotationLog("更新操作")
-    @RequiresPermissions("sys:log:edit")
     @PostMapping("/update")
-    public RetResult<Integer> update(SystemLog systemLog) throws Exception {
-        Integer state = systemLogService.update(systemLog);
+    public RetResult<Integer> update(TFile tFile) throws Exception {
+        Integer state = tFileService.update(tFile);
         return RetResponse.makeOKRsp(state);
     }
 
     @GetMapping("/selectById")
-    public RetResult<SystemLog> selectById(@RequestParam String id) throws Exception {
-        SystemLog systemLog = systemLogService.selectById(id);
-        return RetResponse.makeOKRsp(systemLog);
+    public RetResult<TFile> selectById(@RequestParam String id) throws Exception {
+        TFile tFile = tFileService.selectById(id);
+        return RetResponse.makeOKRsp(tFile);
     }
 
-    @RequiresPermissions("sys:log:edit")
+
     @GetMapping("/getById")
     public ModelAndView getById(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        SystemLog systemLog =systemLogService.selectById(id);
-        mv.setViewName("views/system/systemLog/systemLogEdit");
-        mv.addObject("systemLog",systemLog);
+        TFile tFile =tFileService.selectById(id);
+        mv.setViewName("views/system/tFile/tFileEdit");
+        mv.addObject("tFile",tFile);
         return mv;
     }
 
    /**
 	* @Description: 分页查询
-	* @Reutrn RetResult<PageInfo<SystemLog>>
+	* @Reutrn RetResult<PageInfo<TFile>>
 	*/
     @GetMapping("/list")
-    public RetResult<List<SystemLog>> list() throws Exception {
-        List<SystemLog> list = systemLogService.selectAll();
+    public RetResult<List<TFile>> list() throws Exception {
+        List<TFile> list = tFileService.selectAll();
         return RetResponse.makeOKRsp(list);
     }
 
@@ -127,15 +123,14 @@ public class SystemLogController {
     * @param limit 每页条数
     * @return
     */
-    @RequiresPermissions("sys:log:log")
     @GetMapping("/getAll")
-    public LayuiResult<SystemLog> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
+    public LayuiResult<TFile> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
         @RequestParam(defaultValue = "0") Integer limit){
         HashMap map = new HashMap();
         PageHelper.startPage(page, limit);
         QueryFilter filter = new QueryFilter(request);
-        List<SystemLog> list = systemLogService.getAll(map);
-        PageInfo<SystemLog> pageInfo = new PageInfo<SystemLog>(list);
+        List<TFile> list = tFileService.getAll(map);
+        PageInfo<TFile> pageInfo = new PageInfo<TFile>(list);
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());
     }
 
