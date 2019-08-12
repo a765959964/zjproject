@@ -29,6 +29,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <!--排除默认配置tomcat 使用jetty  -->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.springframework.boot</groupId>-->
+                    <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+
         </dependency>
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -238,6 +246,7 @@
             <scope>true</scope>
         </dependency>
 
+        <!-- 自定义依赖文件 -->
         <dependency>
             <groupId>com.santint</groupId>
             <artifactId>core-framework</artifactId>
@@ -251,7 +260,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- 学习时添加 jar 文件 -->
+        <!-- 学习时添加 jar 文件，通过webjars 引入前端文件  -->
         <!-- webjars 引入jquery 文件 -->
         <dependency>
             <groupId>org.webjars</groupId>
@@ -286,13 +295,25 @@
             <scope>provided</scope>
         </dependency>-->
 
+       <!-- 使用jetty 启动 -->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-jetty</artifactId>-->
+        <!--</dependency>-->
 
-       <!-- fastdfs 客户端  -->
+       <!-- fastdfs 文件服务器 客户端  -->
 		<dependency>
 		    <groupId>net.oschina.zcx7878</groupId>
 		    <artifactId>fastdfs-client-java</artifactId>
 		    <version>1.27.0.0</version>
 		</dependency>
+
+        <!-- netty配置，实现websocket 协议 -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.25.Final</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -301,6 +322,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <!-- 热部署需要加入此属性 -->
                     <fork>true</fork>
                 </configuration>
             </plugin>

@@ -99,6 +99,11 @@ public interface Service<T> {
      */
     T selectOne(T record);
 
+    /**
+     * 自定义查询所有信息
+     * @param map
+     * @return
+     */
     List<T> getAll(Map map);
 
 }

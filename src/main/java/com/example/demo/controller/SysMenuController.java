@@ -1,36 +1,21 @@
 package com.example.demo.controller;
 
 import com.example.demo.core.ret.LayuiResult;
-import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.RetResponse;
-import com.example.demo.core.ret.ServiceException;
-import com.example.demo.core.utils.ApplicationUtils;
-import com.example.demo.core.utils.TreeList;
+import com.example.demo.core.ret.RetResult;
 import com.example.demo.dto.TreeListDto;
 import com.example.demo.model.SysMenu;
-import com.example.demo.model.SysUser;
-import com.example.demo.model.UserInfo;
 import com.example.demo.service.SysMenuService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.santint.core.util.JSonUtils;
 import com.santint.core.web.query.QueryFilter;
-import org.apache.catalina.User;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.subject.Subject;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,7 +105,7 @@ public class SysMenuController {
     @RequiresPermissions("sys:menu:edit")
     @RequestMapping(value = "/getByIdEdit",method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView getByIdEdit(String id, Model model) throws Exception {
+       public ModelAndView getByIdEdit(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
         SysMenu sysMenu =sysMenuService.selectById(id);
         mv.addObject("sysMenu",sysMenu);

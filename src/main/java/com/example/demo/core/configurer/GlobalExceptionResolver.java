@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -20,8 +21,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
+ * @ControllerAdvice 注解的类是当前项目中所有类的统一异常处理类
+ * @ExceptionHandler 注解的方勇用来定义函数针对异常类型以及异常如何处理
  * @Description: 全局异常处理
  * @author zf
  */
@@ -72,17 +77,20 @@ public class GlobalExceptionResolver {
         result.setCode(RetCode.FAIL).setMsg(e.getMessage()).setData(null);
         responseResult(response, result);
     }
-/*    *//**
+    /**
      * 其他异常统一处理
-     *//*
-    @ExceptionHandler(value = Exception.class)
-    public String exceptionHandler(HttpServletResponse response, Exception e) throws IOException {
-        RetResult<Object> result = new RetResult<>();
-//        result.setCode(RetCode.INTERNAL_SERVER_ERROR).setMsg("服务器打酱油了，请稍后再试~");
-//        logger.error(e.getMessage(), e);
-//        responseResult(response, result);
-        return "views/commons/500.html";
-    }*/
+     */
+//    @ExceptionHandler(value = Exception.class)
+//    @ResponseBody
+//    public Object exceptionHandler(HttpServletRequest req, Exception e) throws Exception {
+//        System.out.println("GlobalExceptionResolver exceptionHandler() .......");
+//        Map<String,Object> map = new HashMap();
+//        map.put("code",100);
+//        map.put("message",e.getMessage());
+//        map.put("url",req.getRequestURI().toString());
+//        map.put("data","请求失败");
+//        return map;
+//    }
     /**
      * @param response
      * @param result

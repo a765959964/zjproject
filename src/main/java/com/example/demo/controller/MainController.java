@@ -11,6 +11,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class MainController {
     private SysMenuService sysMenuService;
 
 
-    @AnnotationLog("y，系统主页面")
+    @AnnotationLog("系统主页面")
     @RequiresAuthentication
     @RequestMapping("/index")
     public String index(Model model){
@@ -81,6 +82,17 @@ public class MainController {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
         return "redirect:/login";
+    }
+
+
+    /**
+     * 在异常抛出的时候，controller 会使用@ExceptionHandler 注解处理异常，而不会抛给Servlet 容器
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = Exception.class)
+    public String testErrorHandler(Exception  e){
+        return "服务器故障，请联系管理员";
     }
 
 }
