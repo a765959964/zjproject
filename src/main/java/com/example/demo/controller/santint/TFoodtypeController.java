@@ -1,11 +1,11 @@
-package com.example.demo.controller;
+package com.example.demo.controller.santint;
 
 import com.example.demo.core.ret.LayuiResult;
 import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.RetResponse;
 import com.example.demo.core.utils.ApplicationUtils;
-import com.example.demo.model.TKitchen;
-import com.example.demo.service.TKitchenService;
+import com.example.demo.model.TFoodtype;
+import com.example.demo.service.TFoodtypeService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.santint.core.web.query.QueryFilter;
@@ -24,41 +24,41 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
-* @Description: TKitchenController类
+* @Description: TFoodtypeController类
 * @author zf
-* @date 2019/03/15 16:38
+* @date 2019/03/19 11:42
 */
 @RestController
-@RequestMapping("/sys/tKitchen")
-public class TKitchenController {
+@RequestMapping("/sys/tFoodtype")
+public class TFoodtypeController {
 
     @Resource
-    private TKitchenService tKitchenService;
+    private TFoodtypeService tFoodtypeService;
 
-    @RequiresPermissions("sys:tKitchen:tKitchen")
+    @RequiresPermissions("sys:tFoodtype:tFoodtype")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/system/tKitchen/tKitchenList");
+        mv.setViewName("views/system/tFoodtype/tFoodtypeList");
         return mv;
     }
 
     /**
      * 添加页面
      **/
-    @RequestMapping(value = "/tKitchenAdd",method = RequestMethod.GET)
-    public ModelAndView tKitchenAdd() throws Exception {
+    @RequestMapping(value = "/tFoodtypeAdd",method = RequestMethod.GET)
+    public ModelAndView tFoodtypeAdd() throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/system/tKitchen/tKitchenAdd");
+        mv.setViewName("views/system/tFoodtype/tFoodtypeAdd");
         return mv;
     }
 
 
 
     @PostMapping("/insert")
-    public RetResult<Integer> insert(TKitchen tKitchen) throws Exception{
-    // tKitchen.setId(ApplicationUtils.getUUID());
-    	Integer state = tKitchenService.insert(tKitchen);
+    public RetResult<Integer> insert(TFoodtype tFoodtype) throws Exception{
+    // tFoodtype.setId(ApplicationUtils.getUUID());
+    	Integer state = tFoodtypeService.insert(tFoodtype);
         return RetResponse.makeOKRsp(state);
     }
 
@@ -68,30 +68,30 @@ public class TKitchenController {
     * @param ids [1,2,3]
     * @return
     */
-    @RequiresPermissions("sys:tKitchen:batchRemove")
+    @RequiresPermissions("sys:tFoodtype:batchRemove")
     @PostMapping("/batchRemove")
     public RetResult<Integer> batchRemove(String ids) throws Exception{
-        Integer state = tKitchenService.deleteByIds(ids);
+        Integer state = tFoodtypeService.deleteByIds(ids);
         return RetResponse.makeOKRsp(state);
     }
 
-    @RequiresPermissions("sys:tKitchen:remove")
+    @RequiresPermissions("sys:tFoodtype:remove")
     @PostMapping("/deleteById")
     public RetResult<Integer> deleteById(@RequestParam String id) throws Exception {
-        Integer state = tKitchenService.deleteById(id);
+        Integer state = tFoodtypeService.deleteById(id);
         return RetResponse.makeOKRsp(state);
     }
 
     @PostMapping("/update")
-    public RetResult<Integer> update(TKitchen tKitchen) throws Exception {
-        Integer state = tKitchenService.update(tKitchen);
+    public RetResult<Integer> update(TFoodtype tFoodtype) throws Exception {
+        Integer state = tFoodtypeService.update(tFoodtype);
         return RetResponse.makeOKRsp(state);
     }
 
     @PostMapping("/selectById")
-    public RetResult<TKitchen> selectById(@RequestParam String id) throws Exception {
-        TKitchen tKitchen = tKitchenService.selectById(id);
-        return RetResponse.makeOKRsp(tKitchen);
+    public RetResult<TFoodtype> selectById(@RequestParam String id) throws Exception {
+        TFoodtype tFoodtype = tFoodtypeService.selectById(id);
+        return RetResponse.makeOKRsp(tFoodtype);
     }
 
 
@@ -99,21 +99,19 @@ public class TKitchenController {
     @ResponseBody
     public ModelAndView getById(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        TKitchen tKitchen =tKitchenService.selectById(id);
-        mv.setViewName("views/system/tKitchen/tKitchenEdit");
-        mv.addObject("tKitchen",tKitchen);
+        TFoodtype tFoodtype =tFoodtypeService.selectById(id);
+        mv.setViewName("views/system/tFoodtype/tFoodtypeEdit");
+        mv.addObject("tFoodtype",tFoodtype);
         return mv;
     }
 
    /**
 	* @Description: 分页查询
-	* @param page 页码
-	* @param size 每页条数
-	* @Reutrn RetResult<PageInfo<TKitchen>>
+	* @Reutrn RetResult<PageInfo<TFoodtype>>
 	*/
     @GetMapping("/list")
-    public RetResult<List<TKitchen>> list() throws Exception {
-        List<TKitchen> list = tKitchenService.selectAll();
+    public RetResult<List<TFoodtype>> list() throws Exception {
+        List<TFoodtype> list = tFoodtypeService.selectAll();
         return RetResponse.makeOKRsp(list);
     }
 
@@ -126,13 +124,13 @@ public class TKitchenController {
     */
     @RequestMapping("/getAll")
     @ResponseBody
-    public LayuiResult<TKitchen> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
+    public LayuiResult<TFoodtype> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
         @RequestParam(defaultValue = "0") Integer limit){
         HashMap map = new HashMap();
         PageHelper.startPage(page, limit);
         QueryFilter filter = new QueryFilter(request);
-        List<TKitchen> list = tKitchenService.getAll(map);
-        PageInfo<TKitchen> pageInfo = new PageInfo<TKitchen>(list);
+        List<TFoodtype> list = tFoodtypeService.getAll(map);
+        PageInfo<TFoodtype> pageInfo = new PageInfo<TFoodtype>(list);
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());
     }
 

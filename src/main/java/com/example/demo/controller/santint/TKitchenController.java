@@ -1,12 +1,11 @@
-package com.example.demo.controller;
+package com.example.demo.controller.santint;
 
-import com.example.demo.core.fastdfs.FastDFSClient;
 import com.example.demo.core.ret.LayuiResult;
 import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.RetResponse;
 import com.example.demo.core.utils.ApplicationUtils;
-import com.example.demo.model.TFile;
-import com.example.demo.service.TFileService;
+import com.example.demo.model.TKitchen;
+import com.example.demo.service.TKitchenService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.santint.core.web.query.QueryFilter;
@@ -25,42 +24,41 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
-* @Description: TFileController类
+* @Description: TKitchenController类
 * @author zf
-* @date 2019/04/22 16:09
+* @date 2019/03/15 16:38
 */
 @RestController
-@RequestMapping("/sys/tFile")
-public class TFileController {
+@RequestMapping("/sys/tKitchen")
+public class TKitchenController {
 
     @Resource
-    private TFileService tFileService;
+    private TKitchenService tKitchenService;
 
-    @RequiresPermissions("sys:tFile:tFile")
+    @RequiresPermissions("sys:tKitchen:tKitchen")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/system/tFile/tFileList");
+        mv.setViewName("views/system/tKitchen/tKitchenList");
         return mv;
     }
 
     /**
      * 添加页面
      **/
-    @RequiresPermissions("sys:tFile:add")
-    @RequestMapping(value = "/tFileAdd",method = RequestMethod.GET)
-    public ModelAndView tFileAdd() throws Exception {
+    @RequestMapping(value = "/tKitchenAdd",method = RequestMethod.GET)
+    public ModelAndView tKitchenAdd() throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/system/tFile/tFileAdd");
+        mv.setViewName("views/system/tKitchen/tKitchenAdd");
         return mv;
     }
 
 
 
     @PostMapping("/insert")
-    public RetResult<Integer> insert(TFile tFile) throws Exception{
-    // tFile.setId(ApplicationUtils.getUUID());
-    	Integer state = tFileService.insert(tFile);
+    public RetResult<Integer> insert(TKitchen tKitchen) throws Exception{
+    // tKitchen.setId(ApplicationUtils.getUUID());
+    	Integer state = tKitchenService.insert(tKitchen);
         return RetResponse.makeOKRsp(state);
     }
 
@@ -70,49 +68,52 @@ public class TFileController {
     * @param ids [1,2,3]
     * @return
     */
-    @RequiresPermissions("sys:tFile:batchRemove")
+    @RequiresPermissions("sys:tKitchen:batchRemove")
     @PostMapping("/batchRemove")
     public RetResult<Integer> batchRemove(String ids) throws Exception{
-        Integer state = tFileService.deleteByIds(ids);
+        Integer state = tKitchenService.deleteByIds(ids);
         return RetResponse.makeOKRsp(state);
     }
 
-    @RequiresPermissions("sys:tFile:remove")
+    @RequiresPermissions("sys:tKitchen:remove")
     @PostMapping("/deleteById")
-    public RetResult<Integer> deleteById(String id) throws Exception {
-        Integer state = tFileService.deleteById(id);
+    public RetResult<Integer> deleteById(@RequestParam String id) throws Exception {
+        Integer state = tKitchenService.deleteById(id);
         return RetResponse.makeOKRsp(state);
     }
 
     @PostMapping("/update")
-    public RetResult<Integer> update(TFile tFile) throws Exception {
-        Integer state = tFileService.update(tFile);
+    public RetResult<Integer> update(TKitchen tKitchen) throws Exception {
+        Integer state = tKitchenService.update(tKitchen);
         return RetResponse.makeOKRsp(state);
     }
 
-    @GetMapping("/selectById")
-    public RetResult<TFile> selectById(@RequestParam String id) throws Exception {
-        TFile tFile = tFileService.selectById(id);
-        return RetResponse.makeOKRsp(tFile);
+    @PostMapping("/selectById")
+    public RetResult<TKitchen> selectById(@RequestParam String id) throws Exception {
+        TKitchen tKitchen = tKitchenService.selectById(id);
+        return RetResponse.makeOKRsp(tKitchen);
     }
 
 
-    @GetMapping("/getById")
+    @RequestMapping(value = "/getById",method = RequestMethod.GET)
+    @ResponseBody
     public ModelAndView getById(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        TFile tFile =tFileService.selectById(id);
-        mv.setViewName("views/system/tFile/tFileEdit");
-        mv.addObject("tFile",tFile);
+        TKitchen tKitchen =tKitchenService.selectById(id);
+        mv.setViewName("views/system/tKitchen/tKitchenEdit");
+        mv.addObject("tKitchen",tKitchen);
         return mv;
     }
 
    /**
 	* @Description: 分页查询
-	* @Reutrn RetResult<PageInfo<TFile>>
+	* @param page 页码
+	* @param size 每页条数
+	* @Reutrn RetResult<PageInfo<TKitchen>>
 	*/
     @GetMapping("/list")
-    public RetResult<List<TFile>> list() throws Exception {
-        List<TFile> list = tFileService.selectAll();
+    public RetResult<List<TKitchen>> list() throws Exception {
+        List<TKitchen> list = tKitchenService.selectAll();
         return RetResponse.makeOKRsp(list);
     }
 
@@ -123,14 +124,15 @@ public class TFileController {
     * @param limit 每页条数
     * @return
     */
-    @GetMapping("/getAll")
-    public LayuiResult<TFile> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
+    @RequestMapping("/getAll")
+    @ResponseBody
+    public LayuiResult<TKitchen> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
         @RequestParam(defaultValue = "0") Integer limit){
         HashMap map = new HashMap();
         PageHelper.startPage(page, limit);
         QueryFilter filter = new QueryFilter(request);
-        List<TFile> list = tFileService.getAll(map);
-        PageInfo<TFile> pageInfo = new PageInfo<TFile>(list);
+        List<TKitchen> list = tKitchenService.getAll(map);
+        PageInfo<TKitchen> pageInfo = new PageInfo<TKitchen>(list);
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());
     }
 

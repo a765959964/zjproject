@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.santint;
 
 import com.example.demo.core.ret.LayuiResult;
 import com.example.demo.core.ret.RetResult;

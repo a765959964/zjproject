@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.system;
 
 import com.example.demo.core.aop.AnnotationLog;
 import com.example.demo.model.SysMenu;
@@ -33,6 +33,9 @@ public class MainController {
     public String index(Model model){
         Subject cur = SecurityUtils.getSubject();
         SysUser sysUser = (SysUser) cur.getPrincipal();
+        if(sysUser ==null){
+            return "views/login";
+        }
 //        List<SysMenu> sysMenuList = sysMenuService.getListByUserId(sysUser.getId()+"");
         List<SysMenu> sysMenuList = sysMenuService.getListByUserId(sysUser.getId()+"");
 //        System.out.println("循环list={1}"+JSonUtils.toJSon(sysMenuList));
@@ -92,7 +95,7 @@ public class MainController {
      */
     @ExceptionHandler(value = Exception.class)
     public String testErrorHandler(Exception  e){
-        return "服务器故障，请联系管理员";
+        return "views/login";
     }
 
 }

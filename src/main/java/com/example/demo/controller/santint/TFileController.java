@@ -1,11 +1,12 @@
-package com.example.demo.controller;
+package com.example.demo.controller.santint;
 
+import com.example.demo.core.fastdfs.FastDFSClient;
 import com.example.demo.core.ret.LayuiResult;
 import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.RetResponse;
 import com.example.demo.core.utils.ApplicationUtils;
-import com.example.demo.model.Test;
-import com.example.demo.service.TestService;
+import com.example.demo.model.TFile;
+import com.example.demo.service.TFileService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.santint.core.web.query.QueryFilter;
@@ -24,41 +25,42 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
-* @Description: TestController类
+* @Description: TFileController类
 * @author zf
-* @date 2019/03/15 15:21
+* @date 2019/04/22 16:09
 */
 @RestController
-@RequestMapping("/sys/test")
-public class TestController {
+@RequestMapping("/sys/tFile")
+public class TFileController {
 
     @Resource
-    private TestService testService;
+    private TFileService tFileService;
 
-    @RequiresPermissions("sys:test:test")
+    @RequiresPermissions("sys:tFile:tFile")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/system/test/testList");
+        mv.setViewName("views/system/tFile/tFileList");
         return mv;
     }
 
     /**
      * 添加页面
      **/
-    @RequestMapping(value = "/testAdd",method = RequestMethod.GET)
-    public ModelAndView testAdd() throws Exception {
+    @RequiresPermissions("sys:tFile:add")
+    @RequestMapping(value = "/tFileAdd",method = RequestMethod.GET)
+    public ModelAndView tFileAdd() throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/system/test/testAdd");
+        mv.setViewName("views/system/tFile/tFileAdd");
         return mv;
     }
 
 
 
     @PostMapping("/insert")
-    public RetResult<Integer> insert(Test test) throws Exception{
-    // test.setId(ApplicationUtils.getUUID());
-    	Integer state = testService.insert(test);
+    public RetResult<Integer> insert(TFile tFile) throws Exception{
+    // tFile.setId(ApplicationUtils.getUUID());
+    	Integer state = tFileService.insert(tFile);
         return RetResponse.makeOKRsp(state);
     }
 
@@ -68,56 +70,50 @@ public class TestController {
     * @param ids [1,2,3]
     * @return
     */
-    @RequiresPermissions("sys:test:batchRemove")
+    @RequiresPermissions("sys:tFile:batchRemove")
     @PostMapping("/batchRemove")
     public RetResult<Integer> batchRemove(String ids) throws Exception{
-        Integer state = testService.deleteByIds(ids);
+        Integer state = tFileService.deleteByIds(ids);
         return RetResponse.makeOKRsp(state);
     }
 
-    @RequiresPermissions("sys:test:remove")
+    @RequiresPermissions("sys:tFile:remove")
     @PostMapping("/deleteById")
-    public RetResult<Integer> deleteById(@RequestParam String id) throws Exception {
-        Integer state = testService.deleteById(id);
+    public RetResult<Integer> deleteById(String id) throws Exception {
+        Integer state = tFileService.deleteById(id);
         return RetResponse.makeOKRsp(state);
     }
 
     @PostMapping("/update")
-    public RetResult<Integer> update(Test test) throws Exception {
-        Integer state = testService.update(test);
+    public RetResult<Integer> update(TFile tFile) throws Exception {
+        Integer state = tFileService.update(tFile);
         return RetResponse.makeOKRsp(state);
     }
 
-    @PostMapping("/selectById")
-    public RetResult<Test> selectById(@RequestParam String id) throws Exception {
-        Test test = testService.selectById(id);
-        return RetResponse.makeOKRsp(test);
+    @GetMapping("/selectById")
+    public RetResult<TFile> selectById(@RequestParam String id) throws Exception {
+        TFile tFile = tFileService.selectById(id);
+        return RetResponse.makeOKRsp(tFile);
     }
 
 
-    @RequestMapping(value = "/getById",method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping("/getById")
     public ModelAndView getById(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        Test test =testService.selectById(id);
-        mv.setViewName("views/system/test/testEdit");
-        mv.addObject("test",test);
+        TFile tFile =tFileService.selectById(id);
+        mv.setViewName("views/system/tFile/tFileEdit");
+        mv.addObject("tFile",tFile);
         return mv;
     }
 
    /**
 	* @Description: 分页查询
-	* @param page 页码
-	* @param size 每页条数
-	* @Reutrn RetResult<PageInfo<Test>>
+	* @Reutrn RetResult<PageInfo<TFile>>
 	*/
-    @PostMapping("/list")
-    public RetResult<PageInfo<Test>> list(@RequestParam(defaultValue = "0") Integer page,
-					@RequestParam(defaultValue = "0") Integer size) throws Exception {
-        PageHelper.startPage(page, size);
-        List<Test> list = testService.selectAll();
-        PageInfo<Test> pageInfo = new PageInfo<Test>(list);
-        return RetResponse.makeOKRsp(pageInfo);
+    @GetMapping("/list")
+    public RetResult<List<TFile>> list() throws Exception {
+        List<TFile> list = tFileService.selectAll();
+        return RetResponse.makeOKRsp(list);
     }
 
 
@@ -127,15 +123,14 @@ public class TestController {
     * @param limit 每页条数
     * @return
     */
-    @RequestMapping("/getAll")
-    @ResponseBody
-    public LayuiResult<Test> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
+    @GetMapping("/getAll")
+    public LayuiResult<TFile> getAll(HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page,
         @RequestParam(defaultValue = "0") Integer limit){
         HashMap map = new HashMap();
         PageHelper.startPage(page, limit);
         QueryFilter filter = new QueryFilter(request);
-        List<Test> list = testService.getAll(map);
-        PageInfo<Test> pageInfo = new PageInfo<Test>(list);
+        List<TFile> list = tFileService.getAll(map);
+        PageInfo<TFile> pageInfo = new PageInfo<TFile>(list);
         return  RetResponse.makeRsp(0,"",pageInfo.getList(),pageInfo.getTotal());
     }
 

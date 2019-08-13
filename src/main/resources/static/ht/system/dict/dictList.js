@@ -10,6 +10,10 @@ function init(){
             ,table = layui.table
             ,element = layui.element
             ,form = layui.form;
+
+        //触发事件
+
+
         table.render({
             elem: '#test-table-totalRow'
             ,url:prefix + 'getAll'
@@ -38,7 +42,8 @@ function init(){
             } else if(obj.event === 'edit'){     //编辑
                 dictEdit(data.id);
             } else if(obj.event === 'tabAdd') {     //
-                dictAddChildren(data.id);
+                // dictAddChildren(data.id);
+                tabAdd();
             }
         });
 
@@ -79,6 +84,14 @@ function init(){
 
                     }
                 });
+            },
+            tabAdd: function(){
+                //新增一个Tab项
+                element.tabAdd('layadmin-layout-tabs', {
+                    title: '新选项'+ (Math.random()*1000|0) //用于演示
+                    ,content: '内容'+ (Math.random()*1000|0)
+                    ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+                })
             }
         };
 
@@ -134,6 +147,8 @@ function batchRemove(ids){
         })  ;
     });
 }
+
+
 
 function dictAddChildren(id){
     layer.open({
