@@ -6,6 +6,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 /**
+ * netty 启动方式
  * @author: 张帆
  * @create: 2019-07-06 15:40
  * @Description:
