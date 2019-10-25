@@ -52,6 +52,11 @@ public class MainController {
         return "views/login";
     }
 
+    @RequestMapping("/websocket")
+    public String websocket(Model model){
+        return "views/websocket";
+    }
+
     @RequestMapping("/reg")
     public String reg(Model model){
         return "views/reg";

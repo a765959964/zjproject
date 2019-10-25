@@ -32,9 +32,9 @@ public class WSServerInitialzer extends ChannelInitializer<SocketChannel>{
 		 * 对于websocket来讲，都是以frames进行传输的，不同的数据类型对应的frames也不同
 		 */
 		pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
-		
+
 		//自定义handler
-		pipeline.addLast(new  ChatHandler());
+		pipeline.addLast(new HttpRequestHandler());
 	}
 
 }

@@ -1,5 +1,9 @@
 package com.example.demo.netty;
 
+import cn.hutool.json.JSONUtil;
+import com.example.demo.DemoApplication;
+import com.example.demo.model.Person;
+import com.example.demo.service.PersonService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -7,6 +11,11 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 处理消息的handler
@@ -14,7 +23,10 @@ import io.netty.util.concurrent.GlobalEventExecutor;
  * @author 张帆
  * @date 2019-7-5 16:05:22
  */
+@Component
 public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>{
+
+
 
 	//用于记录和管理 所以客户端的channle
 	private static ChannelGroup clients = new 
@@ -25,10 +37,9 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 			TextWebSocketFrame msg) throws Exception {
 		//获取客户端传输过来的消息
 		String content = msg.text();
-		System.out.println("接收到的消息11:" + content);
-		
-		for(Channel channel : clients){
-			channel.writeAndFlush(new TextWebSocketFrame("【服务器接收到消息为:】"+content));
+
+        for(Channel channel : clients){
+			channel.writeAndFlush(new TextWebSocketFrame("【服务器接收到消息为:】"+ content));
 		}
 		//下面这个方法跟for循环一致
 //		channel.writeAndFlush(new TextWebSocketFrame("【服务器接收到消息为:】"+content));
