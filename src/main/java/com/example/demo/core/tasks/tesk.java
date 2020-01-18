@@ -27,10 +27,10 @@ public class tesk {
         System.out.println("定时任务1" + new Date());
     }
 
-    @Scheduled(cron = "0 30 08 * * ?")
+  /*  @Scheduled(cron = "0 30 08 * * ?")
     public void job2(){
         System.out.println("8点30 执行");
         tFoodCommonTypeService.createJsonAndFile();
         System.out.println("执行结束"+new Date(System.currentTimeMillis()));
-    }
+    }*/
 }

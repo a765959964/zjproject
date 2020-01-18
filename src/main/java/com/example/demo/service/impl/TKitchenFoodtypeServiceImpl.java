@@ -1,13 +1,13 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.core.universal.AbstractService;
 import com.example.demo.dao.TKitchenFoodtypeMapper;
 import com.example.demo.model.TKitchenFoodtype;
 import com.example.demo.service.TKitchenFoodtypeService;
-import com.example.demo.core.universal.AbstractService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +30,16 @@ public class TKitchenFoodtypeServiceImpl extends AbstractService<TKitchenFoodtyp
     @Override
     public TKitchenFoodtype getByKitId(String kitchenId) {
         return tKitchenFoodtypeMapper.getByKitId(kitchenId);
+    }
+
+    @Override
+    public List getFoodTypeList(HashMap map) {
+        return tKitchenFoodtypeMapper.getFoodTypeList(map);
+    }
+
+    @Override
+    public List getTypeList() {
+        return tKitchenFoodtypeMapper.getTypeList();
     }
 
 }

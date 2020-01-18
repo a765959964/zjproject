@@ -1,9 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.model.TKitchenFoodtype;
 import com.example.demo.core.universal.Service;
+import com.example.demo.model.TKitchenFoodtype;
 
-import javax.swing.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,4 +19,12 @@ public interface TKitchenFoodtypeService extends Service<TKitchenFoodtype> {
 
     TKitchenFoodtype getByKitId(String kitchenId);
 
+    List getFoodTypeList(HashMap map);
+
+
+    /**
+     * 获取分类信息
+     * @return
+     */
+    List getTypeList();
 }

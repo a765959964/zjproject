@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.netty.WSServer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,7 @@ public class NettyBooter implements ApplicationListener<ContextRefreshedEvent> {
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if(event.getApplicationContext().getParent() == null){
             try {
-                WSServer.getInstance().start();
+//                WSServer.getInstance().start();
             } catch (Exception e) {
                 e.printStackTrace();
             }

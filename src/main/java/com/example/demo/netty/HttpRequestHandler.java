@@ -1,16 +1,14 @@
 package com.example.demo.netty;
 
 import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.example.demo.model.Person;
-import com.example.demo.service.PersonService;
+import com.example.demo.model.TKitchen;
+import com.example.demo.service.TKitchenService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
-import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
@@ -21,21 +19,21 @@ import java.util.List;
  */
 public class HttpRequestHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>{
 
-    private static PersonService personService;
+    private static TKitchenService kitchenService;
 
     //用于记录和管理 所以客户端的channle
     private static ChannelGroup clients = new
             DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     static {
-        personService = SpringUtil.getBean(PersonService.class);
+        kitchenService = SpringUtil.getBean(TKitchenService.class);
     }
 
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame web) throws Exception {
         String content = web.text();
-        List<Person> personList = personService.selectAll();
+        List<TKitchen> personList = kitchenService.selectAll();
         JSONArray jsonObject = JSONUtil.parseArray(personList);
         System.out.println(jsonObject.toString());
         System.out.println("aa"+personList.size());
@@ -61,6 +59,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<TextWebSocke
         System.out.println("客户端断开，channle对应的长id为："+ctx.channel().id().asLongText());
         System.out.println("客户端断开，channle对应的短id为："+ctx.channel().id().asShortText());
     }
+
 
 
 }

@@ -1,19 +1,14 @@
 package com.example.demo.controller.santint;
 
 import com.example.demo.core.ret.LayuiResult;
-import com.example.demo.core.ret.RetResult;
 import com.example.demo.core.ret.RetResponse;
-import com.example.demo.core.utils.ApplicationUtils;
+import com.example.demo.core.ret.RetResult;
 import com.example.demo.model.TFoodtable;
 import com.example.demo.service.TFoodtableService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.santint.core.web.query.QueryFilter;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -76,9 +71,9 @@ public class TFoodtableController {
     @ResponseBody
     public ModelAndView getById(String id, Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        TFoodtable foodtable =tFoodtableService.selectById(id);
+        TFoodtable foodtable =tFoodtableService.getById(id);
         mv.setViewName("views/system/foodtable/foodtableEdit");
-        mv.addObject("foodtable",foodtable);
+        mv.addObject("foodtable",foodtable).addObject("id",id);
         return mv;
     }
 

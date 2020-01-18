@@ -2,9 +2,11 @@ package com.example.demo.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "t_foodtable")
 public class TFoodtable {
@@ -183,6 +185,9 @@ public class TFoodtable {
      * 版本号
      */
     private String version;
+
+
+    private String foodType;
 
     /**
      * 获取id
@@ -790,5 +795,13 @@ public class TFoodtable {
      */
     public void setVersion(String version) {
         this.version = version == null ? null : version.trim();
+    }
+
+    public String getFoodType() {
+        return foodType;
+    }
+
+    public void setFoodType(String foodType) {
+        this.foodType = foodType;
     }
 }

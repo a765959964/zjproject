@@ -4,4 +4,6 @@ import com.example.demo.core.universal.Mapper;
 import com.example.demo.model.TFoodtable;
 
 public interface TFoodtableMapper extends Mapper<TFoodtable> {
+
+    TFoodtable getById(String id);
 }

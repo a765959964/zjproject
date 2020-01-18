@@ -1,9 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.model.TFoodtable;
 import com.example.demo.core.universal.Service;
+import com.example.demo.model.TFoodtable;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 
@@ -16,4 +15,6 @@ public interface TFoodtableService extends Service<TFoodtable> {
 
 
     List<TFoodtable> getAll(Map map);
+
+    TFoodtable getById(String id);
 }
