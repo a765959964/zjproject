@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<body>
+
+<div class="demoTable">
+    <div class="layui-row">
+        门店名称：
+        <div class="layui-inline">
+            <select name="sel" lay-verify="required" lay-filter="aihao" id="sel">
+            </select>
+        </div>
+        分类名称：
+        <div class="layui-inline">
+            <select name="foodtypeId" lay-verify="required" lay-filter="aihao" id="foodtypeId">
+            </select>
+        </div>
+
+        状态：
+        <div class="layui-inline">
+            <select name="type" lay-verify="required" lay-filter="type" id="type">
+                <option value="">请选择</option>
+                <option value="1">午餐</option>
+                <option value="2">晚餐</option>
+                <option value="3">外卖</option>
+            </select>
+        </div>
+       <!--堂食 + 外卖：-->
+        <!--<div class="layui-inline">-->
+            <!--<select name="foodType" lay-verify="required" lay-filter="foodType" id="foodType">-->
+                <!--<option value="">请选择</option>-->
+                <!--<option value="1">堂食</option>-->
+                <!--<option value="2">外卖</option>-->
+                <!--<option value="3">堂食+外卖</option>-->
+            <!--</select>-->
+        <!--</div>-->
+        菜品名称：
+        <div class="layui-inline">
+            <input class="layui-input"  name="foodName" id="foodName" autocomplete="off">
+        </div>
+       预制时间
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="prefabricateTime" placeholder="yyyy-MM-dd">
+        </div>
+
+        <button class="layui-btn" data-type="reload">搜索</button>
+    </div>
+</div>
+
+
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <!--<button  class="layui-btn layui-btn-sm" lay-event="add">批量修改</button>-->
+        <button class="layui-btn layui-btn-sm" lay-event="batchRemove">批量删除</button>
+    </div>
+</script>
+
+<table class="layui-hide" id="test-table-totalRow" lay-filter="test-table-totalRow"></table>
+
+<div th:include="include :: footer"></div>
+<script th:src="@{/static/ht/system/tPrefabricateOrder/tPrefabricateOrderList.js?v=11}"></script>
+
+<script type="text/html" id="barTPrefabricateOrder">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="typeTpl">
+    {{# if(d.type===1) { }}
+        午餐
+    {{# } }}
+    {{# if(d.type===2) { }}
+        晚餐
+    {{# } }}
+    {{# if(d.type===3) { }}
+        外卖
+    {{# } }}
+
+</script>
+
+<script>
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+        //常规用法
+        laydate.render({
+            elem: '#prefabricateTime'
+        });
+    })
+</script>
+
+</body>
+</html>

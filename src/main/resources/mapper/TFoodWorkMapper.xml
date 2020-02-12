@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.TFoodWorkMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.model.TFoodWork">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="kitchen_id" jdbcType="INTEGER" property="kitchenId" />
+    <result column="food_work_id" jdbcType="INTEGER" property="foodWorkId" />
+    <result column="foodname" jdbcType="VARCHAR" property="foodname" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="work_date" jdbcType="DATE" property="workDate" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  
+
+  <!-- 查看工作餐 信息  -->
+  <select id="getFoodWorkList" resultType="java.util.Map">
+    SELECT
+      t.id,
+      DATE_FORMAT(t.work_date, '%m月%d日') workDate,
+      WEEKDAY(t.work_date) week,
+      t.foodname
+    FROM
+      t_food_work t
+    where 1=1
+    <if test="kitchenId !=null and kitchenId !=''">
+       and t.kitchen_id  = #{kitchenId}
+    </if>
+    AND t.type = 1
+    <if test="types == 1">
+      and  YEARWEEK(date_format(t.work_date,'%Y-%m-%d'),1) = YEARWEEK(now(),1)
+    </if>
+    <if test="types == 2">
+      and  YEARWEEK(date_format(t.work_date,'%Y-%m-%d'),1) = YEARWEEK(now(),1)+1
+    </if>
+    ORDER BY t.work_date
+    <if test="page !='' and page != null">
+      limit #{page}
+    </if>
+    <if test="limit !='' and limit != null">
+      , #{limit}
+    </if>
+  </select>
+
+
+  <!-- 获取  门店菜品信息-->
+  <select id="getKitFoodList"  resultType="java.util.Map">
+      SELECT
+        t.food_id,
+        t.food_name,
+        c.chefname
+    FROM
+        t_kitchen_foodtype t
+    LEFT JOIN chefproduction cp ON cp.foodid = t.food_id
+    LEFT JOIN chef c ON c.chefid = cp.chefid
+    WHERE 1=1
+
+    <if test="kitchenId !=null and kitchenId !='' ">
+         and t.kitchen_id =  #{kitchenId}
+    </if>
+    <if test="foodname !=null and foodname !='' ">
+      and t.food_name like  concat('%',#{foodname},'%')
+    </if>
+
+    <if test="status !=null and status !='' ">
+        and  t.status = #{status}
+    </if>
+    <if test="page !='' and page != null">
+      limit #{page}
+    </if>
+    <if test="limit !='' and limit != null">
+      , #{limit}
+  </if>
+
+
+  </select>
+
+  <!--  查询自助餐是否存在   -->
+  <select id="getFoodWorkCount"  resultType="java.lang.Integer">
+    SELECT
+        count(*)
+    FROM
+        t_food_work t
+    WHERE
+        t.kitchen_id = #{kitchenId}
+    AND t.type = #{type}
+    AND t.food_work_id = #{foodid}
+    AND work_date = #{workDate}
+  </select>
+
+
+ <!-- 获取门店自助餐list -->
+  <select id="getKitZzList" resultType="java.util.Map" >
+    	SELECT
+    	    t.id,
+			GROUP_CONCAT(f.foodname) foodname,
+			f.iconaddress,
+			DATE_FORMAT(t.work_date,'%Y-%m-%d') date,
+			DATE_FORMAT(t.work_date,'%m月%d日') workDate,
+			WEEKDAY(t.work_date) week
+		FROM
+			t_food_work t
+			left join v_foodtable f on t.food_work_id = f.foodid
+          WHERE
+              t.kitchen_id = #{kitchenId}
+              AND t.type  = #{type}
+        and  YEARWEEK(date_format(t.work_date,'%Y-%m-%d'),1) = YEARWEEK(now(),1)
+        GROUP BY t.work_date
+
+  </select>
+
+  <!-- 删除自助餐信息 -->
+  <delete id="delByWorkDate">
+  DELETE
+    FROM
+        t_food_work
+    WHERE
+        kitchen_id = #{kitchenId}
+    AND type = #{type}
+    AND work_date =#{workDate}
+  </delete>
+
+
+</mapper>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.MyorderMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.model.Myorder">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="orderid" jdbcType="DECIMAL" property="orderid" />
+    <result column="userid" jdbcType="DECIMAL" property="userid" />
+    <result column="totalprice" jdbcType="DECIMAL" property="totalprice" />
+    <result column="ordertime" jdbcType="TIMESTAMP" property="ordertime" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="discountprice" jdbcType="DECIMAL" property="discountprice" />
+    <result column="foodtypecount" jdbcType="INTEGER" property="foodtypecount" />
+    <result column="foodinfo" jdbcType="VARCHAR" property="foodinfo" />
+    <result column="descript" jdbcType="VARCHAR" property="descript" />
+    <result column="reserve" jdbcType="DECIMAL" property="reserve" />
+    <result column="kitchen_id" jdbcType="DECIMAL" property="kitchenId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="center_service" jdbcType="INTEGER" property="centerService" />
+    <result column="hall_service" jdbcType="INTEGER" property="hallService" />
+    <result column="is_push" jdbcType="INTEGER" property="isPush" />
+    <result column="over_time" jdbcType="TIMESTAMP" property="overTime" />
+    <result column="product_status" jdbcType="INTEGER" property="productStatus" />
+    <result column="isPrint" jdbcType="INTEGER" property="isprint" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+  <!-- 查询订单详情   -->
+  <select id="getOrderList" resultType="java.util.Map">
+        SELECT
+        u.nickname,
+        DATE_FORMAT(t.ordertime, '%Y-%m-%d') ordertime,
+      DATE_FORMAT(t.create_time, '%Y-%m-%d %H:%i:%s')  createTime,
+        GROUP_CONCAT(CONCAT(fd.foodtable_name,"*",fd.food_count))  foodDetail,
+        t.totalprice
+    FROM
+        t_food_order_detail fd
+    LEFT JOIN myorder t ON fd.order_id = t.orderid
+    left JOIN userinfo u ON u.userid = fd.user_id
+    WHERE 1=1
+    and t.state in (${state})
+    AND t.kitchen_id = #{kitchenId}
+    AND t.type = #{type}
+    <if test="ordertime !=  '' and ordertime !=null ">
+      AND DATE_FORMAT(t.ordertime, '%Y-%m-%d') = #{ordertime}
+    </if>
+    <if test="nickname !=null and nickname !='' ">
+      and u.nickname = #{nickname}
+    </if>
+    GROUP BY t.orderid
+  </select>
+
+  <!-- 查询菜品数量  -->
+  <select id="getOrderListCount" resultType="java.util.Map">
+    select
+      ft.`name` foodTypeName,
+      t.foodname,
+      t.ordertime,
+      t.foodcount,
+      t.foodtable_price,
+      t.totalPrice
+    from (
+          SELECT
+              fd.foodtable_id foodid,
+              DATE_FORMAT(t.ordertime,'%Y-%m-%d') ordertime,
+              fd.foodtable_name foodname,
+              sum(fd.food_count) foodcount,
+              fd.foodtable_price,
+              (sum(fd.food_count) * fd.foodtable_price) totalPrice
+      FROM
+              t_food_order_detail fd
+          LEFT JOIN myorder t ON fd.order_id = t.orderid
+          left JOIN userinfo u ON u.userid = fd.user_id
+          WHERE
+              t.state in (3,5,7)
+          AND t.kitchen_id = 1
+
+
+          <choose>
+              <when test="type !=null and type !='' ">
+                  AND t.type = #{type}
+              </when>
+              <otherwise>
+                  AND t.type in (1,2,3,5)
+              </otherwise>
+          </choose>
+
+
+
+          <if test="ordertime !=null and ordertime !='' ">
+              AND DATE_FORMAT(t.ordertime, '%Y-%m-%d') = #{ordertime}
+          </if>
+          <if test="beginDate !=null and beginDate !='' ">
+              AND DATE_FORMAT(t.ordertime, '%Y-%m-%d') >= #{beginDate}
+          </if>
+          <if test="endDate !=null and endDate !='' ">
+              <![CDATA[ AND DATE_FORMAT(t.ordertime, '%Y-%m-%d') <= #{endDate} ]]>
+          </if>
+      GROUP BY fd.foodtable_name ) t
+      LEFT JOIN t_kitchen_foodtype kf ON kf.food_id = t.foodid
+      LEFT JOIN t_foodtype ft ON ft.`code` = kf.foodtype_id
+      where  1=1
+        and kf.kitchen_id = 1
+  </select>
+
+    <!-- 查看订单完成 总数  -->
+    <select id="getByOrderTypeCount" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        myorder t
+        WHERE
+        t.state IN  (${state})
+        AND t.kitchen_id = #{kitchenId}
+        AND t.type in (${type})
+        AND DATE_FORMAT(t.ordertime, '%Y-%m-%d') = #{ordertime}
+     </select>
+
+</mapper>

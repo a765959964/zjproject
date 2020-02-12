@@ -19,6 +19,7 @@ function init(){
             ,toolbar: '#toolbarDemo'
             ,title: '添加字典'
             ,totalRow: true
+            ,limit : 20
             ,cols: [[
                 {type: 'radio', fixed: 'left'}
                 ,{field:'id', width:100,title: '菜品id', sort: true}
@@ -100,8 +101,8 @@ function foodtableAdd(id){
                         dataType : 'json',
                         data: field,
                         success : function (res){
-                            layer.msg("增加成功");
-                            layui.table.reload('testReload');
+                                layer.msg("增加成功");
+                                layui.table.reload('testReload');
                             layer.close(index); //关闭弹层
                         }
                     })

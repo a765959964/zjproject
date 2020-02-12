@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>添加自助餐-add</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" th:href="@{/static/layui/layuiadmin/layui/css/layui.css}" media="all">
+</head>
+<body>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜品名称</label>
+        <div class="layui-input-inline">
+            <input type="hidden" name="kitchenId" value="1"/>
+            <input type="hidden" name="type" value="2"/>
+            <input type="hidden" name="foodid" th:value="${foodid}"/>
+            <input type="text" name="foodname" th:value="${foodname}"  readonly lay-verify="required" lay-reqtext="菜品是必填项，岂能为空？" placeholder="请输入菜品名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="checkbox" lay-skin="primary" name="week" value="1" title="星期一">
+            <input type="checkbox" lay-skin="primary" name="week" value="2" title="星期二">
+            <input type="checkbox" lay-skin="primary" name="week" value="3" title="星期三">
+            <input type="checkbox" lay-skin="primary" name="week" value="4" title="星期四"><br/>
+            <input type="checkbox" lay-skin="primary" name="week" value="5" title="星期五">
+            <input type="checkbox" lay-skin="primary" name="week" value="6" title="星期六">
+            <input type="checkbox" lay-skin="primary" name="week" value="7" title="星期日">
+        </div>
+
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="zzfoodAddSubmit" id="zzfoodAddSubmit" value="确认">
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+</div>
+
+<script th:src="@{/webjars/jquery/3.3.1/jquery.js}" ></script>
+<script th:src="@{/static/layui/layuiadmin/layui/layui.js}"></script>
+
+<script>
+  /*  $(function (){
+        //处理时间方法
+        function dealTime(dayNum, dat) {
+            if (dayNum == "0") {
+                dayNum = 7;
+            }
+            var uom = new Date(), dateStr = '', fday = '';
+            fday = dat.substring(6, 8);
+            uom.setYear(dat.substring(0, 4));
+            uom.setMonth(parseInt(dat.substring(4, 6)) - 1);
+            uom.setDate(fday);
+
+            if(uom.getDay() == 0){
+                uom.setDate(uom.getDate() - (7 - dayNum));
+            }else{
+                uom.setDate(uom.getDate() - (uom.getDay() - dayNum));
+            }
+            var mon = (uom.getMonth() + 1) + '';
+            if (mon.length != 2) {
+                mon = '0' + mon;
+            }
+            var day = uom.getDate() + '';
+            if (day.length != 2) {
+                day = '0' + day;
+            }
+            dateStr = '' + uom.getFullYear() +"-"+ mon +"-" + day;
+            return dateStr;
+        }
+
+        var searchTime = '20200116';
+        var mon = "星期一 - " + (dealTime(1, searchTime));
+        var tue = "星期二 - " + (dealTime(2, searchTime));
+        var wed = "星期三 - " + (dealTime(3, searchTime));
+        var thu = "星期四 - " + (dealTime(4, searchTime));
+        var fri = "星期五 - " + (dealTime(5, searchTime));
+        var sat = "星期六 - " + (dealTime(6, searchTime));
+        var sun = "星期日 - " + (dealTime(0, searchTime));
+
+        console.log(mon);
+        console.log(tue);
+        console.log(wed);
+        console.log(thu);
+
+        function getNowFormatDate(){
+            var day = new Date();
+            var Year = 0;
+            var Month = 0;
+            var Day = 0;
+            var CurrentDate = "";
+            Year= day.getFullYear();//支持IE和火狐浏览器.
+            Month= day.getMonth()+1;
+            Day = day.getDate();
+            CurrentDate += Year;
+            if (Month >= 10 ){
+                CurrentDate += Month;
+            }
+            else{
+                CurrentDate += "0" + Month;
+            }
+            if (Day >= 10 ){
+                CurrentDate += Day ;
+            }
+            else{
+                CurrentDate += "0" + Day ;
+            }
+            return CurrentDate;
+        }
+        console.log(getNowFormatDate());
+
+    })*/
+
+
+</script>
+
+<script>
+    layui.use([ 'form','laydate'], function(){
+        var $ = layui.$
+                ,laydate = layui.laydate;
+        form = layui.form;
+        //常规用法
+        laydate.render({
+            elem: '#workDate',
+            trigger: 'click'
+        });
+
+    })
+</script>
+</body>
+</html>

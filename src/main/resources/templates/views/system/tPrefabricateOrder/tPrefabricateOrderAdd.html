@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>添加字典信息-add</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" th:href="@{/static/layui/layuiadmin/layui/css/layui.css}" media="all">
+</head>
+<body>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+    <div class="layui-form-item" style="display: none">
+        <label class="layui-form-label">门店名称:</label>
+        <div class="layui-input-inline">
+            <input type="text" id="ids" name="ids" th:value="${ids}" />
+            <input type="number" th:value="${kitchenName}"   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">总份数:</label>
+        <div class="layui-input-inline">
+            <input type="number" name="sum"   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">售出份数</label>
+        <div class="layui-input-inline">
+            <input type="number" name="sellNum"   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">剩余份数</label>
+        <div class="layui-input-inline">
+            <input type="number" name="remainNum"   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">预制时间</label>
+        <div class="layui-input-inline">
+            <!--<input type="text" name="prefabricateTime" th:value="${prefabricateTime}" class="layui-input" id="test-laydate-normal-cn" placeholder="yyyy-MM-dd">-->
+            <input type="text" th:value="${prefabricateTime}"  name="prefabricateTime" class="layui-input" id="test1" placeholder="yyyy-MM-dd">
+
+        </div>
+
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">午餐 晚餐</label>
+        <div class="layui-input-block">
+            <input type="radio" name="type" value="1" title="午餐" checked>
+            <input type="radio" name="type" value="2" title="晚餐">
+            <input type="radio" name="type" value="3" title="外卖">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="tPrefabricateOrderAddSubmit" id="tPrefabricateOrderAddSubmit" value="确认">
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+</div>
+
+<script th:src="@{/static/layui/layuiadmin/layui/layui.js}"></script>
+<script>
+    layui.use([ 'form','laydate'], function(){
+        var $ = layui.$
+                ,laydate = layui.laydate;
+        form = layui.form;
+        //常规用法
+        laydate.render({
+            elem: '#test1',
+            trigger: 'click'
+        });
+    })
+</script>
+</body>
+</html>

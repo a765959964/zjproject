@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.TPrefabricateOrderMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.model.TPrefabricateOrder">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="kitchen_id" jdbcType="INTEGER" property="kitchenId" />
+    <result column="foodid" jdbcType="INTEGER" property="foodid" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="sys_sum" jdbcType="INTEGER" property="systemSum" />
+    <result column="sum" jdbcType="INTEGER" property="sum" />
+    <result column="sell_num" jdbcType="INTEGER" property="sellNum" />
+    <result column="remain_num" jdbcType="INTEGER" property="remainNum" />
+    <result column="pay_date" jdbcType="TIMESTAMP" property="payDate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="prefabricate_time" jdbcType="VARCHAR" property="prefabricateTime" />
+    <result column="sales" jdbcType="INTEGER" property="sales" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+
+
+  <select id="getAll"  resultMap="BaseResultMap">
+
+    select * from t_prefabricate_order
+    where 1=1
+    <if test="kitchenId !=null and kitchenId !='' ">
+      and   kitchen_id  = #{kitchenId}
+    </if>
+
+    <if test="type !=null and type !='' ">
+      and t_prefabricate_order.type = #{type}
+
+    </if>
+
+
+    <if test="page !='' and page != null">
+      limit #{page}
+    </if>
+    <if test="limit !='' and limit != null">
+      , #{limit}
+    </if>
+
+  </select>
+
+   <!-- 菜品预售管理 -->
+  <select id="getPrefabricateList"  resultType="java.util.Map">
+    SELECT
+	    p.id,
+        p.kitchen_id kitchenId,
+        p.foodid,
+        p.system_sum systemSum,
+        p.sum,
+        p.sell_num sellNum,
+        p.remain_num remainNum,
+        DATE_FORMAT(p.prefabricate_time,'%Y-%m-%d') prefabricateTime,
+        p.type,
+        kt.food_name foodName,
+        k.`name` kitchenName
+    FROM
+        t_prefabricate_order p
+    LEFT JOIN t_kitchen_foodtype kt ON kt.food_id = p.foodid and kt.kitchen_id = p.kitchen_id
+    left join t_kitchen k on k.kitchen_id = p.kitchen_id
+    where 1=1
+
+    <if test="kitchenId !=null and kitchenId !='' ">
+      and   p.kitchen_id = #{kitchenId}
+    </if>
+    <if test="type !=null and type !='' ">
+      and p.type  = #{type}
+    </if>
+    <if test="foodtypeId !=null and foodtypeId !='' ">
+      and kt.foodtype_id = #{foodtypeId}
+    </if>
+    <if test="foodType !=null and foodType !='' ">
+          and kt.food_type = #{foodType}
+    </if>
+    <if test="foodName !=null and foodName !='' ">
+      and kt.food_name like concat( '%',#{foodName},'%')
+    </if>
+    <if test="prefabricateTime !=null and prefabricateTime !='' ">
+          and p.prefabricate_time = #{prefabricateTime}
+    </if>
+
+    <if test="page !='' and page != null">
+      limit #{page}
+    </if>
+    <if test="limit !='' and limit != null">
+      , #{limit}
+    </if>
+
+  </select>
+
+
+
+  <!-- 根据条件查询预制单是否存在 -->
+  <select id="getMap"  resultType="java.lang.Integer">
+    SELECT
+        count(1)
+    FROM
+        t_prefabricate_order t
+    WHERE 1=1
+    <if test="id !='' and  id !=null ">
+        and t.id =  #{id}
+    </if>
+
+    <if test="kitchenId !='' and  kitchenId !=null">
+        and   t.kitchen_id = #{kitchenId}
+    </if>
+
+    <if test="type !='' and type !=null">
+        AND t.type = #{type}
+    </if>
+
+    <if test="foodid !='' and  foodid !=null">
+        AND t.foodid = #{foodid}
+    </if>
+
+    <if test="prefabricateTime !='' and  prefabricateTime !=null">
+          AND t.prefabricate_time = #{prefabricateTime}
+    </if>
+
+  </select>
+
+  <!-- 更新预制单信息  -->
+  <update id="updatePrefabricate" parameterType="com.example.demo.model.TPrefabricateOrder" >
+       UPDATE t_prefabricate_order t
+        SET t.prefabricate_time = #{prefabricateTime},
+         t.sum = #{sum},
+         t.sell_num = #{sellNum},
+         t.remain_num = #{remainNum}
+        WHERE
+          t.id = #{id}
+        and t.kitchen_id = #{kitchenId}
+        AND t.foodid = #{foodid}
+        AND t.type = #{type}
+  </update>
+
+   <!-- 批量修改  -->
+   <update id="batchUpdate" parameterType="com.example.demo.model.TPrefabricateOrder" >
+     UPDATE t_prefabricate_order t
+        SET
+
+        <if test="systemSum !=null and systemSum !=null ">
+            t.system_sum = #{systemSum},
+        </if>
+         t.sum = #{sum},
+         t.sell_num = #{sellNum},
+         t.remain_num = #{remainNum},
+        t.type = #{type}
+        WHERE
+          t.foodid = #{foodid}
+          and t.prefabricate_time = #{prefabricateTime}
+          and t.type = #{type}
+          and  t.kitchen_id = #{kitchenId}
+   </update>
+
+
+    <!--  查询单个预制单信息  -->
+    <select id="getPrefabricate" resultMap="BaseResultMap">
+        SELECT
+           *
+        FROM
+         t_prefabricate_order po
+        where 1 = 1
+        <if test="kitchenId !=null and kitchenId !='' ">
+            and po.kitchen_id = #{kitchenId}
+        </if>
+        <if test="foodid !=null and foodid !='' ">
+            and po.foodid = #{foodid}
+        </if>
+        <if test="pmtype !=null and pmtype !=''">
+            AND po.type = #{pmtype}
+        </if>
+        <if test="laskWeekDay !=null and laskWeekDay !='' ">
+            and po.prefabricate_time  =  #{laskWeekDay}
+        </if>
+        <if test="currentDate !=null and currentDate !=''">
+            AND DATE_FORMAT(po.prefabricate_time,'%Y-%m-%d') =  #{currentDate}
+        </if>
+        <if test="status != null and status !='' ">
+            and po.status =  #{status}
+        </if>
+    </select>
+
+    <!-- 查询菜品剩余份数  -->
+    <select id="getRemainNum" resultType="java.util.Map">
+        SELECT
+            kf.food_id foodid,
+            kf.food_name foodName,
+            IFNULL(t.sell_num, 0) sell_num,
+            IFNULL(t.remain_num, 0) remain_num
+            FROM
+            t_kitchen_foodtype kf
+            LEFT JOIN (
+            SELECT
+            po.kitchen_id,
+            po.foodid,
+            po.sell_num,
+            po.remain_num
+        FROM
+            t_prefabricate_order po
+        WHERE
+            1 = 1
+        <if test="kitchenId !=null and kitchenId !='' ">
+            and po.kitchen_id = #{kitchenId}
+        </if>
+
+        <if test="pmtype !=null and pmtype !=''">
+            AND po.type = #{pmtype}
+        </if>
+
+        <if test="laskWeekDay !=null and laskWeekDay !='' ">
+            and po.prefabricate_time  =  #{laskWeekDay}
+        </if>
+        ) t ON t.foodid = kf.food_id AND t.kitchen_id = kf.kitchen_id
+        WHERE
+            1 = 1
+            AND kf.`status` = 1
+        <if test="kitchenId !=null and kitchenId !='' ">
+            and  kf.kitchen_id= #{kitchenId}
+        </if>
+    </select>
+
+</mapper>

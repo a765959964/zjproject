@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>添加字典信息-add</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" th:href="@{/static/layui/layuiadmin/layui/css/layui.css}" media="all">
+</head>
+<body>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="workDate"  id="workDate" lay-verify="date" placeholder="yyyy-MM-dd"  autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜品</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="kitchenId" value="1"/>
+            <input type="hidden" name="type" value="1"/>
+            <input type="text" name="foodname"  lay-verify="required" lay-reqtext="菜品是必填项，岂能为空？" placeholder="请输入菜品名称" autocomplete="off" class="layui-input">
+
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="tFoodWorkAddSubmit" id="tFoodWorkAddSubmit" value="确认">
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+</div>
+
+<script th:src="@{/static/layui/layuiadmin/layui/layui.js}"></script>
+<script>
+    layui.use([ 'form','laydate'], function(){
+        var $ = layui.$
+                ,laydate = layui.laydate;
+        form = layui.form;
+        //常规用法
+        laydate.render({
+            elem: '#workDate',
+            trigger: 'click'
+        });
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<body>
+
+<div class="demoTable">
+    <!--订单时间：-->
+    <!--<div class="layui-inline">-->
+        <!--<input class="layui-input" name="ordertime" id="ordertime" autocomplete="off" placeholder="yyyy-MM-dd">-->
+        <!--&lt;!&ndash;<input type="text" class="layui-input" id="prefabricateTime" placeholder="yyyy-MM-dd">&ndash;&gt;-->
+    <!--</div>-->
+
+    开始时间：
+    <div class="layui-inline">
+        <input class="layui-input" name="beginDate" id="beginDate" autocomplete="off" placeholder="yyyy-MM-dd">
+        <!--<input type="text" class="layui-input" id="prefabricateTime" placeholder="yyyy-MM-dd">-->
+    </div>
+
+    结束时间：
+    <div class="layui-inline">
+        <input class="layui-input" name="endDate" id="endDate" autocomplete="off" placeholder="yyyy-MM-dd">
+        <!--<input type="text" class="layui-input" id="prefabricateTime" placeholder="yyyy-MM-dd">-->
+    </div>
+    类型：
+    <div class="layui-inline">
+        <select name="type" lay-verify="required" lay-filter="type" id="type">
+            <option value="">请选择</option>
+            <option value="1">预定</option>
+            <option value="3">现场点餐</option>
+            <option value="4">九成菜</option>
+            <option value="5">聚餐</option>
+        </select>
+    </div>
+
+
+    <button class="layui-btn" data-type="reload">搜索</button>
+    <!--<button class="layui-btn" data-type="reload">清除</button>-->
+</div>
+
+
+
+<table class="layui-hide" id="test-table-totalRow" lay-filter="test-table-totalRow"></table>
+
+<div th:include="include :: footer"></div>
+<script th:src="@{/static/ht/system/myorder/myorderListCount.js?v=1111111211}"></script>
+
+<!--<script type="text/html" id="barMyorder">-->
+    <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="tabAdd">增加项</a>-->
+    <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+<!--</script>-->
+<script>
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+        var myDate = new Date;
+        var year = myDate.getFullYear(); //获取当前年
+        var mon = myDate.getMonth() + 1; //获取当前月
+        var date = myDate.getDate(); //获取当前日
+        var nowDate = year + "-" + mon +"-" + date;
+//        console.log(nowDate);
+        //常规用法
+        laydate.render({
+            elem: '#ordertime'
+        });
+
+        laydate.render({
+            elem: '#beginDate',
+            value : nowDate
+        });
+
+        laydate.render({
+            elem: '#endDate',
+            value : nowDate
+        });
+    })
+</script>
+
+</body>
+</html>

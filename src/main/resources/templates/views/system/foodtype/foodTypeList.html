@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<meta http-equiv="Access-Control-Allow-Origin" content="http://10.10.2.17:8080/myserver">
 <head th:include="include :: header"></head>
 <body>
 <div class="demoTable">
-<div class="layui-row">
-    <label class="layui-form-label">门店名称：</label>
-    <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
-        <select name="type" lay-verify="required" lay-filter="aihao" id="sel">
-        </select>
-    </div>
-    <label class="layui-form-label">状态：</label>
-    <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
+
+    <div class="layui-row">
+        门店名称：
+        <div class="layui-inline">
+            <select name="sel" lay-verify="required" lay-filter="aihao" id="sel">
+            </select>
+        </div>
+        分类名称：
+        <div class="layui-inline">
+            <select name="foodtypeId" lay-verify="required" lay-filter="aihao" id="foodtypeId">
+            </select>
+        </div>
+
+        状态：
+        <div class="layui-inline">
         <select name="status" lay-verify="required" lay-filter="status" id="status">
             <option value="">请选择</option>
             <option value="1">上线</option>
@@ -19,31 +27,46 @@
             <option value="4">收藏</option>
             <option value="5">删除</option>
         </select>
+        </div>
+        堂食+外卖：
+        <div class="layui-inline">
+            <select name="foodType" lay-verify="required" lay-filter="foodType" id="foodType">
+                <option value="">请选择</option>
+                <option value="1">堂食</option>
+                <option value="2">外卖</option>
+                <option value="3">堂食+外卖</option>
+            </select>
+        </div>
+        菜品名称：
+        <div class="layui-inline">
+            <input class="layui-input"  name="foodName" id="foodName" autocomplete="off" />
+        </div>
+        <button class="layui-btn" data-type="reload">搜索</button>
     </div>
-    <button class="layui-btn" data-type="reload">搜索</button>
 
 </div>
-
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <!--<button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
-        <button class="layui-btn layui-btn-sm" lay-event="batchRemove">删除</button>-->
+        <button class="layui-btn layui-btn-sm" lay-event="add">批量添加估清</button>
+        <button class="layui-btn layui-btn-sm" lay-event="refresh">刷新</button><span style="font-size: 14px;color: #CF1900;">(当点击上线下线的时候，需要点击刷新  其余不要随便点击刷新)</span>
+        <!--<button class="layui-btn layui-btn-sm" lay-event="batchRemove">删除</button>-->
     </div>
 </script>
 
 <table class="layui-hide" id="test-table-totalRow" lay-filter="test-table-totalRow"></table>
 
 <div th:include="include :: footer"></div>
-<script th:src="@{/static/ht/system/foodtype/foodtype.js?v=2313211}"></script>
+<script th:src="@{/static/ht/system/foodtype/foodtype.js?v=221122112}"></script>
 
 <script type="text/html" id="barFoodType">
 
-     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="1">上线</a>
-     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="2">下线</a>
-     <a class="layui-btn layui-btn-xs" lay-event="3">试吃</a>
-     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="4">收藏</a>
-     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="5">删除</a>
 
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="1">上线</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="2">下线</a>
+    <!--<a class="layui-btn layui-btn-xs" lay-event="3">试吃</a>-->
+   <!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="4">收藏</a> -->
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="5">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="6">增加估清</a>
 
 
 
@@ -52,22 +75,34 @@
 
 <script type="text/html" id="statusTpl">
     {{# if(d.status===1) { }}
-         上线
+    上线
     {{# } }}
     {{# if(d.status===2) { }}
-   下线
+    下线
     {{# } }}
     {{# if(d.status===3) { }}
-        试吃
+    试吃
     {{# } }}
     {{# if(d.status===4) { }}
-        收藏
+    收藏
     {{# } }}  {{# if(d.status===5) { }}
-        删除
+    删除
     {{# } }}
 
 </script>
 
+
+<script type="text/html" id="foodTypeTpl">
+    {{# if(d.foodType===1) { }}
+    堂食
+    {{# } }}
+    {{# if(d.foodType===2) { }}
+    外卖
+    {{# } }}
+    {{# if(d.foodType===3) { }}
+    堂食 + 外卖
+    {{# } }}
+</script>
 
 </body>
 </html>

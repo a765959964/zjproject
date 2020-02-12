@@ -45,7 +45,7 @@ public class TPrefabricateOrderController {
     @RequestMapping(value="execute", method = RequestMethod.GET)
     public void listExecuteView(Model model) throws Exception {
         ModelAndView mv = new ModelAndView();
-        tPrefabricateOrderService.execute("1","2020-01-02","3");
+        tPrefabricateOrderService.execute("1","2020-02-13","3");
 
     }
 

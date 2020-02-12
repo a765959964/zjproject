@@ -3,11 +3,23 @@ var prefix = "/sys/foodtype/";
 $(function (){
     init();
     initSel();
+    initFoodtypeSel();
 })
 
 $("select#sel").change(function (){
     $("#sel").val($(this).val())
 })
+
+
+$("select#foodtypeId").change(function (){
+    $("#foodtypeId").val($(this).val())
+})
+
+
+$("select#foodType").change(function (){
+    $("#foodType").val($(this).val())
+})
+
 
 $("select#status").change(function (){
     $("#status").val($(this).val())
@@ -30,6 +42,27 @@ function initSel(){
     });
 }
 
+function initFoodtypeSel(){
+    var _sel = $("#foodtypeId");
+
+    $.get("/sys/foodtype/getTypeList/",function(rsp){
+        if(rsp.code==200){
+            if(!rsp.data.length){
+                return;
+            }
+            var html = "";
+            html+="<option value=''>全部</option>";
+            for(var i=0;i<rsp.data.length;i++){
+                html+="<option value='"+rsp.data[i].code+"'>"+rsp.data[i].name+"</option>";
+            }
+            _sel.append(html);
+        }
+    });
+}
+
+
+
+
 
 function init(){
     layui.use([ 'table','element'], function(){
@@ -39,18 +72,21 @@ function init(){
             ,form = layui.form;
         table.render({
             elem: '#test-table-totalRow'
-            ,url:prefix + 'getAll'
+            ,url:prefix + 'getFoodTypeList'
             ,toolbar: '#toolbarDemo'
-            ,title: '添加字典'
+            ,title: '门店菜品管理'
             ,totalRow: true
+            , limit : 20
             ,cols: [[
-                {type: 'radio', fixed: 'left'}
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'id', width:70,title: 'id', sort: true}
+                ,{field:'kitchenName', width:120,title: '餐厅信息', sort: true}
                 ,{field:'foodId', width:100,title: '菜品id', sort: true}
-                ,{field:'foodName', width:150, title: '菜品名称', sort: true}
-                ,{field:'kichenPrice', width:80, title: '价格', sort: true}
-                // ,{field:'score', width:80, title: '评分', sort: true,hidden:false}
+                ,{field:'foodName', width:200, title: '菜品名称', sort: true}
+                ,{field:'foodtypeName', width:150, title: '菜品分类'}
+                ,{field:'kitchenPrice', width:100, title: '价格'}
                 ,{field:'status', width:100, title: '状态', sort: true,templet:'#statusTpl'}
-                // ,{field:'jsonpath', width:300, title: 'json地址', sort: true}
+                ,{field:'foodType', width:120, title: '堂食 外卖', sort: true,templet:'#foodTypeTpl'}
                 ,{field:'createTime', width:200, title: '创建时间', sort: true}
                 ,{fixed: 'right', width: 280, align:'center', toolbar: '#barFoodType'}
             ]]
@@ -63,6 +99,7 @@ function init(){
         //监听行工具事件
         table.on('tool(test-table-totalRow)', function(obj){
             var data = obj.data;
+            console.log(data.id);
             if(obj.event === '1'){      //上线
                 updateStatus(data.id,1);
             } else if(obj.event === '2'){     //下线
@@ -73,26 +110,49 @@ function init(){
                 updateStatus(data.id,4);
             } else if(obj.event === '5') {     //试吃
                 updateStatus(data.id,5);
+            }else if (obj.event  === '6'){
+                console.log(data);
+                var  foodid = data.foodId;
+                var kitchenId = $("#sel").val();
+                batchAdd(foodid,kitchenId);
+                // layer.msg('添加页面',{icon:1});
             }
         });
 
         //头工具栏事件
         table.on('toolbar(test-table-totalRow)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id);
+            var kitchenId =  $('#sel').val();
+            // console.log($("#sel").val());
             if(obj.event=="add"){   //添加
-                dictAdd();
-            }else if(obj.event=="batchRemove"){
-                var ids;    //得到  1,2,3
+                var foodIds;    //得到  1,2,3  菜品ids
+                var ids;
                 if(checkStatus.data.length>0){
                     $(checkStatus.data).each(function (i,e){
                         if(i==0){
-                            ids = e.id;
+                            // foodIds = e.foodId;
+                            ids = e.foodId;
                         }else{
-                            ids+="," + e.id;
+                            // foodIds+="," + e.foodId;
+                            ids += "," + e.foodId;
                         }
                     })
-                    batchRemove(ids);
+                    batchAdd(ids,kitchenId);
+                }else{
+                    layer.msg('请选择一条数据！');
                 }
+            }else if(obj.event=="refresh"){
+                console.log('刷新');
+                $.ajax({
+                    url : prefix + 'createJson?kitchenId='+$("#sel").val(),
+                    type : 'get',
+                    success : function (res){
+                        console.log(res.msg);
+                    }
+                })
+
+
+
             }
 
         });
@@ -107,13 +167,16 @@ function init(){
                 var sel = $('#sel');
                 //执行重载
                 table.reload('testReload', {
-                    url : prefix+'getAll'
+                    url : prefix+'getFoodTypeList'
                     ,page: {
                         curr: 1 //重新从第 1 页开始
                     }
                     ,where: {
                         kitchenId : $("#sel").val(),
-                        status : $("#status").val()
+                        status : $("#status").val(),
+                        foodtypeId : $('#foodtypeId').val(),
+                        foodName : $('#foodName').val(),
+                        foodType : $('#foodType').val()
                     }
                 });
             }
@@ -143,33 +206,47 @@ function updateStatus(id,status){
             layer.msg('以修改为收藏', {icon: 1});
         }else if(status==5){
             layer.msg('以修改为删除', {icon: 1});
+        }else if(status==6){
+            layer.msg('添加页面',{icon:1});
         }
-
-
     })
 
 }
 
-//增加页面
-function dictAdd(){
+
+//批量添加估清
+function batchAdd(id,kitchenId){
     layer.open({
         type: 2
-        ,title: '增加字典类型'
-        ,content: prefix+'dictAdd'
+        ,title: '批量增加估清'
+        ,content: prefix+'batchAdd?foodid='+id+"&kitchenId="+kitchenId
         ,maxmin: true
         ,area: ['650px', '550px']
         ,btn: ['确定', '取消']
         ,yes: function(index, layero){
             var iframeWindow = window['layui-layer-iframe'+ index]
-                ,submitID = 'sysDictAddSubmit'
+                ,submitID = 'foodtypeAddSubmit'
                 ,submit = layero.find('iframe').contents().find('#'+ submitID);
+            var sum  = layero.find('iframe').contents().find('#sum')[0].value;
+            var wcSum  = layero.find('iframe').contents().find('#sum1')[0].value;
+            var wmSum = layero.find('iframe').contents().find('#sum2')[0].value;
+            console.log(sum+","+wcSum+","+wmSum);
+            var sums ;
+            console.log(wmSum==='');
+            if(wmSum===''){
+                sums  = Array.of(sum,wcSum);
+            }else{
+                sums  = Array.of(sum,wcSum,wmSum);
+            }
+            console.log(sums);
+            layero.find('iframe').contents().find('#sums')[0].value = sums;
             //监听提交
             iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                debugger;
                 var field = data.field; //获取提交的字段
-                console.log(field);
                 $.ajax({
-                    url : prefix+'insert',
-                    type : 'post',
+                    url : prefix + 'batchUpdate',
+                    type : 'POST',
                     dataType : 'json',
                     data: field,
                     success : function (res){
@@ -182,7 +259,11 @@ function dictAdd(){
             submit.trigger('click');
         }
     });
+
 }
+
+
+
 
 
 function batchRemove(ids){
@@ -195,72 +276,6 @@ function batchRemove(ids){
     });
 }
 
-function dictAddChildren(id){
-    layer.open({
-        type: 2
-        ,title: '增加字典项'
-        ,content: prefix+'dictAdd?id='+id
-        ,maxmin: true
-        ,area: ['650px', '550px']
-        ,btn: ['确定', '取消']
-        ,yes: function(index, layero){
-            var iframeWindow = window['layui-layer-iframe'+ index]
-                ,submitID = 'sysDictAddSubmit'
-                ,submit = layero.find('iframe').contents().find('#'+ submitID);
-            //监听提交
-            iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
-                var field = data.field; //获取提交的字段
-                console.log(field);
-                $.ajax({
-                    url :prefix+ 'insert',
-                    type : 'post',
-                    dataType : 'json',
-                    data: field,
-                    success : function (res){
-                        layer.msg("增加成功");
-                        layui.table.reload('testReload');
-                        layer.close(index); //关闭弹层
-                    }
-                })
-            });
-            submit.trigger('click');
-        }
-    });
-}
-
-
-//编辑页面
-function dictEdit(id){
-    layer.open({
-        type: 2
-        ,title: '修改字典信息'
-        ,content:prefix+ 'getById?id='+id
-        ,maxmin: true
-        ,area: ['650px', '550px']
-        ,btn: ['确定', '取消']
-        ,yes: function(index, layero){
-            var iframeWindow = window['layui-layer-iframe'+ index]
-                ,submitID = 'sysDictUpdateSubmit'
-                ,submit = layero.find('iframe').contents().find('#'+ submitID);
-            //监听提交
-            iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
-                var field = data.field; //获取提交的字段
-                $.ajax({
-                    url : prefix+'update',
-                    type : 'post',
-                    dataType : 'json',
-                    data: field,
-                    success : function (res){
-                        layer.msg("修改成功");
-                        layui.table.reload('testReload');
-                        layer.close(index); //关闭弹层
-                    }
-                })
-            });
-            submit.trigger('click');
-        }
-    });
-}
 
 //删除id
 function delById(id){

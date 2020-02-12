@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<body>
+
+<div class="demoTable">
+
+    姓名：
+    <div class="layui-inline">
+        <input class="layui-input" name="nickname" id="nickname" autocomplete="off">
+    </div>
+
+    订单时间：
+    <div class="layui-inline">
+        <input class="layui-input" name="ordertime" id="ordertime" autocomplete="off" placeholder="yyyy-MM-dd">
+        <!--<input type="text" class="layui-input" id="prefabricateTime" placeholder="yyyy-MM-dd">-->
+    </div>
+    <button class="layui-btn" data-type="reload">搜索</button>
+</div>
+
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button shiro:hasPermission="sys:myorder:add" class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button shiro:hasPermission="sys:myorder:batchRemove" class="layui-btn layui-btn-sm" lay-event="batchRemove">删除</button>
+    </div>
+</script>
+
+<table class="layui-hide" id="test-table-totalRow" lay-filter="test-table-totalRow"></table>
+
+<div th:include="include :: footer"></div>
+<script th:src="@{/static/ht/system/myorder/myorderList.js?v=1122111111}"></script>
+
+<!--<script type="text/html" id="barMyorder">-->
+    <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="tabAdd">增加项</a>-->
+    <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+<!--</script>-->
+<script>
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+        //常规用法
+        laydate.render({
+            elem: '#ordertime'
+        });
+    })
+</script>
+
+</body>
+</html>

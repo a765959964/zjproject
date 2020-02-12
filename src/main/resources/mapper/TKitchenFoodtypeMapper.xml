@@ -21,6 +21,7 @@
     <result column="score" jdbcType="DECIMAL" property="score" />
     <result column="score_count" jdbcType="INTEGER" property="scoreCount" />
     <result column="version" jdbcType="VARCHAR" property="version" />
+    <result column="food_type" jdbcType="VARCHAR" property="foodType" />
   </resultMap>
 
   <select id="getAll"  resultMap="BaseResultMap">
@@ -46,11 +47,70 @@
   </select>
 
 
+  <!-- 获取门店菜品信息  -->
+  <select id="getFoodTypeList" resultType="java.util.Map">
+
+    SELECT
+      t.id,
+      t.kitchen_id kitchenId,
+      k.`name` kitchenName,
+      t.food_id foodId,
+      t.food_name foodName,
+      t.kichen_price kitchenPrice,
+      t.`status`,
+      t.foodtype_id foodtypeId,
+      t.food_type foodType,
+      ft.`name` foodtypeName,
+      DATE_FORMAT(t.create_time, '%Y-%m-%d') createTime
+    FROM
+      t_kitchen_foodtype t
+      inner join t_kitchen k on k.kitchen_id = t.kitchen_id
+    inner join t_foodtype ft on ft.`code` = t.foodtype_id
+
+
+    <if test="kitchenId != '' and kitchenId != null">
+      and t.kitchen_id = #{kitchenId}
+    </if>
+
+    <if test="status != '' and status != null">
+      and t.status = #{status}
+    </if>
+    <if test="foodtypeId != '' and foodtypeId != null">
+      and  t.foodtype_id  = #{foodtypeId}
+    </if>
+    <if test="foodName != '' and foodName != null ">
+      and t.food_name like concat('%',#{foodName},'%')
+    </if>
+    <if test="foodType != '' and foodType != null ">
+      and t.food_type in (${foodType})
+    </if>
+    <if test="page !='' and page != null">
+      limit #{page}
+    </if>
+    <if test="limit !='' and limit != null">
+      , #{limit}
+    </if>
+
+  </select>
+
+
+
   <select id="getByKitId" resultMap="BaseResultMap" >
     select * from  t_kitchen_foodtype
     where 1=1  and kitchen_id = #{kitchenId}
 
   </select>
+
+  <!-- 查询分类信息  -->
+  <select id="getTypeList" resultType="java.util.Map">
+    SELECT
+        t.`code`,
+        t.`name`
+    FROM
+        t_foodtype t;
+  </select>
+
+
 
 
 </mapper>

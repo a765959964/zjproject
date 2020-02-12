@@ -17,9 +17,10 @@
         <label class="layui-form-label">菜品名称</label>
         <div class="layui-input-inline">
             <input type="hidden" th:name="id" id="id"/>
-            <input type="hidden" th:name="foodId" th:value="*{foodid}"/>
+            <input type="hidden" id="foodid"   th:name="foodId" th:value="*{foodid}"/>
             <input type="hidden" th:name="jsonpath" th:value="*{jsonpath}"/>
             <input type="hidden" th:name="foodtypeField" th:value="*{foodtypeField}"/>
+            <input type="hidden" id="foodType" th:value="*{foodType}" />
             <input type="text" name="foodName" id="foodName" lay-verify="required" th:value="*{foodname}" readonly autocomplete="off"
                    class="layui-input">
         </div>
@@ -49,10 +50,6 @@
 
     <div class="layui-form-item">
         <label class="layui-form-label">菜品评分</label>
-        <div class="layui-input-inline" id="test4">
-            <!--<input type="text" name="score" id="score" placeholder="请输入菜品评分" autocomplete="off" class="layui-input">-->
-        </div>
-
         <div class="layui-input-inline">
             <input type="text" name="score" id="score" placeholder="请输入菜品评分" autocomplete="off" class="layui-input">
         </div>
@@ -70,7 +67,15 @@
             </select>
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">堂食 外卖</label>
+        <div class="layui-input-block">
 
+            <input type="radio" name="foodType" value="1" title="堂食">
+            <input type="radio" name="foodType" value="2" title="外卖">
+            <input type="radio" name="foodType" value="3" title="堂食+外卖" >
+        </div>
+    </div>
     <div class="layui-form-item layui-hide">
         <input type="button" lay-submit lay-filter="foodtypeAddSubmit"  id="foodtypeAddSubmit" value="确认">
         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -80,53 +85,15 @@
 <script th:src="@{/static/layui/layuiadmin/layui/layui.js}"></script>
 <script th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
 <script>
-    var foodName = $("#foodName").val();  console.log(foodName);
-    $("select#seltest").change(function (){
-       var sel =   $(this).val();
-       console.log(sel);
-       debugger;
-        $.get("/sys/foodtype/getByKitId?id="+sel+"&foodName="+foodName,function (rs){
-            if(rs.code==200){
-                if(!rs.data.length){    //没有数据 就增加， 有数据就更新
-                    $("input[type='button']").attr("id","foodtypeAddSubmit");
-                    $("input[type='button']").attr("lay-filter","foodtypeAddSubmit");
-                    $("#sel").val("");
-                    $("#kichenPrice").val("");
-                    $("#score").val("");
-                    $("#id").val("");
-                    return;
-                }
-                $("input[type='button']").attr("id","foodtypeUpdateSubmit");
-                $("input[type='button']").attr("lay-filter","foodtypeUpdateSubmit");
-                $("#sel").val(rs.data[0].kitchenId);
-                $("#foodtypeId").val(rs.data[0].foodtypeId);
-                $("#id").val(rs.data[0].id);
-                $("#kichenPrice").val(rs.data[0].kichenPrice);
-                $("#score").val(rs.data[0].score);
-                form.render('select');
-            }
-        })
-    })
-
+    var foodid = $("#foodid").val();
     layui.use(['form', 'laydate','rate'], function () {
         var $ = layui.$,
             rate = layui.rate
         , laydate = layui.laydate;
         form = layui.form;
-        rate.render({
-            elem: '#test4'
-            ,value: 3.5
-            ,half: true
-            ,text: true
-        })
-
         //常规用法
-        laydate.render({
-            elem: '#test1'
-        });
         var _sel = $("#sel");
         var html = "";
-
         $.get('/sys/tKitchen/list', function (rsp) {
             for (var i = 0; i < rsp.data.length; i++) {
                 html += "<option value=" + rsp.data[i].kitchenId + ">" + rsp.data[i].name + "</option>";
@@ -134,10 +101,11 @@
             _sel.append(html);
             form.render('select');
             var sel =   $("#sel").val();
-            var foodName = $("#foodName").val();
-            $.get("/sys/foodtype/getByKitId?id="+sel+"&foodName="+foodName,function (rs){
+            $.get("/sys/foodtype/getByKitId?id="+sel+"&foodid="+foodid,function (rs){
                 if(rs.code==200){
-                    if(!rs.data.length){    //没有数据 就增加， 有数据就更新
+                    if(rs.data.length==0){    //没有数据 就增加， 有数据就更新
+                        $('input:radio[name=foodType]')[0].checked =true;
+                        form.render();
                         return;
                     }
                     $("input[type='button']").attr("id","foodtypeUpdateSubmit");
@@ -147,7 +115,17 @@
                     $("#id").val(rs.data[0].id);
                     $("#kichenPrice").val(rs.data[0].kichenPrice);
                     $("#score").val(rs.data[0].score);
+                    $("#foodType").val(rs.data[0].foodType);
+                    console.log(rs.data[0].foodType == 3);
+                    if(rs.data[0].foodType == 1){
+                        $('input:radio[name=foodType]')[0].checked =true;
+                    }else if(rs.data[0].foodType == 2){
+                        $('input:radio[name=foodType]')[1].checked =true;
+                    }else if (rs.data[0].foodType == 3){
+                        $('input:radio[name=foodType]')[2].checked =true;
+                    }
                     form.render('select');
+                    form.render();
                 }
             })
 
@@ -166,10 +144,10 @@
         })
 
         form.on('select(sel)', function(data){
-            console.log(foodName);
-            $.get("/sys/foodtype/getByKitId?id="+data.value+"&foodName="+foodName,function (rs){
+            $.get("/sys/foodtype/getByKitId?id="+data.value+"&foodid="+foodid,function (rs){
                 if(rs.code==200){
-                    if(!rs.data.length){    //没有数据 就增加， 有数据就更新
+                    console.log(rs.data.length);
+                    if(rs.data.length==0){    //没有数据 就增加， 有数据就更新
                         $("input[type='button']").attr("id","foodtypeAddSubmit");
                         $("input[type='button']").attr("lay-filter","foodtypeAddSubmit");
                         $("#sel").val("");
@@ -177,8 +155,12 @@
                         $("#score").val("");
                         $("#id").val("");
                         $("#sel").val(data.value);
+//                        $("#foodType").val(rs.data[0].foodType);
+                        $('input:radio[name=foodType]')[0].checked =true;
+                        form.render(); //更新全部
                         return;
                     }
+                    console.log(rs.data.length);
                     $("input[type='button']").attr("id","foodtypeUpdateSubmit");
                     $("input[type='button']").attr("lay-filter","foodtypeUpdateSubmit");
                     $("#sel").val(rs.data[0].kitchenId);
@@ -186,15 +168,21 @@
                     $("#id").val(rs.data[0].id);
                     $("#kichenPrice").val(rs.data[0].kichenPrice);
                     $("#score").val(rs.data[0].score);
-                    form.render('select');
+                    $("#foodType").val(rs.data[0].foodType);
+                    debugger;
+                    if(rs.data[0].foodType == 1){
+                        $('input:radio[name=foodType]')[0].checked =true;
+                    }else if(rs.data[0].foodType == 2){
+                        $('input:radio[name=foodType]')[1].checked =true;
+                    }else if (rs.data[0].foodType == 3){
+                        $('input:radio[name=foodType]')[2].checked =true;
+                    }
+//                    form.render('select');
+                    form.render(); //更新全部
                 }
             })
-
         })
 
-        form.on('select(foodtypeId)', function(data){
-            console.log(data.value);
-        })
     })
 
 </script>

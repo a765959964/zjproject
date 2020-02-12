@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>批量添加估清信息-add</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" th:href="@{/static/layui/layuiadmin/layui/css/layui.css}" media="all">
+</head>
+<body>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">门店id</label>
+        <div class="layui-input-inline">
+            <input type="text" name="kitchenId" lay-verify="required"  th:value="${kitchenId}" readonly autocomplete="off" class="layui-input">
+            <input type="hidden" name="sums" id="sums" readonly autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜品id</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ids" lay-verify="required"  th:value="${foodid}" readonly  autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><label style="color: red">*</label>午餐份数</label>
+        <div class="layui-input-inline">
+            <input type="number" name="sum"  id="sum" lay-verify="required" lay-reqtext="必填项" placeholder="必填项"  autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><label style="color: red">*</label>晚餐份数</label>
+        <div class="layui-input-inline">
+            <input type="number" name="sum" lay-verify="required" lay-reqtext="必填项"  placeholder="必填项" id="sum1" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">外卖份数</label>
+        <div class="layui-input-inline">
+            <input type="number" name="sum"  id="sum2"  autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+        <label class="layui-form-label">剩余份数</label>
+        <div class="layui-input-inline">
+            <input type="number" name="remainNum"  id="remainNum"  readonly autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">预制时间</label>
+        <div class="layui-input-inline">
+            <!--<input type="text" name="prefabricateTime" th:value="${prefabricateTime}" class="layui-input" id="test-laydate-normal-cn" placeholder="yyyy-MM-dd">-->
+            <input type="text" th:value="${prefabricateTime}"  name="prefabricateTime" class="layui-input" id="test1" placeholder="yyyy-MM-dd">
+
+        </div>
+
+    </div>
+    <!--<div class="layui-form-item">-->
+        <!--<label class="layui-form-label">午餐 晚餐</label>-->
+        <!--<div class="layui-col-md9">-->
+            <!--<input type="radio" name="type" value="1" title="午餐" checked>-->
+            <!--<input type="radio" name="type" value="2" title="晚餐">-->
+            <!--<input type="radio" name="type" value="3" title="外卖">-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="foodtypeAddSubmit" id="foodtypeAddSubmit" value="确认">
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+</div>
+
+<script th:src="@{/webjars/jquery/3.3.1/jquery.js}" ></script>
+<script th:src="@{/static/layui/layuiadmin/layui/layui.js}"></script>
+
+<script>
+    $(function (){
+        $("#sum").blur(function (){
+            $("#remainNum").val($(this).val());
+        })
+    })
+
+
+</script>
+
+<script>
+    layui.use([ 'form','laydate'], function(){
+        var $ = layui.$
+            ,laydate = layui.laydate;
+            form = layui.form;
+        //常规用法
+        laydate.render({
+            elem: '#test1',
+            trigger: 'click'
+        });
+
+    })
+</script>
+</body>
+</html>

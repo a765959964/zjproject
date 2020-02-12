@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<body>
+
+
+
+<!-- 星期表头 -->
+
+<script type="text/html" id="weekbarDemo">
+    <div class="layui-btn-container">
+        <sapn class="layui-btn-sm">门店名称:三华餐厅</sapn>
+        <button  style="margin-left: 20px;" class="layui-btn layui-btn-sm" lay-event="save">保存</button>
+    </div>
+</script>
+
+<!-- 门店菜品表头  -->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <sapn class="layui-btn-sm">门店菜品</sapn>
+        <sapn class="layui-btn-sm" style="margin-left: 700px;">菜品名称:&nbsp;&nbsp;
+            <input type="text"  id="foodname">
+        </sapn>
+        <button class="layui-btn layui-btn-sm" lay-event="foodSel">查询</button>
+    </div>
+</script>
+
+<!-- table 表格 -->
+<!-- 星期表格 -->
+<table class="layui-hide" id="week-table-totalRow" lay-filter="week-table-totalRow"></table>
+<!-- 门店表格 -->
+<table class="layui-hide" id="test-table-totalRow" lay-filter="test-table-totalRow"></table>
+
+<div th:include="include :: footer"></div>
+<script th:src="@{/static/ht/system/tFoodWork/zzfood.js?v=2111}"></script>
+
+<!-- bar -->
+<!-- 星期几 bar -->
+<script type="text/html" id="barWeek">
+    <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+<!-- 门店菜品bar -->
+<script type="text/html" id="barTFoodWork">
+    <a class="layui-btn layui-btn-xs" lay-event="save">添加</a>
+</script>
+
+<script type="text/html" id="weekTpl">
+    {{# if(d.week==0){ }}
+    星期一
+    {{# } else if(d.week=== 1) { }}
+    星期二
+    {{# } else if(d.week=== 2) { }}
+    星期三
+    {{# } else if(d.week=== 3) { }}
+    星期四
+    {{# } else if(d.week=== 4) { }}
+    星期五
+    {{# } else if(d.week=== 5) { }}
+    星期六
+    {{# } else { }}
+    星期日
+    {{# } }}
+</script>
+
+
+</body>
+</html>
